@@ -47,7 +47,7 @@ Wails 应用（`main.go`）和命令行工具（`cmd/opsctl/`）都调用 `boots
 - `exec <asset-id> -- <command>` -- 通过 SSH 执行命令，支持标准输入输出管道
 - `cp` -- 类 scp 风格的文件传输：本地到远程、远程到本地、远程到远程（直接流式传输，无需本地磁盘）
 - `ssh <asset-id>` -- 交互式 SSH 终端会话
-- `db <asset-id>` / `sql <asset-id>` -- 数据库查询执行
+- `sql <asset-id>` -- 数据库查询执行
 - `redis <asset-id>` -- Redis 命令执行
 - `session` -- 批量审批工作流的会话管理
 - `grant submit` -- 提交命令模式以进行预审批
@@ -237,7 +237,7 @@ wails generate module
 | Windows | `%APPDATA%/opskat` |
 | Linux | `~/.config/opskat` |
 
-数据库、配置和日志（`info.log`、`error.log`）存储在此目录。opsctl 可通过 `--data-dir` 覆盖。
+数据库、配置和日志（`logs/opskat.log`、`logs/error.log`）存储在此目录。opsctl 可通过 `--data-dir` 覆盖。
 
 ## 关键约定
 

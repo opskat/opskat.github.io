@@ -9,7 +9,7 @@ OpsKat's AI Agent lets you manage infrastructure through natural-language conver
 
 ## Provider Configuration
 
-The AI Agent supports three provider backends. Configure your preferred provider in **Settings > AI Agent**.
+The AI Agent supports three provider backends. Configure your preferred provider in **Settings > AI**.
 
 ### OpenAI-compatible API
 
@@ -92,7 +92,7 @@ OpsKat integrates with AI coding CLIs like **Claude Code** and **Codex**. One-cl
 
 ### Installing Skills
 
-1. Go to **Settings > AI Coding Integration**.
+1. Open **Settings** and go to the **AI** tab.
 2. Click **Install** next to Claude Code or Codex.
 3. The skill file is symlinked to the appropriate location (e.g., `~/.claude/skills/opsctl` for Claude Code).
 

@@ -37,7 +37,7 @@ make install-cli      # Install to $GOPATH/bin
 
 - **连接池** — 复用桌面应用的 SSH 连接，而非新建连接
 - **审批 (Approval) 工作流** — 写操作（exec、cp、create、update）会在桌面应用中弹出审批对话框
-- **会话审批** — 用户点击"允许本次会话"后，同一会话中的后续操作将自动通过审批
+- **会话审批** — 在审批对话框中点击"记住"，会将命令模式存储到当前会话，后续匹配的操作将自动通过审批
 
 当桌面应用未运行时，`opsctl` 会回退到使用共享数据库和凭据进行直连。
 
@@ -80,7 +80,7 @@ make install-cli      # Install to $GOPATH/bin
 # 显式管理会话
 opsctl session start               # 创建会话并输出其 ID
 opsctl exec web-01 -- uptime       # 使用 .opskat/sessions/ 中的会话
-opsctl exec web-02 -- df -h        # 同一会话——首次点击"允许本次会话"后自动审批
+opsctl exec web-02 -- df -h        # 同一会话——点击"记住"后匹配的命令自动审批
 opsctl session end                  # 结束会话
 
 # 也可以让系统自动创建

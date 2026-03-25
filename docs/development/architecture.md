@@ -47,7 +47,7 @@ Standalone CLI for asset management and remote operations without the GUI:
 - `exec <asset-id> -- <command>` -- SSH command execution with stdio piping
 - `cp` -- scp-style file transfer: local-to-remote, remote-to-local, and remote-to-remote (direct streaming, no local disk)
 - `ssh <asset-id>` -- Interactive SSH terminal session
-- `db <asset-id>` / `sql <asset-id>` -- Database query execution
+- `sql <asset-id>` -- Database query execution
 - `redis <asset-id>` -- Redis command execution
 - `session` -- Session management for batch approval workflows
 - `grant submit` -- Submit command patterns for pre-approval
@@ -237,7 +237,7 @@ Resolved by `bootstrap.AppDataDir()`:
 | Windows | `%APPDATA%/opskat` |
 | Linux | `~/.config/opskat` |
 
-Database, config, and logs (`info.log`, `error.log`) are stored here. opsctl can override with `--data-dir`.
+Database, config, and logs (`logs/opskat.log`, `logs/error.log`) are stored here. opsctl can override with `--data-dir`.
 
 ## Key Conventions
 

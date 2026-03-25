@@ -5,11 +5,39 @@ sidebar_label: Installation
 
 # Installation
 
-OpsKat runs on macOS, Linux, and Windows. You can download a pre-built binary or build from source.
+OpsKat runs on macOS, Linux, and Windows.
 
-## Prerequisites
+## Download
 
-Building from source requires:
+Download the latest release from [GitHub Releases](https://github.com/opskat/opskat/releases/latest):
+
+| Platform | Architecture | File |
+|---|---|---|
+| macOS | Apple Silicon (M1/M2/M3/M4) | `opskat-vX.X.X-darwin-arm64.dmg` |
+| macOS | Intel | `opskat-vX.X.X-darwin-amd64.dmg` |
+| Windows | x64 | `opskat-vX.X.X-windows-amd64-installer.exe` |
+| Linux | x64 | `opskat-vX.X.X-linux-amd64.deb` |
+
+- **macOS** — Open the `.dmg` file and drag OpsKat to the Applications folder.
+- **Windows** — Run the `.exe` installer and follow the prompts.
+- **Linux** — Install the `.deb` package: `sudo dpkg -i opskat-vX.X.X-linux-amd64.deb`
+
+## Installing opsctl
+
+The `opsctl` CLI tool can be installed in two ways:
+
+1. **From the desktop app (recommended)** — One-click install from the Settings page. The embedded binary is extracted to `~/.local/bin/` (Linux/macOS) or `%LOCALAPPDATA%/opsctl` (Windows).
+2. **From source** — Run `make install-cli` to build and install to `$GOPATH/bin`.
+
+Verify the installation:
+
+```bash
+opsctl --help
+```
+
+## Building from Source
+
+If you prefer to build from source, you'll need:
 
 | Dependency | Version | Purpose |
 |---|---|---|
@@ -18,36 +46,24 @@ Building from source requires:
 | [pnpm](https://pnpm.io/) | latest | Frontend package manager |
 | [Wails v2 CLI](https://wails.io/docs/gettingstarted/installation) | v2 | Desktop app framework |
 
-Install the Wails CLI after Go is set up:
+Install the Wails CLI:
 
 ```bash
 go install github.com/wailsapp/wails/v2/cmd/wails@latest
 ```
 
-## Download Pre-built Binaries
-
-Pre-built binaries for macOS, Linux, and Windows will be available on the [GitHub Releases](https://github.com/nicoxiang/opskat/releases) page.
-
-## Building from Source
-
-Clone the repository and build:
+Clone and build:
 
 ```bash
-git clone https://github.com/nicoxiang/opskat.git
+git clone https://github.com/opskat/opskat.git
 cd opskat
-make install       # Install frontend dependencies (pnpm install)
-make build         # Production build (desktop app only)
-```
-
-To build with the embedded `opsctl` CLI (recommended for full functionality):
-
-```bash
-make build-embed   # Production build with embedded opsctl binary
+make install       # Install frontend dependencies
+make build-embed   # Production build with embedded opsctl
 ```
 
 The built application will be in the `build/bin/` directory.
 
-### Build Targets
+### Build Commands
 
 | Command | Description |
 |---|---|
@@ -58,25 +74,15 @@ The built application will be in the `build/bin/` directory.
 | `make build-cli` | Build the opsctl CLI only |
 | `make install-cli` | Install opsctl to `$GOPATH/bin` |
 
-### Development Mode
-
-For development with hot reload on both frontend and backend:
-
-```bash
-make dev
-```
-
 ## Platform Support
 
-OpsKat supports all three major desktop platforms:
-
-- **macOS** (Intel and Apple Silicon)
-- **Linux** (x86_64)
-- **Windows** (x86_64)
+- **macOS** — Intel and Apple Silicon
+- **Linux** — x86_64
+- **Windows** — x86_64
 
 ## App Data Directory
 
-OpsKat stores its database (`opskat.db`), configuration, and logs in a platform-specific directory:
+OpsKat stores its database, configuration, and logs in:
 
 | Platform | Path |
 |---|---|
@@ -84,17 +90,4 @@ OpsKat stores its database (`opskat.db`), configuration, and logs in a platform-
 | Windows | `%APPDATA%/opskat` |
 | Linux | `~/.config/opskat` |
 
-The `opsctl` CLI uses the same data directory by default, but you can override it with the `--data-dir` flag.
-
-## Installing opsctl
-
-The `opsctl` CLI tool can be installed in two ways:
-
-1. **From the desktop app** — One-click install from the Settings page. The embedded binary is extracted to `~/.local/bin/` (Linux/macOS) or `%LOCALAPPDATA%/opsctl` (Windows).
-2. **From source** — Run `make install-cli` to build and install to `$GOPATH/bin`.
-
-Verify the installation:
-
-```bash
-opsctl --help
-```
+The `opsctl` CLI uses the same directory by default. Override with `--data-dir`.

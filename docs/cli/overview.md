@@ -37,7 +37,7 @@ When the OpsKat desktop app is running, `opsctl` automatically connects to it vi
 
 - **Connection pooling** — reuses the desktop app's SSH connections instead of opening new ones
 - **Approval workflow** — write operations (exec, cp, create, update) prompt an approval dialog in the desktop app
-- **Session approval** — once the user clicks "Allow Session", all subsequent operations in the same session are auto-approved
+- **Session approval** — clicking "Remember" in the approval dialog stores the command pattern for the current session, auto-approving matching subsequent operations
 
 When the desktop app is not running, `opsctl` falls back to direct connections using the shared database and credentials.
 

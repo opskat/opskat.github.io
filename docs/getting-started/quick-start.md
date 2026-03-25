@@ -31,7 +31,7 @@ The main interface has a sidebar with:
    - **Password / Private Key** — Your credentials
 4. Click **Save**.
 
-Credentials are encrypted using your OS keyring before being stored in the local database.
+Credentials are encrypted with AES-256-GCM before being stored in the local database. The encryption key is managed via your OS keyring.
 
 ### Database (MySQL / PostgreSQL)
 
@@ -62,7 +62,7 @@ The AI Agent lets you manage infrastructure through natural language. Before usi
 
 ### Option 1: OpenAI-compatible API
 
-1. Go to **Settings > AI Agent**.
+1. Open **Settings** and go to the **AI** tab.
 2. Select **OpenAI API** as the provider.
 3. Enter your API endpoint and API key.
 4. Choose a model (e.g., `gpt-4o`).
@@ -73,13 +73,13 @@ This works with any OpenAI-compatible API, including self-hosted models.
 ### Option 2: Claude CLI
 
 1. Install [Claude Code](https://docs.anthropic.com/en/docs/claude-code) on your machine.
-2. In **Settings > AI Agent**, select **Claude CLI**.
+2. In **Settings > AI**, select **Claude CLI**.
 3. OpsKat will use the Claude CLI binary directly.
 
 ### Option 3: Codex CLI
 
 1. Install [Codex CLI](https://github.com/openai/codex) on your machine.
-2. In **Settings > AI Agent**, select **Codex CLI**.
+2. In **Settings > AI**, select **Codex CLI**.
 
 ## Your First AI Conversation
 

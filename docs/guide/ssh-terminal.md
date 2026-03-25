@@ -70,11 +70,11 @@ Port forwarding configurations are saved per-asset and can include multiple rule
 
 ## SOCKS Proxy
 
-Configure a SOCKS5, SOCKS4, or HTTP proxy for the SSH connection. This is useful when the SSH server is only reachable through a proxy.
+Configure a SOCKS proxy for the SSH connection. This is useful when the SSH server is only reachable through a proxy.
 
 Set the proxy in the asset's SSH configuration:
 
-- **Type** — `socks5`, `socks4`, or `http`
+- **Type** — `socks5` or `socks4`
 - **Host / Port** — Proxy server address
 - **Username / Password** — Optional proxy authentication
 

@@ -18,7 +18,7 @@ SSH server assets for terminal access, command execution, and file transfer.
 - **Username** — Login user
 - **Auth Type** — `password` or `key`
 - **Jump Host** — Optional jump host chain for bastion access
-- **Proxy** — Optional SOCKS5/SOCKS4/HTTP proxy
+- **Proxy** — Optional SOCKS5/SOCKS4 proxy
 
 ### Database (MySQL / PostgreSQL)
 
@@ -65,7 +65,7 @@ Right-click an asset and select **Delete**. Assets are soft-deleted (marked as d
 
 ## Credential Management
 
-All credentials (passwords and SSH private keys) are encrypted before storage using AES encryption. The encryption key is derived from your OS keyring:
+All credentials (passwords and SSH private keys) are encrypted with AES-256-GCM before storage. The master encryption key is stored in your OS keyring:
 
 - **macOS** — Keychain
 - **Windows** — Windows Credential Manager

@@ -95,7 +95,7 @@ OpsKat ships with built-in policy groups (these cannot be modified):
 
 You can create custom policy groups:
 
-1. Go to **Settings > Policy Groups**.
+1. Open the policy group management page.
 2. Click **Create** and select the policy type (command, query, or redis).
 3. Define your allow/deny rules.
 4. Save the group.

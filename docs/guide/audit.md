@@ -87,7 +87,7 @@ Grants can be submitted from two places:
 Example from `opsctl`:
 
 ```bash
-opsctl grant submit --asset 1 --commands "cat /var/log/*" "systemctl * nginx"
+opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
 ```
 
 ### Grant Lifecycle
