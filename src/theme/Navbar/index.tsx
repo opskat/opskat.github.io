@@ -20,10 +20,8 @@ function Navbar(): React.ReactElement {
   const getAlternateLocalePath = useCallback(() => {
     const pathname = location.pathname;
     if (currentLocale === "en") {
-      // Default locale -> add /zh-CN prefix
       return `/zh-CN${pathname}`;
     }
-    // zh-CN locale -> remove /zh-CN prefix
     return pathname.replace(/^\/zh-CN/, "") || "/";
   }, [currentLocale, location.pathname]);
 

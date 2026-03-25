@@ -18,7 +18,7 @@ const config: Config = {
   baseUrl: "/",
 
   organizationName: "opskat",
-  projectName: "docs",
+  projectName: "opskat.github.io",
 
   onBrokenLinks: "warn",
 
@@ -55,7 +55,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: "./sidebars.ts",
-          editUrl: "https://github.com/opskat/docs/tree/main/",
+          editUrl: "https://github.com/opskat/opskat.github.io/tree/main/",
         },
         blog: false,
         theme: {
