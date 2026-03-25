@@ -51,7 +51,7 @@ function Navbar(): React.ReactElement {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/40 border-b border-border/50">
+    <nav className="navbar fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/40 border-b border-border/50 !shadow-none !p-0">
       <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-6">
         {/* Left: Logo + Brand */}
         <Link to="/" className="flex items-center gap-2 no-underline">

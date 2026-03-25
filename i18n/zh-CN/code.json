@@ -122,6 +122,24 @@
   "hero.cli.prefix": {
     "message": "或安装 CLI："
   },
+  "changelog.title": {
+    "message": "更新日志"
+  },
+  "changelog.subtitle": {
+    "message": "版本发布历史和每个版本的更新内容。"
+  },
+  "changelog.error": {
+    "message": "加载发布信息失败。"
+  },
+  "changelog.viewOnGithub": {
+    "message": "在 GitHub 上查看"
+  },
+  "changelog.noReleases": {
+    "message": "暂无发布版本。"
+  },
+  "changelog.downloads": {
+    "message": "下载"
+  },
   "footer.documentation": {
     "message": "文档"
   },
