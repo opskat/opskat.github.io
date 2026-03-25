@@ -1,4 +1,5 @@
 import Layout from "@theme/Layout";
+import { translate } from "@docusaurus/Translate";
 import { Hero } from "@/components/landing/Hero";
 import { TerminalDemo } from "@/components/landing/TerminalDemo";
 import { Features } from "@/components/landing/Features";
@@ -9,8 +10,15 @@ import { CTA } from "@/components/landing/CTA";
 export default function Home() {
   return (
     <Layout
-      title="AI-First Infrastructure Management"
-      description="AI-first desktop application for managing remote infrastructure with natural language."
+      title={translate({
+        id: "homepage.title",
+        message: "AI-First Infrastructure Management",
+      })}
+      description={translate({
+        id: "homepage.description",
+        message:
+          "AI-first desktop application for managing remote infrastructure with natural language.",
+      })}
     >
       <main className="landing-page relative overflow-hidden">
         {/* Tech grid lines overlay — fades out toward bottom */}

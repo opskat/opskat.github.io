@@ -1,4 +1,10 @@
 {
+  "homepage.title": {
+    "message": "AI 驱动的基础设施管理"
+  },
+  "homepage.description": {
+    "message": "AI 驱动的桌面应用，通过自然语言管理远程基础设施。"
+  },
   "navbar.docs": {
     "message": "文档"
   },
