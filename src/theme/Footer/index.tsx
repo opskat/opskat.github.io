@@ -33,7 +33,7 @@ function Footer(): React.ReactElement {
             GitHub
           </Link>
           <Link
-            to="/changelog"
+            to="/docs/changelog"
             className="text-xs text-muted-foreground no-underline transition-colors hover:text-foreground"
           >
             <Translate id="footer.releaseNotes">Changelog</Translate>

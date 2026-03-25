@@ -4,7 +4,7 @@ import { DownloadButton } from "./DownloadButton";
 
 export function CTA() {
   return (
-    <section className="relative max-w-[1200px] mx-auto border-t border-border">
+    <section className="relative max-w-[1200px] mx-auto border-t border-solid border-border">
       {/* Subtle radial gradient behind CTA for emphasis */}
       <div
         className="pointer-events-none absolute inset-0"

@@ -66,7 +66,7 @@ function Navbar(): React.ReactElement {
         </Link>
 
         {/* Center: Nav Links (hidden on mobile) */}
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 md:flex ml-8">
           {navLinks.map((link) => (
             <Link
               key={link.to}

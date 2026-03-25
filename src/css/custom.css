@@ -1,7 +1,8 @@
 /* Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
 
-@import "tailwindcss";
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
 
 @custom-variant dark (&:is([data-theme='dark'] *));
 
@@ -116,9 +117,19 @@
 
 /* ===== Base Styles ===== */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  /* Minimal reset for Tailwind border utilities to work without Preflight.
+     Preflight normally sets border-style: solid + border-width: 0 on all elements.
+     We scope this to our custom components only so Docusaurus pages are untouched. */
+  .landing-page *, .landing-page *::before, .landing-page *::after,
+  .navbar *, .navbar *::before, .navbar *::after,
+  [data-slot], [data-slot] *,
+  .changelog-page *, .changelog-page *::before, .changelog-page *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--border);
   }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
@@ -216,4 +227,29 @@
 
 [data-theme='light'] .section-glow-divider {
   background: linear-gradient(90deg, transparent, oklch(0.5 0.1 260 / 0.2), transparent);
+}
+
+/* ===== Doc page code block fix ===== */
+/* Ensure code blocks use Infima's default styling without interference */
+.theme-code-block {
+  border: none;
+  overflow: hidden;
+}
+.theme-code-block pre {
+  border: none;
+  margin: 0;
+}
+/* Inline code in doc pages */
+.markdown code:not(pre code),
+.theme-doc-markdown code:not(pre code) {
+  border: 1px solid var(--ifm-code-background, rgba(0, 0, 0, 0.1));
+  background-color: var(--ifm-code-background, rgba(0, 0, 0, 0.06));
+  border-radius: var(--ifm-code-border-radius, 0.25rem);
+  font-size: 0.875em;
+  padding: 0.1rem 0.4rem;
+}
+[data-theme='dark'] .markdown code:not(pre code),
+[data-theme='dark'] .theme-doc-markdown code:not(pre code) {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.06);
 }

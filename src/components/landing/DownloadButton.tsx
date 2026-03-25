@@ -111,11 +111,11 @@ export function DownloadButton() {
 
       {/* Dropdown menu */}
       {open && (
-        <div className="absolute top-full right-0 mt-2 min-w-[220px] rounded-lg border border-border bg-card shadow-xl z-50 overflow-hidden">
+        <div className="absolute top-full right-0 mt-2 min-w-[220px] rounded-lg border border-solid border-border bg-card shadow-xl z-50 overflow-hidden">
           {assets.map((a) => (
             <button
               key={a.id}
-              className={`flex items-center gap-2.5 px-4 py-2.5 text-sm w-full text-left transition-colors cursor-pointer ${
+              className={`appearance-none border-0 bg-transparent font-[inherit] flex items-center gap-2.5 px-4 py-2.5 text-sm w-full text-left transition-colors cursor-pointer ${
                 a.id === currentId
                   ? "bg-accent text-foreground font-medium"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -127,7 +127,7 @@ export function DownloadButton() {
             </button>
           ))}
           {version && (
-            <div className="border-t border-border px-4 py-2 text-xs text-muted-foreground">
+            <div className="border-t border-solid border-border px-4 py-2 text-xs text-muted-foreground">
               {version}
             </div>
           )}
