@@ -15,7 +15,7 @@
     "message": "桌面端 + CLI，同一核心"
   },
   "apppreview.subtitle": {
-    "message": "一个 Electron 应用用于可视化工作流，一个 Go 二进制用于脚本和 CI —— 共享同一连接池和策略引擎。"
+    "message": "桌面应用用于可视化操作，CLI 用于脚本和 CI —— 共享同一连接池和策略引擎。"
   },
   "cli.heading": {
     "message": "opsctl 命令行工具"

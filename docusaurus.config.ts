@@ -8,6 +8,7 @@ const config: Config = {
   title: "OpsKat",
   tagline: "AI-first infrastructure management",
   favicon: "img/favicon.ico",
+  clientModules: [require.resolve("./src/clientModules/localeRedirect.ts")],
 
   future: {
     v4: true,

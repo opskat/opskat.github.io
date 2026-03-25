@@ -254,7 +254,7 @@ export function AppPreview() {
         </h2>
         <p className="text-[15px] text-muted-foreground max-w-[500px] mx-auto">
           <Translate id="apppreview.subtitle">
-            One Electron app for visual workflows, one Go binary for scripting
+            One desktop app for visual workflows, one Go binary for scripting
             and CI — both share the same connection pool and policy engine.
           </Translate>
         </p>
