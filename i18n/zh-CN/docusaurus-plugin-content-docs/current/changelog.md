@@ -5,6 +5,35 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.0.2
+
+### 新增功能
+
+- **opsctl batch 命令** — 支持批量执行 SSH 命令、文件传输和数据库/Redis 操作
+- **批量审批对话框** — 桌面应用中一次审批多个操作
+- **插件系统重构** — `skill/` 目录迁移至 `plugin/`，支持多平台插件注册（Claude Code、Codex、Gemini CLI）
+- **构建信息模块** — 将 commit ID 嵌入二进制文件，便于版本追溯
+
+### 测试与质量
+
+- 新增 16 个前端测试文件，覆盖 stores、hooks、组件和工具函数
+- 新增 opsctl batch 命令测试和 GitHub 备份服务测试
+- 改进 golangci-lint 错误处理：`os.Remove`/`os.RemoveAll` 改用 logger 记录错误，去除 `//nolint`
+
+### CI/CD
+
+- Release/Nightly 构建优化
+- CI 集成前端 Vitest 测试
+
+### 其他改进
+
+- 前端组件无障碍属性完善
+- 新增批量操作相关 i18n 翻译
+- GitHub 备份服务重构
+- 自动更新服务修复
+
+**完整更新记录**: [v1.0.1...v1.0.2](https://github.com/opskat/opskat/compare/v1.0.1...v1.0.2)
+
 ## v1.0.0
 
 OpsKat 是一款服务器资产管理与远程运维桌面应用，集成 AI 智能助手，支持 SSH 终端、数据库查询、Redis 操作和文件传输。
