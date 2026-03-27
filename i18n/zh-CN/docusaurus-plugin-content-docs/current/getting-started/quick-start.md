@@ -60,26 +60,24 @@ sidebar_label: 快速开始
 
 AI 智能体允许你通过自然语言管理基础设施。使用前需要先配置提供商。
 
-### 方式一：OpenAI 兼容 API
+### 方式一：OpenAI 兼容 API（推荐）
 
-1. 打开 **设置**，进入 **AI** 选项卡。
-2. 选择 **OpenAI API** 作为提供商。
+1. 打开 **AI 智能体** 标签页 — 首次使用时会出现设置向导。
+2. 选择 **OpenAI 兼容** 作为提供商类型。
 3. 输入 API 端点和 API 密钥。
-4. 选择模型（例如 `gpt-4o`）。
-5. 点击 **保存**。
+4. 选择模型（点击**获取模型**自动发现，或手动输入 — 模型参数会自动填充）。
+5. 点击 **完成**。
 
-支持任何 OpenAI 兼容的 API，包括自托管模型。
+支持任何 OpenAI 兼容的 API，包括 DeepSeek、Azure OpenAI、自托管模型等。
 
-### 方式二：Claude CLI
+### 方式二：Anthropic API
 
-1. 在你的机器上安装 [Claude Code](https://docs.anthropic.com/en/docs/claude-code)。
-2. 在 **设置 > AI** 中，选择 **Claude CLI**。
-3. OpsKat 将直接使用 Claude CLI 二进制文件。
+1. 在设置向导中，选择 **Anthropic** 作为提供商类型。
+2. 输入 API 密钥。
+3. 选择 Claude 模型（例如 `claude-sonnet-4-20250514`）。
+4. 点击 **完成**。
 
-### 方式三：Codex CLI
-
-1. 在你的机器上安装 [Codex CLI](https://github.com/openai/codex)。
-2. 在 **设置 > AI** 中，选择 **Codex CLI**。
+你可以在 **设置 > AI** 中管理多个提供商并随时切换。
 
 ## 你的第一次 AI 对话
 

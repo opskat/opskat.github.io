@@ -60,26 +60,24 @@ You can split the terminal pane, open multiple sessions, and use the built-in SF
 
 The AI Agent lets you manage infrastructure through natural language. Before using it, configure a provider.
 
-### Option 1: OpenAI-compatible API
+### Option 1: OpenAI-compatible API (Recommended)
 
-1. Open **Settings** and go to the **AI** tab.
-2. Select **OpenAI API** as the provider.
+1. Open the **AI Agent** tab — the setup wizard will appear on first use.
+2. Select **OpenAI Compatible** as the provider type.
 3. Enter your API endpoint and API key.
-4. Choose a model (e.g., `gpt-4o`).
-5. Click **Save**.
+4. Choose a model (click **Fetch Models** to auto-discover, or type manually — model parameters will auto-fill).
+5. Click **Complete**.
 
-This works with any OpenAI-compatible API, including self-hosted models.
+This works with any OpenAI-compatible API, including DeepSeek, Azure OpenAI, self-hosted models, etc.
 
-### Option 2: Claude CLI
+### Option 2: Anthropic API
 
-1. Install [Claude Code](https://docs.anthropic.com/en/docs/claude-code) on your machine.
-2. In **Settings > AI**, select **Claude CLI**.
-3. OpsKat will use the Claude CLI binary directly.
+1. In the setup wizard, select **Anthropic** as the provider type.
+2. Enter your API key.
+3. Choose a Claude model (e.g., `claude-sonnet-4-20250514`).
+4. Click **Complete**.
 
-### Option 3: Codex CLI
-
-1. Install [Codex CLI](https://github.com/openai/codex) on your machine.
-2. In **Settings > AI**, select **Codex CLI**.
+You can manage multiple providers and switch between them in **Settings > AI**.
 
 ## Your First AI Conversation
 

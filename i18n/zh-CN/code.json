@@ -27,7 +27,7 @@
     "message": "opsctl 命令行工具"
   },
   "cli.description": {
-    "message": "一个 Go 二进制文件，将 OpsKat 的全部能力带到你的终端。编写常用操作脚本、集成 CI 流水线，或进入交互式会话。在 Claude Code 或 Codex 中安装 Skill，让 AI 编程助手通过 opsctl 直接管理你的基础设施 —— 全程策略管控和审计日志。"
+    "message": "一个 Go 二进制文件，将 OpsKat 的全部能力带到你的终端。编写常用操作脚本、集成 CI 流水线，或进入交互式会话。在 Claude Code、Codex 或 Gemini CLI 中安装 Skill，让 AI 编程助手通过 opsctl 直接管理你的基础设施 —— 全程策略管控和审计日志。"
   },
   "cli.feature.exec": {
     "message": "跨服务器执行命令"
@@ -48,7 +48,7 @@
     "message": "与桌面应用共享连接池"
   },
   "cli.feature.ai_skill": {
-    "message": "一键安装 Claude Code / Codex Skill，让 AI 通过 opsctl 管理基础设施"
+    "message": "一键安装 Claude Code / Codex / Gemini CLI Skill，让 AI 通过 opsctl 管理基础设施"
   },
   "cta.heading": {
     "message": "准备好开始了吗？"
@@ -72,7 +72,7 @@
     "message": "AI 智能体"
   },
   "features.ai_agent.desc": {
-    "message": "支持多轮对话和工具调用。兼容 OpenAI API、Claude CLI 和 Codex CLI。"
+    "message": "支持多轮对话和工具调用。兼容 OpenAI API 和 Anthropic API，内置模型参数预设和上下文自动压缩。"
   },
   "features.ssh_terminal.title": {
     "message": "SSH 终端"
@@ -102,7 +102,7 @@
     "message": "AI 工具集成"
   },
   "features.ai_tool.desc": {
-    "message": "一键安装技能，教会 Claude Code 和 Codex 使用 opsctl 进行基础设施管理。"
+    "message": "一键安装技能，教会 Claude Code、Codex 和 Gemini CLI 使用 opsctl 进行基础设施管理。"
   },
   "hero.badge": {
     "message": "开源 · macOS · Linux · Windows"

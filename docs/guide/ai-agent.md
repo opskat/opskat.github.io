@@ -9,25 +9,26 @@ OpsKat's AI Agent lets you manage infrastructure through natural-language conver
 
 ## Provider Configuration
 
-The AI Agent supports three provider backends. Configure your preferred provider in **Settings > AI**.
+OpsKat supports multiple AI providers. You can configure and switch between them in **Settings > AI**, or use the setup wizard on first launch.
 
-### OpenAI-compatible API
+### OpenAI-compatible API (Recommended)
 
-Works with OpenAI, Azure OpenAI, and any OpenAI-compatible endpoint (e.g., self-hosted models via vLLM, Ollama, etc.).
+Works with OpenAI, DeepSeek, Azure OpenAI, and any OpenAI-compatible endpoint (e.g., self-hosted models via vLLM, Ollama, etc.).
 
 - **API Endpoint** — The base URL (e.g., `https://api.openai.com/v1`)
 - **API Key** — Your API key
-- **Model** — Model name (e.g., `gpt-4o`, `claude-sonnet-4-20250514`)
+- **Model** — Model name (e.g., `gpt-4o`, `deepseek-chat`). Click **Fetch Models** to auto-discover available models, or type manually — model parameters (max output tokens, context window) will auto-fill based on known presets.
 
 The agent uses streaming SSE for real-time response delivery and OpenAI function calling for tool invocation.
 
-### Claude CLI
+### Anthropic API
 
-Uses the [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI binary installed on your machine. Messages are converted to plain text and processed through Claude's stream-json format (NDJSON). Supports session resume for continuing previous conversations.
+Native support for Anthropic's Messages API with prompt caching optimization.
 
-### Codex CLI
+- **API Key** — Your Anthropic API key
+- **Model** — Claude model name (e.g., `claude-sonnet-4-20250514`)
 
-Uses the [Codex CLI](https://github.com/openai/codex) via its JSON-RPC 2.0 protocol over stdin/stdout. OpsKat manages the subprocess lifecycle and translates between its internal message format and the Codex protocol.
+Supports automatic context compression when conversations approach the context window limit.
 
 ## How Conversations Work
 

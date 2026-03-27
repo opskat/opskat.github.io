@@ -9,25 +9,26 @@ OpsKat 的 AI 智能体允许你通过自然语言对话来管理基础设施。
 
 ## 提供商配置
 
-AI 智能体支持三种后端提供商。在 **设置 > AI** 中配置你偏好的提供商。
+OpsKat 支持多个 AI 提供商。你可以在 **设置 > AI** 中配置和切换提供商，首次使用时也会出现设置向导。
 
-### OpenAI 兼容 API
+### OpenAI 兼容 API（推荐）
 
-兼容 OpenAI、Azure OpenAI 以及任何 OpenAI 兼容的端点（例如通过 vLLM、Ollama 等自托管的模型）。
+兼容 OpenAI、DeepSeek、Azure OpenAI 以及任何 OpenAI 兼容的端点（例如通过 vLLM、Ollama 等自托管的模型）。
 
 - **API 端点** — 基础 URL（例如 `https://api.openai.com/v1`）
 - **API 密钥** — 你的 API 密钥
-- **模型** — 模型名称（例如 `gpt-4o`、`claude-sonnet-4-20250514`）
+- **模型** — 模型名称（例如 `gpt-4o`、`deepseek-chat`）。点击**获取模型**自动发现可用模型，或手动输入 — 模型参数（最大输出 Token、上下文窗口）会根据已知预设自动填充。
 
 智能体使用流式 SSE 实现实时响应传输，通过 OpenAI 函数调用进行工具调用。
 
-### Claude CLI
+### Anthropic API
 
-使用安装在你机器上的 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI 二进制文件。消息会被转换为纯文本，并通过 Claude 的 stream-json 格式（NDJSON）进行处理。支持会话恢复以继续之前的对话。
+原生支持 Anthropic Messages API，并带有 Prompt 缓存优化。
 
-### Codex CLI
+- **API 密钥** — 你的 Anthropic API 密钥
+- **模型** — Claude 模型名称（例如 `claude-sonnet-4-20250514`）
 
-通过 stdin/stdout 上的 JSON-RPC 2.0 协议使用 [Codex CLI](https://github.com/openai/codex)。OpsKat 管理子进程的生命周期，并在内部消息格式与 Codex 协议之间进行转换。
+支持对话接近上下文窗口限制时自动压缩上下文。
 
 ## 对话工作原理
 

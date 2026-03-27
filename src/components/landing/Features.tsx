@@ -14,7 +14,7 @@ const features = [
     titleId: "features.ai_agent.title",
     title: "AI Agent",
     descId: "features.ai_agent.desc",
-    desc: "Multi-turn conversations with tool calling. Supports OpenAI-compatible API, Claude CLI, and Codex CLI.",
+    desc: "Multi-turn conversations with tool calling. Supports OpenAI-compatible API and Anthropic API, with model presets and context auto-compression.",
   },
   {
     icon: Cable,
@@ -49,7 +49,7 @@ const features = [
     titleId: "features.ai_tool.title",
     title: "AI Tool Integration",
     descId: "features.ai_tool.desc",
-    desc: "One-click skill installation teaches Claude Code and Codex how to use opsctl for infrastructure management.",
+    desc: "One-click skill installation teaches Claude Code, Codex, and Gemini CLI how to use opsctl for infrastructure management.",
   },
 ];
 

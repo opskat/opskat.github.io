@@ -27,7 +27,7 @@ const features = [
   },
   {
     id: "cli.feature.ai_skill",
-    text: "One-click Skill for Claude Code & Codex — AI manages your infra via opsctl",
+    text: "One-click Skill for Claude Code, Codex & Gemini CLI — AI manages your infra via opsctl",
   },
 ];
 
@@ -45,8 +45,8 @@ export function CLISection() {
               A single Go binary that brings the full power of OpsKat to your
               terminal. Script common operations, integrate with CI pipelines,
               or drop into interactive sessions. Install the Skill in Claude
-              Code or Codex, and let AI coding assistants manage your
-              infrastructure directly through opsctl — with full policy
+              Code, Codex, or Gemini CLI, and let AI coding assistants manage
+              your infrastructure directly through opsctl — with full policy
               enforcement and audit logging.
             </Translate>
           </p>
