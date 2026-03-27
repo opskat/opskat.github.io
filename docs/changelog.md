@@ -5,6 +5,34 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.1.1
+
+### New Features
+
+- **Download integrity verification** — SHA256 checksum verification for downloaded files. On failure, prompts manual download.
+- **Download mirror support** — Mirror selector in settings with automatic fallback and skip-verification option.
+- **AI thinking display** — AI conversations now show thinking process, message queue, stop/retry, and error recovery.
+- **Terminal context menu & search** — Right-click context menu and search in terminal. MySQL TLS support, password echo.
+- **Edge reveal strip** — Edge hot zone component for sidebar navigation.
+- **System status dashboard** — Startup status registry with settings page section and toast notifications for migration failures.
+
+### Bug Fixes
+
+- Fixed DeepSeek and other OpenAI-compatible API returning 400 errors.
+- Fixed CI golangci-lint v2 formatting and staticcheck issues.
+- Removed redundant `nolint gosec` directives.
+- Fixed UpdateSection prettier formatting.
+
+### CI/CD
+
+- Generate `release-info.json` on release for mirror update checks.
+
+### Other
+
+- README rewrite highlighting use cases and security auditing.
+
+**Full Changelog**: [v1.1.0...v1.1.1](https://github.com/opskat/opskat/compare/v1.1.0...v1.1.1)
+
 ## v1.1.0
 
 ### New Features
