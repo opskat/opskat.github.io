@@ -5,6 +5,49 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.1.0
+
+### 新增功能
+
+- **多 Provider AI 配置** — 基于数据库的 Provider 管理，支持完整 CRUD API。新增原生 Anthropic Messages API 支持，与 OpenAI 兼容 Provider 并存。
+- **AI Agent 增强** — 动态系统提示词、Sub Agent 支持、并行工具执行、批量命令处理。
+- **统一审批系统** — 合并 AI 与 opsctl 审批弹窗为统一工作流。支持批量确认、Grant 机制（可编辑命令模式）和记住模式。
+- **AI 模型智能化** — 模型参数预设，选择模型时自动填充参数；上下文窗口自动压缩；Anthropic Prompt 缓存优化。
+- **多资产权限申请** — `request_permission` 工具支持多资产 `items` 参数，与 `opsctl grant` 保持一致。
+- **opsctl 改进** — Redis `-n` 参数切换数据库；`create/update asset` 支持 `--icon` 参数。
+
+### UI/UX 改进
+
+- **AI 设置向导重构** — 新增 opsctl 插件引导横幅，优化 Provider 选择卡片，提取共享 `AIProviderForm` 组件。
+- **AI 对话 UI 重构** — Chat Header、角色标签、实色助手气泡、独立审批块渲染。
+- **Terminal Aesthetic 主题** — 全新应用视觉风格。
+- **AI 设置增强** — 从 API 获取模型列表、模型搜索选择器、Token 参数配置。
+- **审批块优化** — single/batch/grant 三种类型差异化渲染；仅 pending 状态的审批打断消息流。
+- **ToolBlock 与 AgentBlock 微调** — 优化间距、行高、运行状态指示器、错误状态图标。
+- **GFM Markdown 支持** — AI 对话支持渲染 GitHub Flavored Markdown（表格、删除线、任务列表）。
+- **数据库与 Redis UX** — 优化查询模块前端用户体验。
+
+### Bug 修复
+
+- 修复 Windows 下启动子进程黑窗一闪而过的问题
+- 修复新建 SSH 资产默认端口为 6379 而非 22 的问题
+- 修复 `SSHPool.Close()` 重复调用导致 panic
+- 修复 opsctl `exec_sql`/`exec_redis`/`cp` 审计日志未记录决策和决策来源
+
+### 后端改进
+
+- **用户拒绝处理** — 用户拒绝命令时返回强制停止指令；系统提示词增加拒绝引导，防止 AI 尝试绕过。
+- **并发安全** — 审批回调通过 context 传递会话 ID，替代实例变量。
+- AI 模块错误信息统一为英文，提升 LLM 理解效果。
+
+### 其他
+
+- 添加 MIT 许可证
+- 更新 README 链接至 opskat.github.io
+- 新增审批按钮和批量操作的 i18n 翻译
+
+**完整更新记录**: [v1.0.2...v1.1.0](https://github.com/opskat/opskat/compare/v1.0.2...v1.1.0)
+
 ## v1.0.2
 
 ### 新增功能

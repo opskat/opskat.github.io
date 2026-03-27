@@ -5,6 +5,49 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.1.0
+
+### New Features
+
+- **Multi-provider AI configuration** — Database-backed provider management with full CRUD API. Added native Anthropic Messages API support alongside OpenAI-compatible providers.
+- **AI Agent enhancements** — Dynamic system prompts, sub-agent support, parallel tool execution, and batch command processing.
+- **Unified approval system** — Merged AI and opsctl approval dialogs into a single workflow. Supports batch confirmation, Grant mechanism with editable command patterns, and remember mode.
+- **AI model intelligence** — Model parameter presets with auto-fill on selection, context window auto-compression, and Anthropic prompt caching optimization.
+- **Multi-asset permission requests** — `request_permission` tool now supports multi-asset `items` parameter, consistent with `opsctl grant`.
+- **opsctl improvements** — Redis `-n` flag for database selection; `create/update asset` supports `--icon` parameter.
+
+### UI/UX Improvements
+
+- **AI setup wizard redesign** — New opsctl plugin banner, improved provider selection cards, extracted shared `AIProviderForm` component.
+- **AI chat UI refactoring** — Chat header, role labels, solid assistant bubbles, independent approval block rendering.
+- **Terminal Aesthetic theme** — New visual style for the application interface.
+- **AI settings enhancement** — Model list fetching from API, model selector with search, token parameter configuration.
+- **Approval block improvements** — Differentiated rendering for single/batch/grant types; only pending approvals interrupt message flow.
+- **ToolBlock & AgentBlock refinements** — Optimized spacing, line height, running state indicator, error state icons.
+- **GFM Markdown support** — AI chat now renders GitHub Flavored Markdown (tables, strikethrough, task lists).
+- **Database & Redis UX** — Improved frontend user experience for query modules.
+
+### Bug Fixes
+
+- Fixed Windows subprocess causing a brief black window flash on launch.
+- Fixed new SSH asset defaulting to port 6379 instead of 22.
+- Fixed `SSHPool.Close()` panic on double-call.
+- Fixed opsctl `exec_sql`/`exec_redis`/`cp` audit logs missing decision and decision source.
+
+### Backend Improvements
+
+- **User denial handling** — Strong stop instructions when user denies commands; system prompt includes denial guidance to prevent AI from attempting workarounds.
+- **Concurrency safety** — Approval callbacks now receive conversation ID via context instead of instance variable.
+- Error messages in AI module standardized to English for better LLM comprehension.
+
+### Other
+
+- Added MIT License.
+- Updated README links to opskat.github.io.
+- Added i18n translations for approval buttons and batch operations.
+
+**Full Changelog**: [v1.0.2...v1.1.0](https://github.com/opskat/opskat/compare/v1.0.2...v1.1.0)
+
 ## v1.0.2
 
 ### New Features
