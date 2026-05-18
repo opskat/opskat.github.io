@@ -5,6 +5,16 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.6.2 (2026-05-18)
+
+Fixes a rendering glitch where selected text in the xterm WebGL terminal appeared to shift font when the selection updated frequently.
+
+### 🎨 UI Improvements
+
+- 🎨 Terminal selection now sets an explicit foreground color, eliminating the "font shift" appearance of selected text under frequent selection updates (by @CodFrm)
+
+**Full Changelog**: [v1.6.1...v1.6.2](https://github.com/opskat/opskat/compare/v1.6.1...v1.6.2)
+
 ## v1.6.1 (2026-05-18)
 
 Fixes a regression where SSH terminal double-sent characters (space, capital letters) due to xterm rollover-bypass misjudgement, and adds loading feedback to the port-forwarding start/stop flow so users don't repeatedly click during dial and tear down a connection mid-build.
