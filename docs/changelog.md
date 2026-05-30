@@ -5,6 +5,35 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.7.0 (2026-05-30)
+
+This release adds etcd asset management, SQL Server / SQLite database assets, and a full remote-file external-edit workflow (with a three-way merge workbench) as its three headline features. The SFTP file manager gains a major upgrade, asset-tree drag performance is improved, and several bugs are fixed: startup home-tab preference, terminal PTY sizing, command-palette overflow, and WebGL font rendering.
+
+### 🚀 Major New Features
+
+- 💥 etcd asset management: new etcd asset type, connection pool and built-in permission policy, with KV browsing/query/detail editing and cluster info, wired into the AI tool chain [#122](https://github.com/opskat/opskat/issues/122) ([#129](https://github.com/opskat/opskat/pull/129)) (by @CodFrm)
+- 💥 SQL Server and SQLite database assets: MSSQL via a pure-Go driver with direct connection + SSH tunnel, SQLite via local file, with full query-panel dialect/pagination/read-only adaptation [#120](https://github.com/opskat/opskat/issues/120) ([#128](https://github.com/opskat/opskat/pull/128)) (by @CodFrm)
+- 💥 Full remote-file external-edit workflow: pull a remote file into a local copy for continuous editing with auto write-back, including a three-way merge workbench, pending-decision consolidation and restart recovery ([#112](https://github.com/opskat/opskat/pull/112)) (by @2849236173)
+- ✨ SFTP file manager upgrade: create file/folder, rename, cut/copy/paste, multi-select download/delete, drag-to-move, properties dialog, and permission/owner editing (chmod/chown, recursive) ([#124](https://github.com/opskat/opskat/pull/124)) (by @youaremywind)
+- ✨ SFTP file manager: new "Copy file path" menu action ([#131](https://github.com/opskat/opskat/pull/131)) (by @youaremywind)
+
+### ⚡️ Performance
+
+- ⚡️ Optimized asset-tree drag performance and click-response latency (AssetRow re-renders during drag dropped from ~34/move to ~0.68/move) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed startup home-tab preference not taking effect [#132](https://github.com/opskat/opskat/issues/132) ([#133](https://github.com/opskat/opskat/pull/133)) (by @CodFrm)
+- 🐛 Fixed SSH terminal not syncing PTY size on initial mount, causing full-screen programs like vi to display only half the screen [#125](https://github.com/opskat/opskat/issues/125) (by @CodFrm)
+- 🐛 Fixed command palette overflowing the popover when content is too long [#126](https://github.com/opskat/opskat/issues/126) (by @CodFrm)
+- 🐛 Fixed terminal WebGL font rendering glitch (by @CodFrm)
+
+### ♻️ Refactoring
+
+- ♻️ opsctl cp now skips approval, keeping audit only (by @CodFrm)
+
+**Full Changelog**: [v1.6.2...v1.7.0](https://github.com/opskat/opskat/compare/v1.6.2...v1.7.0)
+
 ## v1.6.2 (2026-05-18)
 
 Fixes a rendering glitch where selected text in the xterm WebGL terminal appeared to shift font when the selection updated frequently.
