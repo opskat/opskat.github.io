@@ -5,6 +5,27 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.8.0 (2026-06-04)
+
+This release adds a local terminal asset (local) — open your machine's shell / PowerShell / WSL terminal directly inside the app, with split-screen support. The asset-type selector is upgraded to a dropdown with icons, grouping and search, backed by a unified type list. macOS shortcuts gain Ctrl support with a one-click ⌘⇄⌃ toggle. The macOS/Windows app icons are refreshed, and success toasts (such as copy) are moved to top-center.
+
+### 🚀 Major New Features
+
+- 💥 New local terminal asset (local): open your machine's shell / PowerShell / WSL terminal directly in the app, with split-screen (a new shell sharing the same config) and the Windows console black-window hidden [#70](https://github.com/opskat/opskat/issues/70) ([#140](https://github.com/opskat/opskat/pull/140)) (by @CodFrm)
+- ✨ Asset-type selector upgraded to a dropdown with icons, grouping and search, backed by a unified type list ([#142](https://github.com/opskat/opskat/pull/142)) (by @CodFrm)
+- ✨ macOS shortcuts now support Ctrl, with a one-click ⌘⇄⌃ toggle [#138](https://github.com/opskat/opskat/issues/138) ([#139](https://github.com/opskat/opskat/pull/139)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed the scroll height of the asset-type filter dropdown (by @CodFrm)
+
+### 🎨 UI Improvements
+
+- 🎨 Refreshed the macOS / Windows app icons (Windows icon now fills the tile) [#134](https://github.com/opskat/opskat/issues/134) (by @CodFrm)
+- 🎨 Moved success toasts (such as copy) to top-center with a shorter dwell time [#135](https://github.com/opskat/opskat/issues/135) (by @CodFrm)
+
+**Full Changelog**: [v1.7.0...v1.8.0](https://github.com/opskat/opskat/compare/v1.7.0...v1.8.0)
+
 ## v1.7.0 (2026-05-30)
 
 This release adds etcd asset management, SQL Server / SQLite database assets, and a full remote-file external-edit workflow (with a three-way merge workbench) as its three headline features. The SFTP file manager gains a major upgrade, asset-tree drag performance is improved, and several bugs are fixed: startup home-tab preference, terminal PTY sizing, command-palette overflow, and WebGL font rendering.
