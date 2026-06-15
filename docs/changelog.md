@@ -5,6 +5,43 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.9.0 (2026-06-15)
+
+This release centers on **terminal file transfer**: lrzsz (ZMODEM rz/sz) file transfer in the terminal, with drag-and-drop upload straight into the SSH terminal. Database/middleware assets gain SOCKS5 proxy connections; new additions include WindTerm config import, standalone AI-plugin uninstall, and a terminal server-status popup. It also fixes PostgreSQL table-tree schema display, missing output in the Windows ConPTY local terminal, split-pane sync, and more.
+
+### 🚀 Major New Features
+
+- 💥 Terminal file transfer: lrzsz (ZMODEM rz/sz) file transfer in the terminal, plus drag-and-drop files into the SSH terminal to upload via rz ([#170](https://github.com/opskat/opskat/pull/170)) ([#177](https://github.com/opskat/opskat/pull/177)) (by @CodFrm, @wfion)
+- ✨ Database/middleware assets support SOCKS5 proxy connections ([#175](https://github.com/opskat/opskat/pull/175)) (by @CodFrm)
+- ✨ Added WindTerm config import ([#166](https://github.com/opskat/opskat/pull/166)) (by @wfion)
+- ✨ AI plugins can be uninstalled individually ([#184](https://github.com/opskat/opskat/pull/184)) (by @wfion)
+- ✨ Added a terminal server-status popup ([#157](https://github.com/opskat/opskat/pull/157)) (by @2849236173)
+- ✨ Improved terminal copy/paste and shortcut settings ([#185](https://github.com/opskat/opskat/pull/185)) (by @CodFrm)
+- ✨ Improved SSH key import/export [#161](https://github.com/opskat/opskat/issues/161) ([#163](https://github.com/opskat/opskat/pull/163)) (by @CodFrm)
+- ✨ Remember WebDAV backup parameters ([#186](https://github.com/opskat/opskat/pull/186)) (by @wfion)
+- ✨ SQL syntax highlighting in the DDL dialog ([#145](https://github.com/opskat/opskat/pull/145)) (by @wfion)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed PostgreSQL table tree not showing tables in non-public schemas [#187](https://github.com/opskat/opskat/issues/187) ([#188](https://github.com/opskat/opskat/pull/188)) (by @CodFrm)
+- 🐛 Fixed missing output in the Windows ConPTY local terminal [#164](https://github.com/opskat/opskat/issues/164) ([#165](https://github.com/opskat/opskat/pull/165)) (by @Joker764)
+- 🐛 Fixed terminal and file-manager sync after splitting panes ([#180](https://github.com/opskat/opskat/pull/180)) (by @wfion)
+- 🐛 Fixed server-status window flicker on refresh ([#168](https://github.com/opskat/opskat/pull/168)) (by @2849236173)
+- 🐛 Fixed Tabby key authentication import ([#162](https://github.com/opskat/opskat/pull/162)) (by @CodFrm)
+- 🐛 Fixed multi-line clipboard paste not recognizing newlines on terminal right-click [#146](https://github.com/opskat/opskat/issues/146) ([#158](https://github.com/opskat/opskat/pull/158)) (by @CodFrm)
+- 🐛 Fixed tab freeze when opening the same connection multiple times (added a random instance segment to the terminal session ID) ([#143](https://github.com/opskat/opskat/pull/143)) (by @CodFrm)
+- 🐛 Fixed approval activation restoring a maximized window [#148](https://github.com/opskat/opskat/issues/148) ([#154](https://github.com/opskat/opskat/pull/154)) (by @CodFrm)
+- 🐛 Fixed command-palette tab labels not using i18n translations ([#172](https://github.com/opskat/opskat/pull/172)) (by @YangFong)
+
+### 🎨 UI Improvements
+
+- 🎨 Added an upload button to the file manager [#147](https://github.com/opskat/opskat/issues/147) ([#149](https://github.com/opskat/opskat/pull/149)) (by @CodFrm)
+- 🎨 Highlight URLs in the terminal and open them in the browser on click ([#153](https://github.com/opskat/opskat/pull/153)) (by @wfion)
+- 🎨 Settings page uses scrollbar-gutter to reserve the scrollbar groove, eliminating tab-switch jitter ([#167](https://github.com/opskat/opskat/pull/167)) (by @YangFong)
+- 🎨 Improved the popup direction of the context menu ([#151](https://github.com/opskat/opskat/pull/151)) (by @CodFrm)
+
+**Full Changelog**: [v1.8.0...v1.9.0](https://github.com/opskat/opskat/compare/v1.8.0...v1.9.0)
+
 ## v1.8.0 (2026-06-04)
 
 This release adds a local terminal asset (local) — open your machine's shell / PowerShell / WSL terminal directly inside the app, with split-screen support. The asset-type selector is upgraded to a dropdown with icons, grouping and search, backed by a unified type list. macOS shortcuts gain Ctrl support with a one-click ⌘⇄⌃ toggle. The macOS/Windows app icons are refreshed, and success toasts (such as copy) are moved to top-center.
