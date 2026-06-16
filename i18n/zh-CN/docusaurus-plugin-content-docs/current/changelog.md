@@ -5,6 +5,20 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.9.1 (2026-06-16)
+
+v1.9.1 是一个补丁版本，修复了 ZMODEM(rz/sz) 终端传输二进制文件损坏的问题，并优化了终端高亮链接的点击交互。
+
+### 🐛 Bug 修复
+
+- 🐛 修复 ZMODEM(rz/sz) 终端传输二进制文件损坏 ([#198](https://github.com/opskat/opskat/pull/198)) (by @CodFrm)
+
+### 🎨 UI 改进
+
+- 🎨 终端高亮链接改为仅左键点击弹出浏览器，避免误触 ([#193](https://github.com/opskat/opskat/pull/193)) (by @wfion)
+
+**完整更新记录**: [v1.9.0...v1.9.1](https://github.com/opskat/opskat/compare/v1.9.0...v1.9.1)
+
 ## v1.9.0 (2026-06-15)
 
 本次版本以**终端文件传输**为核心：新增 lrzsz (ZMODEM rz/sz) 终端文件传输并支持直接拖拽文件到 SSH 终端上传；数据库/中间件资产支持 SOCKS5 代理连接；新增 WindTerm 配置导入、AI 插件单独卸载、终端服务器状态弹窗等功能；并修复 PostgreSQL 表树 schema 展示、Windows ConPTY 本地终端无输出、分屏同步等多个问题。

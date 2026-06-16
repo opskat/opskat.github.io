@@ -5,6 +5,20 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.9.1 (2026-06-16)
+
+v1.9.1 is a patch release that fixes binary file corruption during ZMODEM (rz/sz) terminal transfers and refines the click behavior of highlighted links in the terminal.
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed binary file corruption during ZMODEM (rz/sz) terminal transfers ([#198](https://github.com/opskat/opskat/pull/198)) (by @CodFrm)
+
+### 🎨 UI Improvements
+
+- 🎨 Highlighted terminal links now open the browser on left-click only, avoiding accidental triggers ([#193](https://github.com/opskat/opskat/pull/193)) (by @wfion)
+
+**Full Changelog**: [v1.9.0...v1.9.1](https://github.com/opskat/opskat/compare/v1.9.0...v1.9.1)
+
 ## v1.9.0 (2026-06-15)
 
 This release centers on **terminal file transfer**: lrzsz (ZMODEM rz/sz) file transfer in the terminal, with drag-and-drop upload straight into the SSH terminal. Database/middleware assets gain SOCKS5 proxy connections; new additions include WindTerm config import, standalone AI-plugin uninstall, and a terminal server-status popup. It also fixes PostgreSQL table-tree schema display, missing output in the Windows ConPTY local terminal, split-pane sync, and more.
