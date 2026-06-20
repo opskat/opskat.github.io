@@ -5,9 +5,11 @@ sidebar_label: Asset Management
 
 # Asset Management
 
-OpsKat organizes your infrastructure into a tree-structured inventory. Assets represent individual servers, databases, or Redis instances. Groups provide hierarchical organization.
+OpsKat organizes your infrastructure into a tree-structured inventory. Assets represent individual servers, databases, message brokers, Kubernetes clusters, and more. Groups provide hierarchical organization.
 
 ## Asset Types
+
+OpsKat supports nine asset types. Each type has its own connection form, console, and policy model.
 
 ### SSH
 
@@ -20,16 +22,31 @@ SSH server assets for terminal access, command execution, and file transfer.
 - **Jump Host** — Optional jump host chain for bastion access
 - **Proxy** — Optional SOCKS5/SOCKS4 proxy
 
-### Database (MySQL / PostgreSQL)
+### Local Terminal
 
-Database assets for SQL query execution via the Query Editor or AI Agent.
+Local terminal assets open a shell on **your own machine** — no remote connection. Useful for running local tooling alongside your managed servers.
 
-- **Driver** — `mysql` or `postgresql`
-- **Host** / **Port** — Database server address (default port: 3306 for MySQL, 5432 for PostgreSQL)
-- **Username** / **Password** — Database credentials
+- **Shell** — Optional shell executable. Pick from detected shells (the app probes the host, e.g. `/etc/shells` on Unix and WSL distributions / PowerShell / Command Prompt on Windows) or type a path. Leave empty to use the OS default.
+- **Args** — Optional shell startup arguments (e.g., `--login`)
+- **Working Directory** — Optional starting directory (default: `~`)
+
+Local terminals have no host, port, or credentials.
+
+### Database (MySQL / PostgreSQL / SQL Server / SQLite)
+
+Database assets for SQL execution via the [Query Editor](/docs/guide/query-editor) or the AI Agent.
+
+- **Driver** — `mysql`, `postgresql`, `mssql` (SQL Server), or `sqlite`
+- **Host** / **Port** — Database server address (default ports: 3306 MySQL, 5432 PostgreSQL, 1433 SQL Server). Not used for SQLite.
+- **Username** / **Password** — Database credentials (not used for SQLite)
 - **Database** — Default database name
 - **Read Only** — Enable to restrict to read-only connections
 - **SSH Asset** — Optional SSH asset for tunnel connections (the database is accessed through an SSH tunnel to the selected server)
+
+**SQLite** uses a file source instead of host/port:
+
+- **Path** — Path to the SQLite database file
+- **Source** — `local` (a file on your machine) or `remote_ssh_vfs` (a file on a remote server, accessed over SSH). The remote source requires an SSH asset.
 
 ### Redis
 
@@ -38,8 +55,58 @@ Redis assets for command execution and key browsing.
 - **Host** / **Port** — Redis server address (default port: 6379)
 - **Username** / **Password** — Optional authentication
 - **Database** — DB index (default: 0)
-- **TLS** — Enable TLS connections
+- **TLS** — Enable TLS connections (CA / client cert / client key, skip-verify, and server name are supported)
 - **SSH Asset** — Optional SSH asset for tunnel connections
+
+### MongoDB
+
+MongoDB assets for document queries via the [MongoDB panel](/docs/guide/mongodb) or the AI Agent.
+
+- **Host** / **Port** — MongoDB server address (default port: 27017)
+- **Username** / **Password** — Optional authentication (auth source defaults to `admin`)
+- **Database** — Default database
+- **SSH Asset** — Optional SSH asset for tunnel connections
+
+### Kafka
+
+Kafka cluster assets for broker, topic, consumer-group, ACL, and schema management via the [Kafka panel](/docs/guide/kafka).
+
+- **Brokers** — One or more `host:port` bootstrap brokers (default port: 9092). A single host/port is also accepted.
+- **Client ID** — Optional client identifier
+- **SASL Mechanism** — `none`, `plain`, `scram-sha-256`, or `scram-sha-512`
+- **Username** / **Password** — Required when SASL is enabled
+- **TLS** — Enable TLS (CA / client cert / client key, skip-verify, server name)
+- **SSH Asset** — Optional SSH asset for tunnel connections
+
+### Kubernetes
+
+Kubernetes cluster assets for browsing workloads and streaming logs via the [Kubernetes panel](/docs/guide/kubernetes), and running `kubectl` through the AI Agent.
+
+- **Kubeconfig** — Kubeconfig YAML content (required, encrypted at rest)
+- **Namespace** — Optional default namespace
+- **Context** — Optional kubeconfig context
+- **SSH Asset** — Optional SSH asset to reach the cluster API through a jump host
+
+### etcd
+
+etcd cluster assets for key/value browsing and operations via the [etcd panel](/docs/guide/etcd).
+
+- **Endpoints** — One or more `host:port` endpoints (default port: 2379)
+- **Username** / **Password** — Optional (when RBAC is enabled)
+- **TLS** — Enable TLS (CA / client cert / client key, skip-verify, server name)
+- **Dial / Command Timeout** — Optional connection and command timeouts (seconds)
+- **SSH Asset** — Optional SSH asset for tunnel connections
+
+### Serial
+
+Serial port assets for connecting to devices over a serial console.
+
+- **Port Path** — Serial device path (e.g., `COM3` on Windows, `/dev/ttyUSB0` on Linux/macOS) — required
+- **Baud Rate** — e.g., `9600`, `115200` — required
+- **Data Bits** — `5`, `6`, `7`, or `8` (default: `8`)
+- **Stop Bits** — `1`, `1.5`, or `2` (default: `1`)
+- **Parity** — `none`, `odd`, `even`, `mark`, or `space` (default: `none`)
+- **Flow Control** — `none` or `hardware`
 
 ## Groups
 
@@ -65,7 +132,7 @@ Right-click an asset and select **Delete**. Assets are soft-deleted (marked as d
 
 ## Credential Management
 
-All credentials (passwords and SSH private keys) are encrypted with AES-256-GCM before storage. The master encryption key is stored in your OS keyring:
+All credentials (passwords, SSH private keys, kubeconfigs) are encrypted with **Argon2id** key derivation and **AES-256-GCM** before storage. The master encryption key is stored in your OS keyring (via go-keyring):
 
 - **macOS** — Keychain
 - **Windows** — Windows Credential Manager
@@ -84,7 +151,7 @@ Imported keys are stored as credentials and can be reused across multiple assets
 
 ## Import / Export
 
-OpsKat supports importing assets from external sources and exporting your inventory for backup or sharing.
+OpsKat supports importing assets from external sources and exporting your inventory for backup.
 
 ### Import Sources
 
@@ -92,16 +159,11 @@ OpsKat supports importing assets from external sources and exporting your invent
 |---|---|
 | **SSH Config** | Parse your `~/.ssh/config` file. Preview entries and select which ones to import. |
 | **Tabby** | Import from a [Tabby](https://tabby.sh/) configuration file. |
+| **WindTerm** | Import from a WindTerm session file. |
 | **File** | Import from an OpsKat backup file (JSON format). |
-| **GitHub Gist** | Import from a GitHub Gist (requires a personal access token). |
 
 When importing, you can preview entries before confirming, and choose whether to merge with existing assets.
 
-### Export Targets
+### Export
 
-| Target | Description |
-|---|---|
-| **File** | Export to a local JSON backup file. |
-| **GitHub Gist** | Export to a GitHub Gist (public or private). Requires a GitHub token with gist scope. |
-
-Export includes assets, groups, credentials (encrypted), and policy configurations.
+Export your inventory to a local JSON backup file. The export includes assets, groups, credentials (encrypted), and policy configurations.
