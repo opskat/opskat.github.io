@@ -21,6 +21,7 @@ const config: Config = {
   projectName: "opskat.github.io",
 
   onBrokenLinks: "warn",
+  onBrokenAnchors: "ignore",
 
   i18n: {
     defaultLocale: "en",

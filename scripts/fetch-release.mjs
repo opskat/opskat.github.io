@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Fetch the latest release info from GitHub API and write to static/release.json.
+ * Fetch the latest release info AND the star count from the GitHub API and
+ * write both into a single static/release.json:
+ *   { version, assets: [...], stars }
+ *
  * Run during CI build or locally: node scripts/fetch-release.mjs
  */
+
+import fs from "fs";
 
 const REPO = "opskat/opskat";
 const OUTPUT = "static/release.json";
@@ -15,62 +20,95 @@ const PLATFORM_MAP = {
   "linux-amd64": "Linux (x64)",
 };
 
-async function main() {
-  const url = `https://api.github.com/repos/${REPO}/releases/latest`;
-  console.log(`Fetching latest release from ${url}...`);
+function ghHeaders() {
+  return {
+    Accept: "application/vnd.github+json",
+    ...(process.env.GITHUB_TOKEN
+      ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+      : {}),
+  };
+}
 
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      ...(process.env.GITHUB_TOKEN
-        ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-        : {}),
-    },
-  });
+function fallbackAssets() {
+  return Object.entries(PLATFORM_MAP).map(([id, label]) => ({
+    id,
+    label,
+    url: `https://github.com/${REPO}/releases/latest`,
+  }));
+}
 
-  if (!res.ok) {
-    // Fallback: write a default release.json so the build doesn't break
-    console.warn(`GitHub API returned ${res.status}, writing fallback release.json`);
-    const fallback = {
-      version: "v1.0.0",
-      assets: Object.entries(PLATFORM_MAP).map(([id, label]) => ({
+/** @returns {Promise<number|null>} */
+async function fetchStars() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}`, {
+      headers: ghHeaders(),
+    });
+    if (!res.ok) {
+      console.warn(`stars: GitHub API returned ${res.status}`);
+      return null;
+    }
+    const data = await res.json();
+    return data.stargazers_count ?? null;
+  } catch (err) {
+    console.warn("stars: failed to fetch:", err.message);
+    return null;
+  }
+}
+
+/** @returns {Promise<{version: string, assets: any[]}|null>} */
+async function fetchRelease() {
+  try {
+    const url = `https://api.github.com/repos/${REPO}/releases/latest`;
+    console.log(`Fetching latest release from ${url}...`);
+    const res = await fetch(url, { headers: ghHeaders() });
+    if (!res.ok) {
+      console.warn(`release: GitHub API returned ${res.status}`);
+      return null;
+    }
+    const data = await res.json();
+    const version = data.tag_name;
+    const assets = Object.entries(PLATFORM_MAP).map(([id, label]) => {
+      const asset = (data.assets || []).find((a) => a.name.includes(id));
+      return {
         id,
         label,
-        url: `https://github.com/${REPO}/releases/latest`,
-      })),
-    };
-    const fs = await import("fs");
-    fs.writeFileSync(OUTPUT, JSON.stringify(fallback, null, 2));
-    console.log(`Wrote fallback ${OUTPUT}`);
-    return;
-  }
-
-  const data = await res.json();
-  const version = data.tag_name;
-  console.log(`Latest release: ${version}`);
-
-  const assets = [];
-  for (const [platformId, label] of Object.entries(PLATFORM_MAP)) {
-    // Find the matching asset by platform ID in the filename
-    const asset = data.assets.find((a) => a.name.includes(platformId));
-    assets.push({
-      id: platformId,
-      label,
-      url: asset
-        ? asset.browser_download_url
-        : `https://github.com/${REPO}/releases/tag/${version}`,
-      fileName: asset ? asset.name : undefined,
+        url: asset
+          ? asset.browser_download_url
+          : `https://github.com/${REPO}/releases/tag/${version}`,
+        ...(asset ? { fileName: asset.name } : {}),
+      };
     });
+    return { version, assets };
+  } catch (err) {
+    console.warn("release: failed to fetch:", err.message);
+    return null;
+  }
+}
+
+async function main() {
+  // Preserve previous values when a given fetch fails.
+  let existing = {};
+  try {
+    existing = JSON.parse(fs.readFileSync(OUTPUT, "utf8"));
+  } catch {
+    /* no existing file */
   }
 
-  const result = { version, assets };
+  const [stars, release] = await Promise.all([fetchStars(), fetchRelease()]);
 
-  const fs = await import("fs");
+  const result = {
+    version: release?.version ?? existing.version ?? "v1.0.0",
+    assets: release?.assets ?? existing.assets ?? fallbackAssets(),
+    stars: stars ?? existing.stars ?? 0,
+  };
+
   fs.writeFileSync(OUTPUT, JSON.stringify(result, null, 2));
-  console.log(`Wrote ${OUTPUT} with ${assets.length} platforms`);
+  console.log(
+    `Wrote ${OUTPUT}: version=${result.version}, ${result.assets.length} platforms, ${result.stars} stars`
+  );
 }
 
 main().catch((err) => {
-  console.error("Failed to fetch release:", err.message);
+  console.error("Failed to build release.json:", err.message);
   process.exit(1);
 });

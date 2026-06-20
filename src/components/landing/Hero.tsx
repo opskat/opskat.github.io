@@ -2,70 +2,57 @@ import Link from "@docusaurus/Link";
 import Translate from "@docusaurus/Translate";
 import { Button } from "@/components/ui/button";
 import { DownloadButton } from "./DownloadButton";
+import { HeroVisual } from "./HeroVisual";
 
 export function Hero() {
   return (
-    <section className="relative flex flex-col items-center text-center pt-[140px] pb-[80px] px-4">
-      {/* Conic aurora glow — wider and more dramatic */}
+    <section className="relative flex flex-col items-center px-6 pt-[120px] pb-20 text-center">
+      {/* Soft top glow */}
       <div
-        className="pointer-events-none absolute top-[60px] left-1/2 -translate-x-1/2 w-[800px] h-[500px] opacity-60"
+        className="pointer-events-none absolute left-1/2 top-[60px] h-[360px] w-[640px] -translate-x-1/2 opacity-60"
         style={{
           background:
-            "conic-gradient(from 210deg at 50% 60%, oklch(0.6 0.2 260 / 0.25), oklch(0.5 0.15 280 / 0.15) 20%, transparent 35%, transparent 65%, oklch(0.55 0.12 240 / 0.1) 80%, oklch(0.6 0.2 260 / 0.25))",
-          filter: "blur(70px)",
-        }}
-      />
-      {/* Inner radial glow */}
-      <div
-        className="pointer-events-none absolute top-[100px] left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full opacity-50"
-        style={{
-          background:
-            "radial-gradient(ellipse, oklch(0.67 0.16 260 / 0.15) 0%, transparent 60%)",
+            "radial-gradient(ellipse at center, oklch(0.67 0.16 260 / 0.18), transparent 65%)",
+          filter: "blur(20px)",
         }}
       />
 
       {/* Badge */}
-      <div className="relative z-10 inline-flex items-center gap-2 bg-secondary/80 backdrop-blur-sm border border-border rounded-full px-3.5 py-1.5 text-xs text-muted-foreground mb-6">
+      <div className="relative z-10 mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-[13px] text-muted-foreground">
         <span className="inline-block size-2 rounded-full bg-success animate-pulse" />
-        <span>
-          <Translate id="hero.badge">
-            Open Source · macOS · Linux · Windows
-          </Translate>
-        </span>
+        <Translate id="hero.badge">Open Source · Cross-platform · macOS / Linux / Windows</Translate>
       </div>
 
       {/* Headline */}
-      <h1 className="relative z-10 text-4xl sm:text-5xl md:text-[56px] font-extrabold tracking-tight leading-[1.1] mb-5 max-w-3xl">
-        <span className="text-foreground">OpsKat —</span>
-        <br />
-        <span
-          className="bg-clip-text text-transparent"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, oklch(0.67 0.16 250), oklch(0.72 0.18 270), oklch(0.65 0.15 290))",
-          }}
-        >
-          <Translate id="hero.headline.line2">Infrastructure Ops, Reimagined with AI</Translate>
+      <h1 className="relative z-10 mb-6 max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-[58px]">
+        <span className="text-primary">
+          <Translate id="hero.h1.accent">All-in-one </Translate>
+        </span>
+        <span className="text-foreground">
+          <Translate id="hero.h1.rest">server ops workstation</Translate>
         </span>
       </h1>
 
-      {/* Description */}
-      <p className="relative z-10 text-base sm:text-[17px] text-muted-foreground max-w-[560px] mx-auto leading-relaxed mb-8">
-        <Translate id="hero.description">
-          Describe what you need — the AI agent executes commands, queries, and
-          file transfers on your behalf, with policy enforcement and full audit
-          logging.
+      {/* Subhead */}
+      <p className="relative z-10 mb-8 max-w-[680px] text-[18px] leading-[1.6] text-muted-foreground">
+        <Translate id="hero.sub">
+          SSH and local terminals, MySQL / PostgreSQL / MongoDB databases, Redis / etcd / Kafka middleware, Kubernetes clusters — everything ops touches, unified in one cross-platform desktop app. And when you want it, AI executes for you in natural language, with policy and audit on every step.
         </Translate>
       </p>
 
       {/* CTAs */}
-      <div className="relative z-10 flex flex-col sm:flex-row items-center gap-3 mb-5">
+      <div className="relative z-20 mb-4 flex flex-col items-center gap-3.5 sm:flex-row">
         <DownloadButton />
-        <Button variant="outline" size="lg" asChild>
-          <Link to="/docs/getting-started/installation" className="no-underline">
+        <Button variant="outline" size="lg" className="h-[46px] px-6 text-[15px]" asChild>
+          <Link to="/docs/getting-started/quick-start" className="no-underline">
             <Translate id="hero.cta.docs">Read the Docs</Translate>
           </Link>
         </Button>
+      </div>
+
+      {/* Workspace visual */}
+      <div className="relative z-10 mt-14 w-full max-w-[1180px]">
+        <HeroVisual />
       </div>
     </section>
   );

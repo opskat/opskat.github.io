@@ -4,8 +4,9 @@ import { useColorMode } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Translate from "@docusaurus/Translate";
 import { useLocation } from "@docusaurus/router";
-import { Sun, Moon, Menu, X, Globe, Download } from "lucide-react";
+import { Sun, Moon, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { StarButton } from "@/components/landing/StarButton";
 
 function Navbar(): React.ReactElement {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,7 +15,6 @@ function Navbar(): React.ReactElement {
   const location = useLocation();
 
   const currentLocale = i18n.currentLocale;
-  const alternateLocale = currentLocale === "en" ? "zh-CN" : "en";
   const alternateLocaleLabel = currentLocale === "en" ? "中文" : "EN";
 
   const getAlternateLocalePath = useCallback(() => {
@@ -33,24 +33,16 @@ function Navbar(): React.ReactElement {
     setMobileMenuOpen((prev) => !prev);
   }, []);
 
-  const navLinks = [
-    {
-      to: "/docs/getting-started/installation",
-      label: <Translate id="navbar.docs">Docs</Translate>,
-    },
-    {
-      to: "/docs/guide/ai-agent",
-      label: <Translate id="navbar.guide">Guide</Translate>,
-    },
-    {
-      to: "/docs/cli/overview",
-      label: <Translate id="navbar.cli">CLI</Translate>,
-    },
+  const navLinks: { to?: string; href?: string; label: React.ReactNode }[] = [
+    { to: "/#features", label: <Translate id="navbar.features">Features</Translate> },
+    { to: "/#resources", label: <Translate id="navbar.resources">Resources</Translate> },
+    { to: "/docs/getting-started/quick-start", label: <Translate id="navbar.docs">Docs</Translate> },
+    { to: "/docs/changelog", label: <Translate id="navbar.changelog">Changelog</Translate> },
   ];
 
   return (
-    <nav className="navbar fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/40 border-b border-border/50 !shadow-none !p-0">
-      <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-6">
+    <nav className="navbar fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/60 border-b border-border/60 !shadow-none !p-0">
+      <div className="flex h-14 w-full items-center justify-between px-6 lg:px-10">
         {/* Left: Logo + Brand */}
         <Link to="/" className="flex items-center gap-2 no-underline">
           <img
@@ -60,32 +52,25 @@ function Navbar(): React.ReactElement {
             height={28}
             className="rounded-lg"
           />
-          <span className="text-base font-bold text-foreground">OpsKat</span>
+          <span className="text-base font-bold text-foreground tracking-tight">
+            OpsKat
+          </span>
         </Link>
 
-        {/* Center: Nav Links (hidden on mobile) */}
-        <div className="hidden items-center gap-1 md:flex ml-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Right: Actions */}
-        <div className="flex items-center gap-1">
-          {/* Language Switcher — use href (not to) to bypass Docusaurus auto locale prefix */}
-          <a
-            href={getAlternateLocalePath()}
-            className="hidden items-center gap-1 rounded-md px-2 py-1.5 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground sm:flex"
-          >
-            <Globe className="size-4" />
-            <span>{alternateLocaleLabel}</span>
-          </a>
+        {/* Right: Links + Actions (right-grouped, per design) */}
+        <div className="flex items-center gap-3 md:gap-5">
+          {/* Nav Links (hidden on mobile) */}
+          <div className="hidden items-center gap-6 md:flex">
+            {navLinks.map((link, i) => (
+              <Link
+                key={i}
+                to={link.to!}
+                className="text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
           {/* Dark Mode Toggle */}
           <Button
@@ -101,21 +86,23 @@ function Navbar(): React.ReactElement {
             )}
           </Button>
 
-          {/* GitHub Link (hidden on mobile) */}
-          <Link
-            href="https://github.com/opskat/opskat"
-            className="hidden rounded-md px-3 py-1.5 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground sm:inline-flex"
+          {/* Language Switcher */}
+          <a
+            href={getAlternateLocalePath()}
+            className="hidden items-center gap-1 rounded-md px-2 py-1.5 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground sm:flex"
           >
-            GitHub
-          </Link>
+            <Globe className="size-4" />
+            <span>{alternateLocaleLabel}</span>
+          </a>
+
+          {/* GitHub Star Button (hidden on mobile) */}
+          <div className="hidden sm:block">
+            <StarButton />
+          </div>
 
           {/* Download Button (hidden on mobile) */}
-          <Button size="sm" className="hidden sm:inline-flex" asChild>
-            <Link
-              to="/docs/getting-started/installation"
-              className="no-underline"
-            >
-              <Download className="size-3.5" />
+          <Button size="sm" className="hidden h-8 px-4 sm:inline-flex" asChild>
+            <Link to="/#get-started" className="no-underline">
               <Translate id="navbar.download">Download</Translate>
             </Link>
           </Button>
@@ -128,11 +115,7 @@ function Navbar(): React.ReactElement {
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? (
-              <X className="size-4" />
-            ) : (
-              <Menu className="size-4" />
-            )}
+            {mobileMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </Button>
         </div>
       </div>
@@ -140,46 +123,46 @@ function Navbar(): React.ReactElement {
       {/* Mobile Menu Panel */}
       {mobileMenuOpen && (
         <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
-          <div className="mx-auto flex max-w-[1200px] flex-col gap-1 px-6 py-3">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="rounded-md px-3 py-2 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="flex w-full flex-col gap-1 px-6 py-3 lg:px-10">
+            {navLinks.map((link, i) =>
+              link.href ? (
+                <Link
+                  key={i}
+                  href={link.href}
+                  className="rounded-md px-3 py-2 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <Link
+                  key={i}
+                  to={link.to!}
+                  className="rounded-md px-3 py-2 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
 
-            {/* Mobile-only: Language Switcher */}
             <a
               href={getAlternateLocalePath()}
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground sm:hidden"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
               <Globe className="size-4" />
               <span>{alternateLocaleLabel}</span>
             </a>
 
-            {/* Mobile-only: GitHub */}
-            <Link
-              href="https://github.com/opskat/opskat"
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground sm:hidden"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              GitHub
-            </Link>
-
-            {/* Mobile-only: Download */}
-            <div className="mt-1 sm:hidden">
-              <Button size="sm" className="w-full" asChild>
+            <div className="mt-2 flex items-center gap-3">
+              <StarButton />
+              <Button size="sm" className="flex-1" asChild>
                 <Link
-                  to="/docs/getting-started/installation"
+                  to="/#get-started"
                   className="no-underline"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <Download className="size-3.5" />
                   <Translate id="navbar.download">Download</Translate>
                 </Link>
               </Button>

@@ -1,38 +1,32 @@
 import Translate from "@docusaurus/Translate";
-import { Button } from "@/components/ui/button";
 import { DownloadButton } from "./DownloadButton";
+import { StarButton } from "./StarButton";
 
 export function CTA() {
   return (
-    <section className="relative max-w-[1200px] mx-auto border-t border-solid border-border">
-      {/* Subtle radial gradient behind CTA for emphasis */}
+    <section
+      id="get-started"
+      className="relative scroll-mt-16 border-t border-border px-6 py-[100px]"
+    >
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "radial-gradient(ellipse 60% 80% at 50% 50%, oklch(0.67 0.16 260 / 0.06), transparent 70%)",
+          background:
+            "radial-gradient(ellipse 50% 70% at 50% 40%, oklch(0.67 0.16 260 / 0.07), transparent 70%)",
         }}
       />
-      <div className="relative text-center py-20 px-6">
-        <h2 className="text-[32px] font-bold tracking-tight mb-3">
-          <Translate id="cta.heading">Ready to get started?</Translate>
+      <div className="relative mx-auto flex max-w-[760px] flex-col items-center text-center">
+        <h2 className="text-[32px] font-extrabold leading-[1.15] tracking-tight sm:text-[38px]">
+          <Translate id="cta.heading">Ready to put ops into one app?</Translate>
         </h2>
-        <p className="text-[15px] text-muted-foreground mb-7">
-          <Translate id="cta.subtitle">
-            Download the desktop app or install the CLI to start managing your
-            infrastructure with AI.
+        <p className="mt-4 max-w-[560px] text-base leading-relaxed text-muted-foreground">
+          <Translate id="cta.sub">
+            Download the desktop app or install the opsctl CLI, and start managing your whole infrastructure with one tool.
           </Translate>
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+        <div className="mt-7 flex flex-col items-center gap-3.5 sm:flex-row">
           <DownloadButton />
-          <Button variant="outline" className="py-3 px-7 text-[15px]" asChild>
-            <a
-              href="https://github.com/opskat/opskat"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Translate id="cta.github">View on GitHub</Translate>
-            </a>
-          </Button>
+          <StarButton />
         </div>
       </div>
     </section>

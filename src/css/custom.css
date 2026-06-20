@@ -9,78 +9,80 @@
 /* ===== OpsKat Light Theme ===== */
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.98 0.003 260);
-  --foreground: oklch(0.145 0.014 260);
-  --card: oklch(0.995 0.001 260);
-  --card-foreground: oklch(0.145 0.014 260);
-  --popover: oklch(0.995 0.001 260);
-  --popover-foreground: oklch(0.145 0.014 260);
-  --primary: oklch(0.49 0.20 260);
-  --primary-foreground: oklch(0.985 0.003 260);
-  --secondary: oklch(0.955 0.008 260);
-  --secondary-foreground: oklch(0.25 0.012 260);
-  --muted: oklch(0.955 0.006 260);
-  --muted-foreground: oklch(0.48 0.01 260);
-  --accent: oklch(0.955 0.012 260);
-  --accent-foreground: oklch(0.25 0.012 260);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.91 0.006 260);
-  --input: oklch(0.91 0.006 260);
-  --ring: oklch(0.49 0.20 260);
-  --success: oklch(0.62 0.17 155);
-  --warning: oklch(0.75 0.15 85);
+  /* Values mirror the Pencil design tokens (light mode) exactly */
+  --background: #f7f8fb;        /* $bg */
+  --foreground: #1a1d29;        /* $text-primary */
+  --card: #ffffff;             /* $surface */
+  --card-foreground: #1a1d29;
+  --popover: #ffffff;          /* $surface-raised */
+  --popover-foreground: #1a1d29;
+  --primary: #4a63e0;          /* $primary */
+  --primary-foreground: #ffffff; /* $on-primary */
+  --secondary: #eef1f6;        /* $bg-alt */
+  --secondary-foreground: #1a1d29;
+  --muted: #eef1f6;
+  --muted-foreground: #5b6173; /* $text-muted */
+  --accent: #e7ebf3;
+  --accent-foreground: #1a1d29;
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+  --border: #e6e8ef;           /* $border */
+  --input: #d3d7e1;            /* $border-strong */
+  --ring: #4a63e0;
+  --success: #15a06b;          /* $success */
+  --warning: #b9821a;          /* $warning */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
 
   /* Docusaurus Infima variable overrides */
-  --ifm-color-primary: oklch(0.49 0.20 260);
-  --ifm-color-primary-dark: oklch(0.44 0.20 260);
-  --ifm-color-primary-darker: oklch(0.41 0.20 260);
-  --ifm-color-primary-darkest: oklch(0.35 0.20 260);
-  --ifm-color-primary-light: oklch(0.54 0.20 260);
-  --ifm-color-primary-lighter: oklch(0.57 0.20 260);
-  --ifm-color-primary-lightest: oklch(0.63 0.20 260);
-  --ifm-background-color: oklch(0.98 0.003 260);
-  --ifm-font-color-base: oklch(0.145 0.014 260);
+  --ifm-color-primary: #4a63e0;
+  --ifm-color-primary-dark: #3a53d6;
+  --ifm-color-primary-darker: #344bc9;
+  --ifm-color-primary-darkest: #2b3ea6;
+  --ifm-color-primary-light: #6076e6;
+  --ifm-color-primary-lighter: #6d82e9;
+  --ifm-color-primary-lightest: #93a2ef;
+  --ifm-background-color: #f7f8fb;
+  --ifm-font-color-base: #1a1d29;
   --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
   --ifm-font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
 }
 
 /* ===== OpsKat Dark Theme ===== */
 [data-theme='dark'] {
-  --background: oklch(0.135 0.012 260);
-  --foreground: oklch(0.93 0.005 260);
-  --card: oklch(0.17 0.014 260);
-  --card-foreground: oklch(0.93 0.005 260);
-  --popover: oklch(0.17 0.014 260);
-  --popover-foreground: oklch(0.93 0.005 260);
-  --primary: oklch(0.67 0.16 260);
-  --primary-foreground: oklch(0.135 0.012 260);
-  --secondary: oklch(0.21 0.012 260);
-  --secondary-foreground: oklch(0.93 0.005 260);
-  --muted: oklch(0.21 0.014 260);
-  --muted-foreground: oklch(0.63 0.01 260);
-  --accent: oklch(0.23 0.018 260);
-  --accent-foreground: oklch(0.93 0.005 260);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.67 0.16 260);
-  --success: oklch(0.72 0.19 155);
-  --warning: oklch(0.8 0.15 85);
+  /* Values mirror the Pencil design tokens (dark mode) exactly */
+  --background: #0e1016;        /* $bg */
+  --foreground: #e8eaf0;        /* $text-primary */
+  --card: #161922;             /* $surface */
+  --card-foreground: #e8eaf0;
+  --popover: #1c2031;          /* $surface-raised */
+  --popover-foreground: #e8eaf0;
+  --primary: #5c7cfa;          /* $primary */
+  --primary-foreground: #ffffff; /* $on-primary */
+  --secondary: #1c2031;        /* $surface-raised */
+  --secondary-foreground: #e8eaf0;
+  --muted: #12141c;            /* $bg-alt */
+  --muted-foreground: #9097a8; /* $text-muted */
+  --accent: #1a1d25;
+  --accent-foreground: #e8eaf0;
+  --destructive: #ff6166;
+  --destructive-foreground: #ffffff;
+  --border: #ffffff14;          /* $border */
+  --input: #ffffff26;           /* $border-strong */
+  --ring: #5c7cfa;
+  --success: #34d39a;          /* $success */
+  --warning: #e6b24a;          /* $warning */
 
   /* Docusaurus Infima variable overrides (dark) */
-  --ifm-color-primary: oklch(0.67 0.16 260);
-  --ifm-color-primary-dark: oklch(0.62 0.16 260);
-  --ifm-color-primary-darker: oklch(0.59 0.16 260);
-  --ifm-color-primary-darkest: oklch(0.53 0.16 260);
-  --ifm-color-primary-light: oklch(0.72 0.16 260);
-  --ifm-color-primary-lighter: oklch(0.75 0.16 260);
-  --ifm-color-primary-lightest: oklch(0.81 0.16 260);
-  --ifm-background-color: oklch(0.135 0.012 260);
-  --ifm-font-color-base: oklch(0.93 0.005 260);
+  --ifm-color-primary: #5c7cfa;
+  --ifm-color-primary-dark: #4063f9;
+  --ifm-color-primary-darker: #3457f8;
+  --ifm-color-primary-darkest: #1538f4;
+  --ifm-color-primary-light: #7891fb;
+  --ifm-color-primary-lighter: #849bfc;
+  --ifm-color-primary-lightest: #aabbfd;
+  --ifm-background-color: #0e1016;
+  --ifm-font-color-base: #e8eaf0;
 }
 
 /* ===== Tailwind Theme Mapping ===== */
@@ -183,32 +185,13 @@
     linear-gradient(90deg, oklch(0.67 0.16 260 / 0.08) 1px, transparent 1px);
 }
 
-/* Landing page gradient background — cinematic depth */
+/* Landing page background — clean solid, matches the design $bg (no grid, per design) */
 .landing-page {
-  background:
-    linear-gradient(
-      180deg,
-      oklch(0.98 0.003 260) 0%,
-      oklch(0.975 0.005 265) 30%,
-      oklch(0.98 0.003 260) 60%,
-      oklch(0.975 0.005 265) 85%,
-      oklch(0.98 0.003 260) 100%
-    );
+  background: #f7f8fb;
 }
 
 [data-theme='dark'] .landing-page {
-  background:
-    linear-gradient(
-      180deg,
-      oklch(0.10 0.02 265) 0%,
-      oklch(0.12 0.018 260) 8%,
-      oklch(0.135 0.015 258) 25%,
-      oklch(0.13 0.018 262) 45%,
-      oklch(0.125 0.02 265) 60%,
-      oklch(0.135 0.015 260) 75%,
-      oklch(0.13 0.018 258) 90%,
-      oklch(0.12 0.02 262) 100%
-    );
+  background: #0e1016;
 }
 
 /* Feature cards — glow border on hover in dark mode */
@@ -252,4 +235,22 @@
 [data-theme='dark'] .theme-doc-markdown code:not(pre code) {
   border-color: rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ===== Landing alternating section band ($bg-alt) ===== */
+.section-alt {
+  background: #eef1f6;
+}
+[data-theme='dark'] .section-alt {
+  background: #12141c;
+}
+
+/* Feature card hover — light mode accent */
+.feature-card-glow:hover {
+  border-color: oklch(0.49 0.2 260 / 0.35);
+  box-shadow: 0 8px 24px -10px oklch(0.49 0.2 260 / 0.18);
+  transform: translateY(-1px);
+}
+[data-theme='dark'] .feature-card-glow:hover {
+  transform: translateY(-1px);
 }
