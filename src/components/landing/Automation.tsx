@@ -3,7 +3,7 @@ import Translate from "@docusaurus/Translate";
 import { SquareTerminal, Sparkles, Code, Braces, Gem } from "lucide-react";
 import { WIN, TrafficLights } from "./Window";
 
-function TerminalWindow({ title, children }: { title: string; children: ReactNode }) {
+function TerminalWindow({ title, children }: { title: ReactNode; children: ReactNode }) {
   return (
     <div
       className="overflow-hidden rounded-xl"
@@ -91,7 +91,7 @@ export function Automation() {
           {/* AI assistant */}
           <div className="flex flex-col gap-4">
             <MiniHead icon={<Sparkles className="size-[17px]" />} titleId="auto.ai.title" title="AI ops assistant" descId="auto.ai.desc" desc="Driven by natural language" />
-            <TerminalWindow title="opsctl — AI session">
+            <TerminalWindow title={<Translate id="auto.ai.window">opsctl — AI session</Translate>}>
               <div><span style={{ color: WIN.green, fontWeight: 600 }}>you&gt;</span> <span style={{ color: WIN.text }}><Translate id="auto.ai.you">Check nginx on prod-web-1 and reload if the config is valid</Translate></span></div>
               <div className="h-2" />
               <div><span style={{ color: WIN.blue, fontWeight: 600 }}>agent&gt;</span> <span style={{ color: WIN.text }}><Translate id="auto.ai.a1">Sure — I'll check it and reload once it passes.</Translate></span></div>

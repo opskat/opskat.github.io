@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import Translate from "@docusaurus/Translate";
+import Translate, { translate } from "@docusaurus/Translate";
 import { ChevronDown, Check } from "lucide-react";
 import { FaApple, FaWindows, FaLinux } from "react-icons/fa6";
 import type { IconType } from "react-icons";
@@ -100,7 +100,7 @@ export function DownloadButton() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Select platform"
+          aria-label={translate({ id: "download.selectPlatform", message: "Select platform" })}
           className="inline-flex appearance-none items-center justify-center border-0 border-l border-solid border-primary-foreground/25 bg-primary px-2.5 text-primary-foreground transition-colors hover:bg-primary/90"
         >
           <ChevronDown

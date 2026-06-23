@@ -35,9 +35,9 @@ const columns: { titleId: string; title: string; links: FooterLink[] }[] = [
     title: "Community",
     links: [
       { label: "GitHub", href: "https://github.com/opskat/opskat" },
-      { label: "Issues", href: "https://github.com/opskat/opskat/issues" },
+      { labelId: "footer.issues", label: "Issues", href: "https://github.com/opskat/opskat/issues" },
       { labelId: "footer.contributing", label: "Contributing", to: "/docs/development/contributing" },
-      { label: "Releases", href: "https://github.com/opskat/opskat/releases" },
+      { labelId: "footer.releases", label: "Releases", href: "https://github.com/opskat/opskat/releases" },
     ],
   },
 ];

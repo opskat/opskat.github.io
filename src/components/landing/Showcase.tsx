@@ -62,7 +62,7 @@ function ShowcaseText({
   );
 }
 
-function ProductWindow({ title, glow, children }: { title: string; glow: string; children: ReactNode }) {
+function ProductWindow({ title, glow, children }: { title: ReactNode; glow: string; children: ReactNode }) {
   return (
     <div
       className="overflow-hidden rounded-xl"
@@ -100,7 +100,10 @@ function SqlEditor() {
     ["4", "Alan Turing", "alan@bletchley.uk", "2026-06-12"],
   ];
   return (
-    <ProductWindow title="查询编辑器 — prod-mysql" glow="rgba(92,124,250,0.18)">
+    <ProductWindow
+      title={<Translate id="query.window.title">Query editor — prod-mysql</Translate>}
+      glow="rgba(92,124,250,0.18)"
+    >
       {/* toolbar */}
       <div className="flex items-center justify-between px-3.5 py-2" style={{ background: WIN.bar, borderBottom: `1px solid ${WIN.border}` }}>
         <span className="flex items-center gap-1.5 rounded-md px-2.5 py-1" style={{ background: WIN.active }}>
@@ -156,7 +159,10 @@ function AuditLog() {
     ["13:52", "prod-cluster", "kubectl get pods -A", "allow"],
   ];
   return (
-    <ProductWindow title="审计日志 · 今日" glow="rgba(52,211,154,0.15)">
+    <ProductWindow
+      title={<Translate id="audit.window.title">Audit log · Today</Translate>}
+      glow="rgba(52,211,154,0.15)"
+    >
       <div className="flex" style={{ background: "#12151d", borderBottom: `1px solid ${WIN.border}` }}>
         <div className="px-3 py-2" style={{ width: 62 }}><span className="font-mono text-[11px] font-semibold" style={{ color: WIN.faint }}><Translate id="audit.col.time">time</Translate></span></div>
         <div className="px-3 py-2" style={{ width: 108 }}><span className="font-mono text-[11px] font-semibold" style={{ color: WIN.faint }}><Translate id="audit.col.asset">asset</Translate></span></div>

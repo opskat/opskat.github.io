@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import Translate from "@docusaurus/Translate";
+import Translate, { translate } from "@docusaurus/Translate";
 import { Star } from "lucide-react";
 
 const REPO_URL = "https://github.com/opskat/opskat";
@@ -41,7 +41,7 @@ export function StarButton({ className = "" }: { className?: string }) {
       target="_blank"
       rel="noopener noreferrer"
       className={`group inline-flex items-center overflow-hidden rounded-lg border border-border bg-card no-underline shadow-sm transition-colors hover:border-border/70 ${className}`}
-      aria-label="Star OpsKat on GitHub"
+      aria-label={translate({ id: "star.ariaLabel", message: "Star OpsKat on GitHub" })}
     >
       <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5">
         <GithubMark className="size-[13px] text-foreground" />

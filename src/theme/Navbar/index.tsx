@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import Link from "@docusaurus/Link";
 import { useColorMode } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import Translate from "@docusaurus/Translate";
+import Translate, { translate } from "@docusaurus/Translate";
 import { useLocation } from "@docusaurus/router";
 import { Sun, Moon, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ function Navbar(): React.ReactElement {
         <Link to="/" className="flex items-center gap-2 no-underline">
           <img
             src="/img/logo.png"
-            alt="OpsKat Logo"
+            alt={translate({ id: "navbar.logoAlt", message: "OpsKat Logo" })}
             width={28}
             height={28}
             className="rounded-lg"
@@ -77,7 +77,7 @@ function Navbar(): React.ReactElement {
             variant="ghost"
             size="icon-sm"
             onClick={toggleColorMode}
-            aria-label="Toggle color mode"
+            aria-label={translate({ id: "navbar.toggleColorMode", message: "Toggle color mode" })}
           >
             {colorMode === "dark" ? (
               <Sun className="size-4" />
@@ -113,7 +113,7 @@ function Navbar(): React.ReactElement {
             size="icon-sm"
             className="md:hidden"
             onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
+            aria-label={translate({ id: "navbar.toggleMenu", message: "Toggle menu" })}
           >
             {mobileMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </Button>
