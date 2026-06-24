@@ -6,19 +6,30 @@ import {
   SquareTerminal,
   Cable,
   Database,
-  HardDrive,
-  Leaf,
   Layers,
-  Network,
-  RadioTower,
   Hexagon,
   Sparkles,
   Plus,
   ArrowRight,
 } from "lucide-react";
+import {
+  SiMysql,
+  SiPostgresql,
+  SiSqlite,
+  SiMongodb,
+  SiRedis,
+  SiEtcd,
+  SiApachekafka,
+  SiKubernetes,
+} from "react-icons/si";
 
-type Chip = { icon: ReactNode; label: string; labelId?: string };
+// Brand colors are tuned to stay legible on both the light (#fff) and
+// dark (#161922) chip surfaces. Near-black logos (Kafka) inherit the
+// theme foreground via `var(--foreground)` so they don't disappear in dark mode.
+type Chip = { icon: ReactNode; label: string; labelId?: string; color?: string };
 type Category = { icon: ReactNode; id: string; name: string; chips: Chip[] };
+
+const logo = "size-[15px]";
 
 const categories: Category[] = [
   {
@@ -26,9 +37,10 @@ const categories: Category[] = [
     id: "res.cat.servers",
     name: "Servers & terminals",
     chips: [
-      { icon: <Server className="size-[15px]" />, label: "SSH" },
-      { icon: <SquareTerminal className="size-[15px]" />, label: "Local terminal", labelId: "res.chip.local" },
-      { icon: <Cable className="size-[15px]" />, label: "Serial", labelId: "res.chip.serial" },
+      // SSH / serial / local terminal are connection types, not products — keep neutral glyphs.
+      { icon: <Server className={logo} />, label: "SSH" },
+      { icon: <SquareTerminal className={logo} />, label: "Local terminal", labelId: "res.chip.local" },
+      { icon: <Cable className={logo} />, label: "Serial", labelId: "res.chip.serial" },
     ],
   },
   {
@@ -36,11 +48,12 @@ const categories: Category[] = [
     id: "res.cat.db",
     name: "Databases",
     chips: [
-      { icon: <Database className="size-[15px]" />, label: "MySQL" },
-      { icon: <Database className="size-[15px]" />, label: "PostgreSQL" },
-      { icon: <Database className="size-[15px]" />, label: "SQL Server" },
-      { icon: <HardDrive className="size-[15px]" />, label: "SQLite" },
-      { icon: <Leaf className="size-[15px]" />, label: "MongoDB" },
+      { icon: <SiMysql className={logo} />, label: "MySQL", color: "#00758F" },
+      { icon: <SiPostgresql className={logo} />, label: "PostgreSQL", color: "#336791" },
+      // No official SQL Server logo in Simple Icons — use the generic db glyph in MSSQL red.
+      { icon: <Database className={logo} />, label: "SQL Server", color: "#CC2927" },
+      { icon: <SiSqlite className={logo} />, label: "SQLite", color: "#0F80CC" },
+      { icon: <SiMongodb className={logo} />, label: "MongoDB", color: "#47A248" },
     ],
   },
   {
@@ -48,23 +61,28 @@ const categories: Category[] = [
     id: "res.cat.middleware",
     name: "Cache & middleware",
     chips: [
-      { icon: <Layers className="size-[15px]" />, label: "Redis" },
-      { icon: <Network className="size-[15px]" />, label: "etcd" },
-      { icon: <RadioTower className="size-[15px]" />, label: "Kafka" },
+      { icon: <SiRedis className={logo} />, label: "Redis", color: "#DC382D" },
+      { icon: <SiEtcd className={logo} />, label: "etcd", color: "#419EDA" },
+      { icon: <SiApachekafka className={logo} />, label: "Kafka", color: "var(--foreground)" },
     ],
   },
   {
     icon: <Hexagon className="size-4" />,
     id: "res.cat.cloud",
     name: "Cloud-native",
-    chips: [{ icon: <Hexagon className="size-[15px]" />, label: "Kubernetes" }],
+    chips: [{ icon: <SiKubernetes className={logo} />, label: "Kubernetes", color: "#326CE5" }],
   },
 ];
 
-function ChipPill({ icon, label, labelId }: Chip) {
+function ChipPill({ icon, label, labelId, color }: Chip) {
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-[13px] font-medium leading-none text-foreground">
-      <span className="inline-flex shrink-0 items-center text-muted-foreground">{icon}</span>
+      <span
+        className={`inline-flex shrink-0 items-center ${color ? "" : "text-muted-foreground"}`}
+        style={color ? { color } : undefined}
+      >
+        {icon}
+      </span>
       <span className="leading-none">
         {labelId ? <Translate id={labelId}>{label}</Translate> : label}
       </span>
@@ -103,7 +121,7 @@ export function ResourcePanorama() {
               </div>
               <div className="flex flex-wrap items-center gap-2.5">
                 {cat.chips.map((c) => (
-                  <ChipPill key={c.label} icon={c.icon} label={c.label} labelId={c.labelId} />
+                  <ChipPill key={c.label} {...c} />
                 ))}
               </div>
             </div>
