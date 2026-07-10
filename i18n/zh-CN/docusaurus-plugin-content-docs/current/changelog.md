@@ -5,16 +5,47 @@ sidebar_position: 100
 
 # 更新日志
 
-## 未发布
+## v1.10.0 (2026-07-11)
 
-下一个版本将 OpsKat 从终端与数据控制台扩展到两种新的内置资产体验：S3 兼容对象存储浏览器与内嵌 RDP 远程桌面。
+本次版本新增两大远程资产类型 —— **RDP 远程桌面** 与 **对象存储（OSS）**，并带来完整的**数据库对象浏览器**；同时围绕数据库、终端与 AI 会话做了大量增强与修复。
 
 ### 🚀 主要新功能
 
-- ✨ **对象存储资产** — 支持 Amazon S3、阿里云 OSS、腾讯 COS、华为 OBS、火山 TOS、七牛 Kodo、Cloudflare R2、Backblaze B2、DigitalOcean Spaces、Wasabi、MinIO 和通用 S3 兼容端点；可浏览 Bucket 与前缀、上传/下载、复制/移动/删除对象、预览支持的图片、查看传输任务，并生成预签名上传/下载 URL（[#223](https://github.com/opskat/opskat/pull/223)）。
-- ✨ **RDP 资产** — 在 OpsKat 内打开 Windows 远程桌面，支持直连、SSH 隧道或 SOCKS 代理，适应/实际尺寸与全屏视图、特殊按键、重连控件，以及双向文本/文件剪贴板（[#225](https://github.com/opskat/opskat/pull/225)）。
+- 💥 **对象存储（OSS）资产** — 支持 Amazon S3、阿里云 OSS、腾讯 COS、华为 OBS、火山 TOS、七牛 Kodo、Cloudflare R2、Backblaze B2、DigitalOcean Spaces、Wasabi、MinIO 和通用 S3 兼容端点；可浏览 Bucket 与前缀、上传/下载、复制/移动/删除对象、预览支持的图片、查看传输任务，并生成预签名上传/下载 URL（[#223](https://github.com/opskat/opskat/pull/223)）(by @CodFrm)
+- 💥 **RDP 远程桌面资产** — 在 OpsKat 内打开 Windows 远程桌面，支持直连、SSH 隧道或 SOCKS 代理，适应/实际尺寸与全屏视图、特殊按键、重连控件，以及双向文本/文件剪贴板（[#225](https://github.com/opskat/opskat/pull/225)）(by @CodFrm)
+- 💥 数据库对象浏览器（列 / 索引 / 外键 / 视图 / 存储过程 / 函数 / 触发器）([#206](https://github.com/opskat/opskat/pull/206)) (by @wfion)
+- ✨ AI 会话可绑定已打开的标签页并支持双向联动 ([#224](https://github.com/opskat/opskat/pull/224)) (by @CodFrm)
+- ✨ SQL 编辑器新增字段（列）级联想补全 ([#214](https://github.com/opskat/opskat/pull/214)) (by @CodFrm)
+- ✨ 表数据支持 Excel (XLSX) 导入导出 ([#207](https://github.com/opskat/opskat/pull/207)) (by @wfion)
+- ✨ 支持远端 SQLite VFS ([#200](https://github.com/opskat/opskat/pull/200)) (by @CodFrm)
+- ✨ 代码片段接入 Ctrl+P 命令面板 ([#217](https://github.com/opskat/opskat/pull/217)) (by @CodFrm)
+- ✨ SSH 终端支持重连恢复上次工作目录 ([#215](https://github.com/opskat/opskat/pull/215)) (by @CodFrm)
+- ✨ 新增 SSH/TCP 连接调优设置（NoDelay / KeepAlive / 保活间隔 / 连接超时）([#204](https://github.com/opskat/opskat/pull/204)) (by @wfion)
+- ✨ 新增「终端内禁用快捷键」开关，聚焦终端时透传按键 ([#191](https://github.com/opskat/opskat/pull/191)) (by @EdWard0x)
+- ✨ 分屏窗格独立工具条与固定 / 隐藏切换 ([#213](https://github.com/opskat/opskat/pull/213)) (by @CodFrm)
 
-这两种交互式资产目前都不提供专用的 opsctl 操作命令，也不定义内置放行/拦截策略类型。
+### 🐛 Bug 修复
+
+- 🐛 markdown 链接改由系统浏览器打开，不再劫持窗口 ([#219](https://github.com/opskat/opskat/pull/219)) (by @CodFrm)
+- 🐛 修复本地 kubectl PATH 解析 ([#208](https://github.com/opskat/opskat/pull/208)) (by @youaremywind)
+- 🐛 修复 K8s 顶部刷新未更新已加载资源 ([#212](https://github.com/opskat/opskat/pull/212)) (by @Pililink)
+- 🐛 修复 DeepSeek 空工具结果历史回放报错 [#199](https://github.com/opskat/opskat/issues/199) ([#201](https://github.com/opskat/opskat/pull/201)) (by @CodFrm)
+- 🐛 修复远端 SQLite 打开 WAL 模式数据库、并发多表抢锁与路径校验等问题
+- 🐛 修复数据库对象浏览器多驱动元数据问题
+- 🐛 修复 SQL Server 资产图标映射
+- 🐛 修复 SSH 目录同步回显与默认配置
+- 🐛 修复对象刷新与终端工具条显示
+
+### 🎨 UI 改进
+
+- 💄 etcd 面板对齐设计稿：新增 KV 浏览 tab、移除集群栏、同步文案
+- 💄 精简 SSH 空闲保活文案并预填资产级默认值
+
+### ♻️ 重构
+
+- ♻️ 资产表单标签页化与配置驱动重构 ([#205](https://github.com/opskat/opskat/pull/205)) (by @CodFrm)
+
+**完整更新记录**: [v1.9.1...v1.10.0](https://github.com/opskat/opskat/compare/v1.9.1...v1.10.0)
 
 ## v1.9.1 (2026-06-16)
 

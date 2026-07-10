@@ -5,16 +5,47 @@ sidebar_position: 100
 
 # Changelog
 
-## Unreleased
+## v1.10.0 (2026-07-11)
 
-The next release expands OpsKat beyond terminal and data consoles with two new built-in asset experiences: an S3-compatible object-storage browser and an embedded RDP remote desktop.
+This release adds two new remote asset types — **RDP remote desktop** and **Object Storage (OSS)** — along with a full **database object browser**, plus a wide range of enhancements and fixes across databases, terminals, and AI sessions.
 
 ### 🚀 Major New Features
 
-- ✨ **Object Storage assets** — connect to Amazon S3, Alibaba Cloud OSS, Tencent COS, Huawei OBS, Volcengine TOS, Qiniu Kodo, Cloudflare R2, Backblaze B2, DigitalOcean Spaces, Wasabi, MinIO, and generic S3-compatible endpoints. Browse buckets and prefixes, upload/download, copy/move/delete objects, preview supported images, monitor transfers, and create presigned upload/download URLs ([#223](https://github.com/opskat/opskat/pull/223)).
-- ✨ **RDP assets** — open Windows remote desktops inside OpsKat with direct, SSH-tunnel, or SOCKS-proxy connectivity; fit/actual-size and fullscreen views; special-key shortcuts; reconnect controls; and bidirectional text/file clipboard support ([#225](https://github.com/opskat/opskat/pull/225)).
+- 💥 **Object Storage (OSS) assets** — connect to Amazon S3, Alibaba Cloud OSS, Tencent COS, Huawei OBS, Volcengine TOS, Qiniu Kodo, Cloudflare R2, Backblaze B2, DigitalOcean Spaces, Wasabi, MinIO, and generic S3-compatible endpoints. Browse buckets and prefixes, upload/download, copy/move/delete objects, preview supported images, monitor transfers, and create presigned upload/download URLs ([#223](https://github.com/opskat/opskat/pull/223)) (by @CodFrm)
+- 💥 **RDP remote desktop assets** — open Windows remote desktops inside OpsKat with direct, SSH-tunnel, or SOCKS-proxy connectivity; fit/actual-size and fullscreen views; special-key shortcuts; reconnect controls; and bidirectional text/file clipboard support ([#225](https://github.com/opskat/opskat/pull/225)) (by @CodFrm)
+- 💥 Database object browser (columns / indexes / foreign keys / views / procedures / functions / triggers) ([#206](https://github.com/opskat/opskat/pull/206)) (by @wfion)
+- ✨ AI sessions can bind to an open tab with bidirectional sync ([#224](https://github.com/opskat/opskat/pull/224)) (by @CodFrm)
+- ✨ SQL editor now offers column-level completion suggestions ([#214](https://github.com/opskat/opskat/pull/214)) (by @CodFrm)
+- ✨ Table data supports Excel (XLSX) import/export ([#207](https://github.com/opskat/opskat/pull/207)) (by @wfion)
+- ✨ Support for remote SQLite via VFS ([#200](https://github.com/opskat/opskat/pull/200)) (by @CodFrm)
+- ✨ Code snippets integrated into the Ctrl+P command palette ([#217](https://github.com/opskat/opskat/pull/217)) (by @CodFrm)
+- ✨ SSH terminal restores the last working directory on reconnect ([#215](https://github.com/opskat/opskat/pull/215)) (by @CodFrm)
+- ✨ New SSH/TCP tuning settings (NoDelay / KeepAlive / keepalive interval / connect timeout) ([#204](https://github.com/opskat/opskat/pull/204)) (by @wfion)
+- ✨ New "disable shortcuts in terminal" toggle that passes keys straight through when the terminal is focused ([#191](https://github.com/opskat/opskat/pull/191)) (by @EdWard0x)
+- ✨ Split panes gain independent toolbars with pin/hide toggle ([#213](https://github.com/opskat/opskat/pull/213)) (by @CodFrm)
 
-Neither interactive asset currently adds a dedicated opsctl operation command or built-in allow/deny policy kind.
+### 🐛 Bug Fixes
+
+- 🐛 Markdown links now open in the system browser instead of hijacking the window ([#219](https://github.com/opskat/opskat/pull/219)) (by @CodFrm)
+- 🐛 Fixed local kubectl PATH resolution ([#208](https://github.com/opskat/opskat/pull/208)) (by @youaremywind)
+- 🐛 Fixed the K8s top-bar refresh not updating already-loaded resources ([#212](https://github.com/opskat/opskat/pull/212)) (by @Pililink)
+- 🐛 Fixed a DeepSeek error when replaying history with empty tool results [#199](https://github.com/opskat/opskat/issues/199) ([#201](https://github.com/opskat/opskat/pull/201)) (by @CodFrm)
+- 🐛 Fixed remote SQLite issues: opening WAL-mode databases, concurrent multi-table lock contention, and path validation
+- 🐛 Fixed multi-driver metadata issues in the database object browser
+- 🐛 Fixed SQL Server asset icon mapping
+- 🐛 Fixed SSH directory-sync echo and default configuration
+- 🐛 Fixed object refresh and terminal toolbar display
+
+### 🎨 UI Improvements
+
+- 💄 etcd panel aligned with the design spec: added a KV browser tab, removed the cluster bar, and synced copy
+- 💄 Streamlined SSH idle-keepalive copy and pre-filled asset-level defaults
+
+### ♻️ Refactoring
+
+- ♻️ Asset form reworked into tabs with a config-driven refactor ([#205](https://github.com/opskat/opskat/pull/205)) (by @CodFrm)
+
+**Full Changelog**: [v1.9.1...v1.10.0](https://github.com/opskat/opskat/compare/v1.9.1...v1.10.0)
 
 ## v1.9.1 (2026-06-16)
 
