@@ -24,16 +24,16 @@ const features: Feature[] = [
   {
     icon: <SquareTerminal className="size-[21px]" />,
     titleId: "feat.terminal.title",
-    title: "Multi-protocol terminal",
+    title: "Terminal & remote desktop",
     descId: "feat.terminal.desc",
-    desc: "SSH + local shell / PowerShell / WSL, with split panes, SFTP, jump-host chains, port forwarding and ZMODEM drag-and-drop upload.",
+    desc: "SSH, local shell / PowerShell / WSL, serial consoles and built-in RDP, with split panes, SFTP, tunnels, fullscreen and clipboard sync.",
   },
   {
     icon: <Database className="size-[21px]" />,
     titleId: "feat.query.title",
     title: "Query & data management",
     descId: "feat.query.desc",
-    desc: "MySQL / PostgreSQL / SQL Server / SQLite share one SQL editor; MongoDB, Redis, etcd and Kafka each get a dedicated panel.",
+    desc: "One SQL editor for relational databases; dedicated panels for MongoDB, Redis, etcd, Kafka and S3-compatible object storage.",
   },
   {
     icon: <Boxes className="size-[21px]" />,
@@ -54,21 +54,21 @@ const features: Feature[] = [
     titleId: "feat.policy.title",
     title: "Policy & audit",
     descId: "feat.policy.desc",
-    desc: "Allow / deny rules across commands, SQL, Redis, Mongo, Kafka, K8s and etcd, with full audit logging and approvals.",
+    desc: "Allow / deny rules across commands, SQL, Redis, Mongo, Kafka, K8s and etcd, with approvals and audit context on supported tool paths.",
   },
   {
     icon: <Terminal className="size-[21px]" />,
     titleId: "feat.cli.title",
     title: "opsctl CLI",
     descId: "feat.cli.desc",
-    desc: "A single Go binary on the same core — shares the desktop connection pool, scriptable and CI-ready.",
+    desc: "A single Go binary for supported server, file, SQL and Redis operations — scriptable, approval-aware and CI-ready.",
   },
   {
     icon: <KeyRound className="size-[21px]" />,
     titleId: "feat.creds.title",
     title: "Secure credentials",
     descId: "feat.creds.desc",
-    desc: "Credentials encrypted with Argon2id + AES-256-GCM; the master key lives in your OS keyring. Local-first.",
+    desc: "Credentials encrypted with Argon2id + AES-256-GCM; the master key resolves from explicit config, OS keyring or a protected local key file.",
   },
   {
     icon: <PackageOpen className="size-[21px]" />,
@@ -82,7 +82,7 @@ const features: Feature[] = [
     titleId: "feat.ai.title",
     title: "AI ops assistant",
     descId: "feat.ai.desc",
-    desc: "Drive ops in natural language, integrated with Claude Code, Codex, OpenCode and Gemini CLI — all under the same policy and audit.",
+    desc: "Drive supported operations in natural language, or install the opsctl skill for Claude Code, Codex, OpenCode and Gemini CLI.",
   },
 ];
 

@@ -5,93 +5,95 @@ sidebar_label: 概览
 
 # opsctl CLI 概览
 
-`opsctl` 是一个独立的命令行工具，与 OpsKat 桌面应用共享相同的核心。它为远程基础设施管理提供脚本化和自动化能力——SSH 命令执行、文件传输、数据库查询和 Redis 操作——同时拥有与图形界面相同的策略 (Policy) 执行和审计 (Audit) 日志。
+`opsctl` 是独立的 CLI 工具，与 OpsKat 共享数据和操作辅助模块。它为 SSH 命令、文件传输、SQL、Redis、MongoDB、资产管理和扩展工具提供脚本化与自动化能力；受支持的操作路径带有对应的策略与审计覆盖。
 
 ## 安装
 
 ### 从桌面应用安装（推荐）
 
-打开 OpsKat 桌面应用，使用一键安装按钮。这会将内置的 `opsctl` 二进制文件提取到：
+打开 OpsKat 桌面应用并使用一键安装按钮。内嵌的 `opsctl` 会被释放到：
 
-- **macOS / Linux:** `~/.local/bin/opsctl`
-- **Windows:** `%LOCALAPPDATA%/opsctl/opsctl.exe`
+- **macOS / Linux：** `~/.local/bin/opsctl`
+- **Windows：** `%LOCALAPPDATA%/opsctl/opsctl.exe`
 
 ### 从源码构建
 
 ```bash
-make build-cli        # Build to ./build/bin/opsctl
-make install-cli      # Install to $GOPATH/bin
+make build-cli        # 构建到 ./build/bin/opsctl
+make install-cli      # 安装到 $GOPATH/bin
 ```
 
 ## 全局参数
 
 | 参数 | 环境变量 | 说明 |
-|------|---------|------|
-| `--data-dir <path>` | — | 覆盖应用数据目录（默认为平台特定路径，如 `~/Library/Application Support/opskat`） |
-| `--master-key <key>` | `OPSKAT_MASTER_KEY` | 覆盖用于凭据解密的主加密密钥 |
+|---|---|---|
+| `--data-dir <path>` | — | 覆盖应用数据目录（默认值依平台而定，例如 `~/Library/Application Support/opskat`） |
+| `--master-key <key>` | `OPSKAT_MASTER_KEY` | 覆盖用于解密凭据的主密钥 |
 | `--session <id>` | `OPSKAT_SESSION_ID` | 批量审批的会话 ID（未指定时自动创建） |
 
 ## 桌面应用集成
 
-当 OpsKat 桌面应用正在运行时，`opsctl` 会通过 Unix 套接字（`sshpool.sock`）自动连接到桌面应用。这提供了以下能力：
+OpsKat 桌面应用运行时，`opsctl` 会通过本地套接字连接应用：
 
-- **连接池** — 复用桌面应用的 SSH 连接，而非新建连接
-- **审批 (Approval) 工作流** — 写操作（exec、cp、create、update）会在桌面应用中弹出审批对话框
-- **会话审批** — 在审批对话框中点击"记住"，会将命令模式存储到当前会话，后续匹配的操作将自动通过审批
+- **连接池** —— 通过 `sshpool.sock` 复用桌面应用的 SSH 连接，而不是重新连接
+- **审批工作流** —— 需要确认的操作通过 `approval.sock` 在桌面应用中显示审批对话框
+- **持久化授权** —— 审批被明确保存为可复用模式后，后续匹配操作可通过 Grant 系统获得授权
 
-当桌面应用未运行时，`opsctl` 会回退到使用共享数据库和凭据进行直连。
+桌面应用未运行时，支持离线模式的命令会使用共享数据库和凭据直连。
 
 ## 资产解析
 
-在所有命令中，资产 (Asset) 可以通过以下方式引用：
+所有命令都可以通过以下方式引用资产：
 
-- **数字 ID:** `opsctl exec 1 -- uptime`
-- **名称:** `opsctl exec web-server -- uptime`
-- **分组/名称:** `opsctl exec production/web-01 -- uptime`（当多个资产同名时用于消歧）
+- **数字 ID：** `opsctl exec 1 -- uptime`
+- **名称：** `opsctl exec web-server -- uptime`
+- **分组/名称：** `opsctl exec production/web-01 -- uptime`（存在同名资产时用于消歧）
 
-## 命令列表
+## 命令
 
 | 命令 | 说明 |
-|------|------|
-| [`exec`](./exec.md) | 通过 SSH 在远程服务器上执行 Shell 命令 |
-| [`batch`](./batch.md) | 并行执行多条命令（exec/sql/redis） |
+|---|---|
+| [`exec`](./exec.md) | 通过 SSH 在远程服务器执行 shell 命令 |
+| [`batch`](./batch.md) | 并行执行多个命令（exec/sql/redis/mongo） |
 | [`ssh`](./ssh.md) | 打开交互式 SSH 终端会话 |
-| [`cp`](./cp.md) | 在本地与远程服务器之间复制文件（类似 scp） |
-| [`sql`](./sql.md) | 在数据库资产上执行 SQL（MySQL、PostgreSQL） |
+| [`cp`](./cp.md) | 在本地与远程服务器之间复制文件（scp 风格） |
+| [`sql`](./sql.md) | 在数据库资产上执行 SQL（MySQL、PostgreSQL、SQL Server 或 SQLite） |
 | [`redis`](./redis.md) | 在 Redis 资产上执行 Redis 命令 |
-| [`grant`](./grant.md) | 提交批量授权以进行预审批 |
-| `session` | 管理审批会话（启动、结束、查看状态） |
+| [`mongo`](./mongo.md) | 在 MongoDB 资产上执行操作 |
+| [`grant`](./grant.md) | 提交批量授权以供预审批 |
+| [`ext`](./ext.md) | 列出已安装扩展或执行扩展工具 |
+| `session` | 管理审批会话（start、end、status） |
 | `list` | 列出资源（`assets` 或 `groups`） |
-| `get` | 获取资源的详细信息 |
-| `create` | 创建新资产（SSH、数据库或 Redis） |
+| `get` | 获取资源详情 |
+| `create` | 创建受支持的 SSH、数据库、Redis、MongoDB 或 Kubernetes 资产 |
 | `update` | 更新已有资产 |
-| `init` | 发现服务器环境并更新资产描述 |
 | `version` | 输出版本信息 |
 
 ## 审批与会话
 
-写操作（`exec`、`cp`、`sql`、`redis`、`create`、`update`）需要审批。审批流程如下：
+`exec`、`cp`、`sql`、`redis`、`mongo`、`create` 和 `update` 等操作使用各自文档说明的策略、Grant 和审批路径。桌面应用可用时，扩展执行仅把 `approval.sock` 作为委托传输通道；委托的 `ext_tool` 处理器不会显示常规审批对话框。
 
-1. **策略检查** — 命令会根据资产的策略（白名单/黑名单）进行检查
-2. **授权匹配** — 如果存在匹配的预审批授权模式，命令将被放行
-3. **桌面应用审批** — 如果策略和授权均未匹配，将在桌面应用中弹出审批对话框。多个并发请求会自动排队到同一个弹窗中，支持"全部允许"/"全部拒绝"操作
+1. **策略检查** —— 根据资产策略（允许列表/拒绝列表）检查命令。
+2. **授权匹配** —— 如果匹配已预先批准的授权模式，则允许执行。
+3. **桌面应用审批** —— 策略和授权都未匹配时，桌面应用显示对话框。多个并发请求会自动合并到同一对话框，可“全部批准”或“全部拒绝”。
 
-会话将多个操作归入同一审批范围。会话在首次写操作时自动创建，存储在当前目录的 `.opskat/sessions/` 中。会话有效期为 24 小时。
+会话把多个操作归入同一审批范围。首次写操作时会自动创建，并存储在当前目录的 `.opscat/sessions/` 中；会话在 24 小时后过期。`.opscat` 是当前 CLI 实际使用的兼容路径拼写。
 
 ```bash
 # 显式管理会话
-opsctl session start               # 创建会话并输出其 ID
-opsctl exec web-01 -- uptime       # 使用 .opskat/sessions/ 中的会话
-opsctl exec web-02 -- df -h        # 同一会话——点击"记住"后匹配的命令自动审批
-opsctl session end                  # 结束会话
+opsctl session start
+opsctl exec web-01 -- uptime
+opsctl exec web-02 -- df -h
+opsctl session end
 
-# 也可以让系统自动创建
-opsctl exec web-01 -- uptime       # 首次调用时自动创建会话
+# 也可以让它自动创建
+opsctl exec web-01 -- uptime
 ```
 
-会话 ID 的解析优先级：
-1. `--session <id>` 全局参数
-2. `OPSKAT_SESSION_ID` 环境变量
-3. `.opskat/sessions/<scope>` 文件（自动创建，沿目录树向上查找）
+会话 ID 解析优先级：
 
-`<scope>` 由终端环境变量（`TERM_SESSION_ID`、`ITERM_SESSION_ID`、`WT_SESSION`、`WINDOWID`）派生，因此同一目录下的不同终端窗口会获得各自独立的会话。
+1. 全局参数 `--session <id>`
+2. 环境变量 `OPSKAT_SESSION_ID`
+3. `.opscat/sessions/<scope>` 文件（自动创建，并向上遍历目录树）
+
+`<scope>` 根据终端环境变量（`TERM_SESSION_ID`、`ITERM_SESSION_ID`、`WT_SESSION`、`WINDOWID`）生成，因此同一目录下的不同终端窗口会获得独立会话。

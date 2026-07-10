@@ -5,7 +5,7 @@ sidebar_label: Overview
 
 # opsctl CLI Overview
 
-`opsctl` is a standalone CLI tool that shares the same core as the OpsKat desktop app. It provides scripting and automation for remote infrastructure management — SSH commands, file transfers, database queries, and Redis operations — with the same policy enforcement and audit logging as the GUI.
+`opsctl` is a standalone CLI tool that shares OpsKat's data and operation helpers. It provides scripting and automation for SSH commands, file transfers, SQL, Redis, MongoDB, asset management, and extension tools, with policy and audit coverage for supported operation paths.
 
 ## Installation
 
@@ -37,7 +37,7 @@ When the OpsKat desktop app is running, `opsctl` automatically connects to it vi
 
 - **Connection pooling** — reuses the desktop app's SSH connections instead of opening new ones
 - **Approval workflow** — write operations (exec, cp, create, update) prompt an approval dialog in the desktop app
-- **Session approval** — clicking "Remember" in the approval dialog stores the command pattern for the current session, auto-approving matching subsequent operations
+- **Persisted grants** — when an approval is explicitly saved as reusable patterns, matching later operations can be authorized through the grant system
 
 When the desktop app is not running, `opsctl` falls back to direct connections using the shared database and credentials.
 
@@ -54,34 +54,35 @@ Assets can be referenced in all commands by:
 | Command | Description |
 |---------|-------------|
 | [`exec`](./exec.md) | Execute a shell command on a remote server via SSH |
-| [`batch`](./batch.md) | Execute multiple commands in parallel (exec/sql/redis) |
+| [`batch`](./batch.md) | Execute multiple commands in parallel (exec/sql/redis/mongo) |
 | [`ssh`](./ssh.md) | Open an interactive SSH terminal session |
 | [`cp`](./cp.md) | Copy files between local and remote servers (scp-style) |
-| [`sql`](./sql.md) | Execute SQL on a database asset (MySQL, PostgreSQL) |
+| [`sql`](./sql.md) | Execute SQL on a database asset (MySQL, PostgreSQL, SQL Server, or SQLite) |
 | [`redis`](./redis.md) | Execute a Redis command on a Redis asset |
+| [`mongo`](./mongo.md) | Execute an operation on a MongoDB asset |
 | [`grant`](./grant.md) | Submit a batch grant for pre-approval |
+| [`ext`](./ext.md) | List installed extensions or execute an extension tool |
 | `session` | Manage approval sessions (start, end, status) |
 | `list` | List resources (`assets` or `groups`) |
 | `get` | Get detailed information about a resource |
-| `create` | Create a new asset (ssh, database, or redis) |
+| `create` | Create a supported SSH, database, Redis, MongoDB, or Kubernetes asset |
 | `update` | Update an existing asset |
-| `init` | Discover server environment and update asset description |
 | `version` | Print version information |
 
 ## Approval and Sessions
 
-Write operations (`exec`, `cp`, `sql`, `redis`, `create`, `update`) require approval. The approval flow works as follows:
+Operations such as `exec`, `cp`, `sql`, `redis`, `mongo`, `create`, and `update` use their documented policy, grant, and approval paths. Extension execution uses `approval.sock` only as a delegation transport when the app is available; the delegated `ext_tool` handler does not display the normal approval dialog.
 
 1. **Policy check** — the command is checked against the asset's policy (allow-list / deny-list)
 2. **Grant matching** — if a pre-approved grant pattern matches, the command is allowed
 3. **Desktop app approval** — if neither policy nor grant matches, a dialog is shown in the desktop app. Multiple concurrent requests are automatically queued into a single dialog with "Approve All" / "Deny All" options
 
-Sessions group multiple operations under a single approval scope. They are auto-created on the first write operation and stored in `.opskat/sessions/` in the current directory. Sessions expire after 24 hours.
+Sessions group multiple operations under a single approval scope. They are auto-created on the first write operation and stored in `.opscat/sessions/` in the current directory. Sessions expire after 24 hours. The `.opscat` spelling reflects the current CLI path and is retained for compatibility.
 
 ```bash
 # Explicit session management
 opsctl session start               # Creates a session, prints its ID
-opsctl exec web-01 -- uptime       # Uses the session from .opskat/sessions/
+opsctl exec web-01 -- uptime       # Uses the session from .opscat/sessions/
 opsctl exec web-02 -- df -h        # Same session — auto-approved after first "Allow Session"
 opsctl session end                  # Ends the session
 
@@ -92,6 +93,6 @@ opsctl exec web-01 -- uptime       # Auto-creates session on first call
 Session ID resolution priority:
 1. `--session <id>` global flag
 2. `OPSKAT_SESSION_ID` environment variable
-3. `.opskat/sessions/<scope>` file (auto-created, walks up directory tree)
+3. `.opscat/sessions/<scope>` file (auto-created, walks up directory tree)
 
 The `<scope>` is derived from terminal environment variables (`TERM_SESSION_ID`, `ITERM_SESSION_ID`, `WT_SESSION`, `WINDOWID`) so that different terminal windows in the same directory get separate sessions.

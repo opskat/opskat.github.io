@@ -66,7 +66,7 @@ export function Automation() {
           </h2>
           <p className="mx-auto mt-3.5 max-w-[660px] text-[15px] leading-relaxed text-muted-foreground sm:text-base">
             <Translate id="auto.sub">
-              opsctl brings the whole workstation to your terminal and CI; when you want it, AI executes in natural language — both share the same connection pool, policy and audit.
+              opsctl brings supported server, file, database and Redis operations to your terminal and CI; AI can drive its own supported, guarded operations in natural language.
             </Translate>
           </p>
         </div>
@@ -83,8 +83,8 @@ export function Automation() {
               <Cmd>opsctl sql prod-mysql "SELECT count(*) FROM users"</Cmd>
               <div className="h-2" />
               <Cmt id="auto.cli.c3">Batch in parallel</Cmt>
-              <Cmd>opsctl batch exec 'web-*' -- uptime</Cmd>
-              <div style={{ color: WIN.green }}>✓ web-1 · web-2 · web-3 — 3/3</div>
+              <Cmd>opsctl batch 'web-01:uptime' 'web-02:uptime'</Cmd>
+              <div style={{ color: WIN.green }}>✓ web-01 · web-02 — 2/2</div>
             </TerminalWindow>
           </div>
 

@@ -14,6 +14,7 @@ OpsKat includes built-in consoles for every data asset type. Each type uses the 
 | Redis | [Key browser + command console](#redis) (no SQL editor) |
 | etcd | Dedicated [etcd panel](/docs/guide/etcd) — KV tree browser + query bar |
 | Kafka | Dedicated [Kafka panel](/docs/guide/kafka) — form-based broker/topic/group/ACL/schema UI |
+| Object Storage | Dedicated [Object Storage browser](/docs/guide/object-storage) — buckets, prefixes, objects, transfers, and presigned links |
 
 Database connections can be tunneled through SSH for secure access.
 
@@ -35,7 +36,7 @@ A schema/table tree on the left lets you browse databases and tables, and open a
 - `INSERT`, `UPDATE`, and `DELETE` statements return the number of affected rows
 - You can override the default database for a specific query from a dropdown
 - A query history popover keeps recent statements, and SQL snippets can be inserted from your library
-- Dangerous statements (such as `DELETE`, `DROP`, `TRUNCATE`, `ALTER`) prompt for confirmation before running
+- Statements are evaluated by policy: an explicit deny is blocked, an explicit allow runs immediately, and an unmatched statement prompts for confirmation
 
 ### SQL Analysis
 
@@ -86,5 +87,7 @@ All queries and commands executed through these consoles are subject to the same
 - **SQL** — Checked against the asset's query policy (allowed/denied statement types, dangerous pattern flags)
 - **Redis** — Checked against the asset's Redis policy (allowed/denied command patterns)
 - **MongoDB**, **etcd**, and **Kafka** — Checked against their respective policy kinds
+
+The Object Storage browser is an interactive file-management surface and currently has no allow/deny policy kind.
 
 If an operation is denied by policy, it will not be executed. If it requires confirmation, you will be prompted before execution.

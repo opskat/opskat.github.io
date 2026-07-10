@@ -74,7 +74,7 @@ Configure a SOCKS proxy for the SSH connection. This is useful when the SSH serv
 
 Set the proxy in the asset's SSH configuration:
 
-- **Type** — `socks5` or `socks4`
+- **Type** — SOCKS5
 - **Host / Port** — Proxy server address
 - **Username / Password** — Optional proxy authentication
 

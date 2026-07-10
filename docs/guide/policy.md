@@ -5,7 +5,9 @@ sidebar_label: Policy
 
 # Policy Enforcement
 
-OpsKat enforces allow/deny rules on every operation — whether triggered by the AI Agent, the Query Editor, or the `opsctl` CLI. Three policy types cover SSH commands, SQL statements, and Redis operations.
+OpsKat evaluates supported commands and data operations against asset and group policies, whether they originate from the AI Agent, an in-app data console, or an applicable `opsctl` command. A policy decision is `Allow`, `Deny`, or `NeedConfirm`.
+
+Policy coverage is capability-specific. Built-in kinds cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, and etcd. Interactive RDP sessions and the built-in object-storage browser currently have no dedicated allow/deny policy kind.
 
 ## Policy Types
 
@@ -43,6 +45,22 @@ Controls which Redis commands can be executed on Redis assets.
 - **Groups** — References to policy groups
 
 Multi-word Redis commands are supported (e.g., `CONFIG SET`, `ACL DELUSER`).
+
+### MongoDB Policy
+
+Controls MongoDB operations by method type. Policies can allow read operations such as `find` and `aggregate`, deny destructive operations such as `dropDatabase` or `dropCollection`, and leave unmatched operations for confirmation.
+
+### Kafka Policy
+
+Controls Kafka actions using action and resource patterns. This covers the broker, topic, consumer-group, ACL, schema, and message operations exposed by the Kafka tools and panel.
+
+### Kubernetes Policy
+
+Controls `kubectl` command patterns for Kubernetes assets. New assets use read-oriented defaults together with rules that deny dangerous commands.
+
+### etcd Policy
+
+Controls etcd operations by action and key pattern. It applies to the built-in etcd panel and AI helper operations.
 
 ## Decision Flow
 
@@ -96,7 +114,7 @@ OpsKat ships with built-in policy groups (these cannot be modified):
 You can create custom policy groups:
 
 1. Open the policy group management page.
-2. Click **Create** and select the policy type (command, query, or redis).
+2. Click **Create** and select the policy type appropriate to the asset operation.
 3. Define your allow/deny rules.
 4. Save the group.
 
@@ -120,4 +138,4 @@ This allows you to set organization-wide rules at the group level while allowing
 
 ## Policy Testing
 
-OpsKat includes a real-time policy tester for all three policy types. Enter a command, SQL statement, or Redis command to see whether it would be allowed, denied, or require confirmation, and which rule matched.
+OpsKat includes a real-time policy tester for the registered built-in policy kinds. Enter an operation in the policy editor to see whether it would be allowed, denied, or require confirmation, and which rule matched.

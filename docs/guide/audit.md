@@ -5,21 +5,21 @@ sidebar_label: Audit
 
 # Audit & Approval
 
-Every operation in OpsKat is logged with full decision tracking. The audit system covers actions from the AI Agent, the `opsctl` CLI, and MCP integrations. The approval workflow provides controlled access for CLI operations, and the grant system enables command pattern pre-approval.
+OpsKat records AI and `opsctl` tool executions with their source, result, and available policy-decision context. The approval workflow provides controlled access for CLI operations, and the grant system enables command-pattern pre-approval.
 
 ## Audit Logging
 
-All tool executions are automatically recorded in the audit log, regardless of the source. Each log entry captures:
+Tool calls that enter the AI runner's audit middleware or an audited `opsctl` handler are recorded automatically. Other interactive or delegated paths are not implied to create an audit row for every action. Recorded entries can include:
 
 | Field | Description |
 |---|---|
-| **Source** | Where the action originated: `ai`, `opsctl`, or `mcp` |
+| **Source** | Where the action originated, currently including `ai` and `opsctl` |
 | **Tool Name** | The tool that was called (e.g., `run_command`, `exec_sql`, `upload_file`) |
 | **Asset** | The target asset (ID and name) |
 | **Command** | The command or query that was executed |
-| **Request / Result** | The full request parameters and execution result (truncated to 4KB) |
+| **Request / Result** | Request parameters (truncated to 4KB) and execution result (truncated to 32KB) |
 | **Success** | Whether the execution succeeded or failed |
-| **Decision** | `allow` or `deny` |
+| **Decision** | The recorded allow/deny decision, when the operation went through a policy or approval check |
 | **Decision Source** | How the decision was made (see below) |
 | **Matched Pattern** | The specific rule or pattern that matched |
 | **Session ID** | The opsctl or AI session identifier |
@@ -39,8 +39,6 @@ Each audit log entry records the decision source, indicating how the allow/deny 
 | `user_deny` | User manually denied when prompted |
 | `grant_allow` | Matched an approved grant pattern |
 | `grant_deny` | Grant request was rejected |
-| `session_allow` | Matched a "remembered" session rule (from clicking "Remember" in the confirmation dialog) |
-| `auto_allow` | Automatically allowed (no policy configured) |
 
 ## Audit Log Viewer
 
@@ -48,7 +46,7 @@ The audit log viewer in the desktop app provides:
 
 - **Filterable list** — Filter by source, tool, asset, decision, and time range
 - **Session filtering** — View all actions within a specific session
-- **Detail view** — Inspect the full request and result of any action
+- **Detail view** — Inspect the stored request and result, subject to the 4KB / 32KB audit truncation limits
 
 ## Approval Workflow
 
@@ -61,7 +59,7 @@ When the `opsctl` CLI is used while the desktop app is running, operations that 
 3. The user reviews and approves or denies.
 4. The response is sent back to `opsctl`, which proceeds or aborts.
 
-This applies to operations like `exec`, `cp`, `create`, `update`, and `grant`.
+This applies to operations including `exec`, `cp`, `sql`, `redis`, `mongo`, `create`, `update`, `batch`, and `grant`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its current handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog.
 
 ### Approval Types
 
@@ -72,6 +70,7 @@ This applies to operations like `exec`, `cp`, `create`, `update`, and `grant`.
 | `create` | Creating a new asset |
 | `update` | Updating an existing asset |
 | `grant` | Submitting command patterns for pre-approval |
+| `batch` | Approving multiple supported operations together |
 
 ## Grant System
 
@@ -98,10 +97,6 @@ opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
 4. Subsequent `run_command` calls matching any approved pattern are auto-approved (decision source: `grant_allow`).
 
 Grant items support `*` wildcard matching (e.g., `cat /var/log/*` matches `cat /var/log/syslog`). Approved grant items are **not consumed** — they persist for the entire session and can match multiple commands.
-
-### Remembered Patterns
-
-In addition to grants, the exec confirmation dialog has a **Remember** button. When clicked, the command pattern is stored in memory for the current session. This is separate from the grant system — remembered patterns are session-scoped and not persisted to the database.
 
 ## opsctl Session Management
 

@@ -9,7 +9,7 @@ OpsKat organizes your infrastructure into a tree-structured inventory. Assets re
 
 ## Asset Types
 
-OpsKat supports nine asset types. Each type has its own connection form, console, and policy model.
+OpsKat's built-in asset types cover terminals, remote desktops, databases, data services, clusters, and object storage. Each type has its own connection form and task-appropriate surface; policy support applies to operation-capable types rather than every interactive asset.
 
 ### SSH
 
@@ -20,7 +20,7 @@ SSH server assets for terminal access, command execution, and file transfer.
 - **Username** — Login user
 - **Auth Type** — `password` or `key`
 - **Jump Host** — Optional jump host chain for bastion access
-- **Proxy** — Optional SOCKS5/SOCKS4 proxy
+- **Proxy** — Optional SOCKS5 proxy
 
 ### Local Terminal
 
@@ -31,6 +31,15 @@ Local terminal assets open a shell on **your own machine** — no remote connect
 - **Working Directory** — Optional starting directory (default: `~`)
 
 Local terminals have no host, port, or credentials.
+
+### RDP
+
+RDP assets open an embedded Windows remote-desktop session through the [RDP client](/docs/guide/rdp).
+
+- **Host / Port** — Remote Windows endpoint (default port: 3389)
+- **Username / Password / Domain** — Windows sign-in details; passwords can use managed credentials
+- **Clipboard** — Optional bidirectional text and file clipboard synchronization
+- **Connection** — Direct, SSH tunnel, or SOCKS proxy
 
 ### Database (MySQL / PostgreSQL / SQL Server / SQLite)
 
@@ -108,6 +117,16 @@ Serial port assets for connecting to devices over a serial console.
 - **Parity** — `none`, `odd`, `even`, `mark`, or `space` (default: `none`)
 - **Flow Control** — `none` or `hardware`
 
+### Object Storage
+
+Object-storage assets connect to S3-compatible services through the [Object Storage browser](/docs/guide/object-storage).
+
+- **Provider** — Optional convenience presets for common cloud and self-hosted services. Any service exposing a compatible S3 API can be configured with its endpoint, region, and addressing mode.
+- **Endpoint / Region** — Service endpoint and signing region
+- **Access Key ID / Secret Access Key** — Directly encrypted or selected from managed credentials
+- **SSL / Path Style / TLS verification** — Provider-specific connection settings
+- **Transfer tuning** — Optional connection timeout and multipart part size
+
 ## Groups
 
 Groups organize assets into a tree hierarchy using parent-child relationships. Every asset belongs to a group (or the root level).
@@ -132,7 +151,7 @@ Right-click an asset and select **Delete**. Assets are soft-deleted (marked as d
 
 ## Credential Management
 
-All credentials (passwords, SSH private keys, kubeconfigs) are encrypted with **Argon2id** key derivation and **AES-256-GCM** before storage. The master encryption key is stored in your OS keyring (via go-keyring):
+Managed secrets (including passwords, SSH private keys, and kubeconfigs) are encrypted with a key derived using **Argon2id** and stored using **AES-256-GCM**. OpsKat first resolves the master key from an explicit configuration, then the OS keyring, and can fall back to a protected key file in the application data directory:
 
 - **macOS** — Keychain
 - **Windows** — Windows Credential Manager

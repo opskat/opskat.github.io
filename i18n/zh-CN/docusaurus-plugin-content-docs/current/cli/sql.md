@@ -5,7 +5,7 @@ sidebar_label: sql
 
 # opsctl sql
 
-对 MySQL 或 PostgreSQL 数据库资产执行 SQL 查询。当资产配置了 SSH 隧道时，数据库连接会通过 SSH 隧道建立。
+针对数据库资产执行 SQL。网络数据库驱动包括 MySQL、PostgreSQL 和 SQL Server；SQLite 资产使用其配置的本地或远程文件来源。网络连接会遵循资产配置的 SSH 隧道或代理。
 
 ## 语法
 

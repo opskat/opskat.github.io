@@ -31,12 +31,12 @@ The main interface has a sidebar with:
    - **Password / Private Key** — Your credentials
 4. Click **Save**.
 
-Credentials are encrypted with AES-256-GCM before being stored in the local database. The encryption key is managed via your OS keyring.
+Credentials are encrypted with AES-256-GCM before being stored in the local database. The master key is resolved from explicit configuration, the OS keyring, or a protected data-directory key file.
 
 ### Database (MySQL / PostgreSQL)
 
 1. Click **+** and select **Database**.
-2. Choose a **Driver** — MySQL or PostgreSQL.
+2. Choose a **Driver** — MySQL, PostgreSQL, SQL Server, or SQLite. SQLite uses a local or remote file source rather than a network host.
 3. Enter host, port, username, password, and default database name.
 4. Optionally select an SSH asset to tunnel through.
 5. Click **Save**.
@@ -47,6 +47,26 @@ Credentials are encrypted with AES-256-GCM before being stored in the local data
 2. Enter host, port, and optional password.
 3. Optionally select an SSH asset to tunnel through.
 4. Click **Save**.
+
+### RDP Remote Desktop
+
+1. Click **+** and select **RDP**.
+2. Enter the Windows host, username, password, and optional domain.
+3. Optionally route the connection through an SSH tunnel or SOCKS proxy.
+4. Leave clipboard synchronization enabled if you want to copy text and files between local and remote desktops.
+5. Test the connection and click **Save**.
+
+See the [RDP guide](/docs/guide/rdp) for session controls and clipboard behavior.
+
+### Object Storage
+
+1. Click **+** and select **Object Storage**.
+2. Choose a convenience preset or the generic S3-compatible option, then confirm the endpoint and region.
+3. Enter the Access Key ID and Secret Access Key, or select a managed credential.
+4. Adjust path-style access or TLS settings when required by the service.
+5. Test the connection and click **Save**.
+
+Open the asset to browse buckets, objects, and transfers. See the [Object Storage guide](/docs/guide/object-storage).
 
 ## Connecting to an SSH Terminal
 
@@ -93,13 +113,15 @@ You can manage multiple providers and switch between them in **Settings > AI**.
 
 4. If the command matches a **deny** policy, it will be blocked. If it requires confirmation, you will see a prompt before execution.
 
-All actions are logged in the [Audit Log](/docs/guide/audit) with full decision tracking.
+The AI tool calls are recorded in the [Audit Log](/docs/guide/audit), including available policy and approval decision context.
 
 ## What's Next
 
 - [Asset Management](/docs/guide/asset-management) — Organize assets into groups, import/export
 - [SSH Terminal](/docs/guide/ssh-terminal) — Split pane, SFTP, jump hosts, port forwarding
+- [RDP Remote Desktop](/docs/guide/rdp) — Embedded remote desktop, special keys, fullscreen, and clipboard sync
 - [AI Agent](/docs/guide/ai-agent) — Provider configuration, tools, policy enforcement
-- [Query Editor](/docs/guide/query-editor) — SQL and Redis query editor
+- [Query Editor](/docs/guide/query-editor) — SQL and data-management consoles
+- [Object Storage](/docs/guide/object-storage) — S3-compatible bucket and object management
 - [Policy](/docs/guide/policy) — Configure allow/deny rules
 - [Audit](/docs/guide/audit) — Review audit logs and approval workflows

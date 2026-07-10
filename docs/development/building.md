@@ -7,12 +7,11 @@ sidebar_label: Building
 
 ## Prerequisites
 
-- **Go 1.25+** (see `go.mod` for exact version)
-- **Node.js 22+** with **pnpm 10+**
+- **Go 1.26** (use the exact version declared by `go.mod`)
+- **Node.js 22+** with pnpm
 - **Wails v2** CLI (`go install github.com/wailsapp/wails/v2/cmd/wails@latest`)
 - **golangci-lint** (for linting)
 - **mockgen** from `go.uber.org/mock` (for generating mocks)
-- **UPX** (optional, for compressed builds)
 - **Git**
 
 ## Make Commands
@@ -26,7 +25,6 @@ All commands are run from the project root (`opskat/`).
 | `make dev` | Wails dev mode with frontend + backend hot reload |
 | `make build` | Production build (without embedded opsctl) |
 | `make build-embed` | Production build with embedded opsctl binary |
-| `make build-upx` | Production build with UPX compression (requires `upx`) |
 | `make run` | Build with embedded opsctl and run the app |
 | `make install` | Install frontend dependencies (`pnpm install`) |
 | `make clean` | Clean build artifacts (`build/bin`, `frontend/dist`, embedded binary, coverage files) |
@@ -36,9 +34,8 @@ All commands are run from the project root (`opskat/`).
 | Command | Description |
 |---|---|
 | `make build-cli` | Build CLI to `./build/bin/opsctl` |
-| `make build-cli-upx` | Build CLI with UPX compression |
 | `make install-cli` | Install CLI to `$GOPATH/bin` |
-| `make install-skill` | Install Claude Code plugin (register to `~/.claude/plugins/`) |
+| `make install-skill` | Register the local opsctl Claude Code plugin and marketplace for development |
 
 ### Quality
 
@@ -48,6 +45,7 @@ All commands are run from the project root (`opskat/`).
 | `make lint-fix` | Go lint with auto-fix |
 | `make test` | Run all Go tests (`./internal/...` and `./cmd/opsctl/...`) |
 | `make test-cover` | Run tests with coverage report, opens `coverage.html` in browser |
+| `make test-e2e` | Run the Playwright suite against the real Wails app |
 
 ## Frontend Development
 
@@ -57,11 +55,12 @@ Frontend source is in `frontend/`. All commands run from that directory.
 cd frontend
 
 pnpm install          # Install dependencies
-pnpm run dev          # Vite dev server (for standalone frontend development)
-pnpm run build        # Type check (tsc -b) + Vite build
-pnpm run lint         # ESLint
-pnpm run lint:fix     # ESLint with auto-fix
-pnpm run preview      # Preview production build
+pnpm dev          # Vite dev server (for standalone frontend development)
+pnpm build        # Type check (tsc -b) + Vite build
+pnpm lint         # ESLint
+pnpm lint:fix     # ESLint with auto-fix
+pnpm test         # Vitest test suite
+pnpm preview      # Preview production build
 ```
 
 For full-stack development with hot reload on both frontend and backend, use `make dev` from the project root instead.
@@ -72,14 +71,14 @@ For full-stack development with hot reload on both frontend and backend, use `ma
 - TypeScript 5 (strict mode via `tsc -b`)
 - React 19
 - Tailwind CSS 4
-- ESLint 10 + Prettier
+- ESLint + Prettier
 
 ## Backend Testing
 
 Run all tests (matches what CI runs):
 
 ```bash
-go test ./internal/... ./cmd/opsctl/...
+make test
 ```
 
 Run a single package:
@@ -102,61 +101,29 @@ make test-cover
 
 ## Generating Wails TypeScript Bindings
 
-After changing public methods on the `App` struct in `app.go`, regenerate the TypeScript bindings that the frontend calls:
+Wails bindings under `frontend/wailsjs/` are generated and gitignored. After changing a bound Go method, regenerate them through the normal Wails development/build workflow:
 
 ```bash
-wails generate module
+make dev
 ```
 
-This updates the generated files under `frontend/src/wailsjs/go/main/App`.
+Do not hand-edit generated bindings.
 
 ## Generating Mocks
 
-After changing repository interfaces, regenerate mocks with `mockgen`:
+After changing repository interfaces, run the repository's generators:
 
 ```bash
-mockgen -source=internal/repository/asset_repo/asset.go \
-  -destination=internal/repository/asset_repo/mock_asset_repo/asset.go \
-  -package=mock_asset_repo
+go generate ./...
 ```
 
 Follow the same pattern for other repository interfaces.
 
 ## CI Pipeline
 
-GitHub Actions (`.github/workflows/ci.yml`) runs on all pull requests and pushes to `main` and `develop/*` branches.
+GitHub Actions runs Go lint/tests, frontend lint/tests, and the real-app GUI e2e suite on pull requests and pushes to `main` and `develop/*` branches. Consult the workflows on the branch for the exact job matrix rather than copying it into documentation.
 
-### Jobs
-
-**1. Go Lint**
-
-Runs `golangci-lint` with gofmt/goimports formatters. Creates a placeholder `frontend/dist` directory since Wails expects it.
-
-```yaml
-- uses: golangci/golangci-lint-action@v9
-  with:
-    version: latest
-```
-
-**2. Go Test**
-
-```bash
-go test ./internal/... ./cmd/opsctl/...
-```
-
-**3. Frontend Check**
-
-Runs lint + type check + build with frozen lockfile:
-
-```bash
-cd frontend && pnpm install --frozen-lockfile
-cd frontend && pnpm run lint
-cd frontend && pnpm run build
-```
-
-### Concurrency
-
-CI uses concurrency groups (`ci-${{ github.ref }}`) with `cancel-in-progress: true`, so pushing new commits cancels the previous run for the same branch.
+Use `make test`, `make lint`, the frontend `pnpm` scripts, and `make test-e2e` for the corresponding local checks.
 
 ## Build Outputs
 

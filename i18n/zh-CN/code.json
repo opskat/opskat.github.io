@@ -11,8 +11,7 @@
   "download.selectPlatform": { "message": "选择平台" },
   "hero.h1.accent": { "message": "一站式" },
   "hero.h1.rest": { "message": "服务器运维工作台" },
-  "hero.sub": { "message": "SSH、数据库、Redis、Kafka、Kubernetes…… 运维要碰的一切，统一在一个跨平台桌面应用里。还能让 AI 用自然语言替你执行，每一步都有策略与审计护航。" },
-  "hero.detect": { "message": "已识别你的系统 · 同样支持 Windows / Linux" },
+  "hero.sub": { "message": "SSH 与 RDP、本地终端、数据库、对象存储、Redis / etcd / Kafka 中间件和 Kubernetes 集群，统一在一个跨平台桌面应用里。支持的操作还可由 AI 用自然语言驱动，并按具体路径应用策略、审批与审计控制。" },
   "preview.title": { "message": "OpsKat — 统一工作区" },
   "preview.assets": { "message": "资产清单" },
   "preview.search": { "message": "搜索资产…" },
@@ -40,34 +39,38 @@
   "res.cat.db": { "message": "数据库" },
   "res.cat.middleware": { "message": "缓存 & 中间件" },
   "res.cat.cloud": { "message": "云原生" },
+  "res.cat.storage": { "message": "对象存储" },
   "res.cat.more": { "message": "持续扩展" },
   "res.more.text": { "message": "更多资产类型，每个版本持续加入" },
   "res.chip.local": { "message": "本地终端" },
   "res.chip.serial": { "message": "串口" },
+  "res.chip.s3compat": { "message": "S3 兼容对象存储" },
+  "res.chip.cloudStorage": { "message": "云厂商对象存储" },
+  "res.chip.selfHosted": { "message": "私有化 / 自托管" },
   "feat.eyebrow": { "message": "核心能力" },
   "feat.heading": { "message": "一个工作台，覆盖运维全流程" },
   "feat.sub": { "message": "资源墙回答“能管什么”，这里回答“能做什么”。" },
-  "feat.terminal.title": { "message": "多协议终端" },
-  "feat.terminal.desc": { "message": "SSH + 本地 shell / PowerShell / WSL，分屏、SFTP、跳板机链、端口转发、ZMODEM 拖拽上传。" },
+  "feat.terminal.title": { "message": "终端 & 远程桌面" },
+  "feat.terminal.desc": { "message": "SSH、本地 shell / PowerShell / WSL、串口与内置 RDP；支持分屏、SFTP、隧道、全屏和剪贴板同步。" },
   "feat.query.title": { "message": "数据查询与管理" },
-  "feat.query.desc": { "message": "MySQL / PostgreSQL / SQL Server / SQLite 共用一个 SQL 编辑器；MongoDB、Redis、etcd、Kafka 各配专属面板。" },
+  "feat.query.desc": { "message": "关系型数据库共用一个 SQL 编辑器；MongoDB、Redis、etcd、Kafka 与 S3 兼容对象存储各配专属面板。" },
   "feat.cluster.title": { "message": "集群 & 中间件管理" },
   "feat.cluster.desc": { "message": "Kubernetes 资源、Kafka topic / 消费组、Redis / etcd 面板，统一操作。" },
   "feat.assets.title": { "message": "资产管理" },
   "feat.assets.desc": { "message": "树状清单与分组，支持从 SSH config、Tabby、WindTerm 一键导入。" },
   "feat.policy.title": { "message": "策略与审计" },
-  "feat.policy.desc": { "message": "覆盖命令、SQL、Redis、MongoDB、Kafka、K8s、etcd 的放行 / 拦截规则，全量审计 + 审批工作流。" },
+  "feat.policy.desc": { "message": "覆盖命令、SQL、Redis、MongoDB、Kafka、K8s、etcd 的放行 / 拦截规则，并在受支持的工具路径中提供审批与审计上下文。" },
   "feat.cli.title": { "message": "opsctl CLI" },
-  "feat.cli.desc": { "message": "同一内核的 Go 单文件，连接池与桌面共享，脚本化与 CI 集成。" },
+  "feat.cli.desc": { "message": "面向服务器、文件、SQL 与 Redis 等受支持操作的单一 Go 二进制；可脚本化、支持审批并适配 CI。" },
   "feat.creds.title": { "message": "安全凭据" },
-  "feat.creds.desc": { "message": "凭据经 Argon2id + AES-256-GCM 加密，主密钥托管系统 keyring，本地优先。" },
+  "feat.creds.desc": { "message": "凭据经 Argon2id + AES-256-GCM 加密；主密钥可来自显式配置、系统 keyring 或受保护的本地密钥文件。" },
   "feat.cross.title": { "message": "跨平台 · 开源" },
   "feat.cross.desc": { "message": "macOS / Windows / Linux 原生支持，GPL-3.0 开源，本地数据自主可控。" },
   "feat.ai.title": { "message": "AI 运维助手" },
-  "feat.ai.desc": { "message": "用自然语言驱动运维，并与 Claude Code、Codex、OpenCode、Gemini CLI 集成；受同一套策略与审计约束。" },
+  "feat.ai.desc": { "message": "用自然语言驱动受支持的操作，也可为 Claude Code、Codex、OpenCode 与 Gemini CLI 安装 opsctl Skill。" },
   "query.eyebrow": { "message": "数据查询" },
   "query.title": { "message": "一个 SQL 编辑器，连通所有关系型库" },
-  "query.desc": { "message": "MySQL、PostgreSQL、SQL Server、SQLite 共用同一个 SQL 编辑器，可经 SSH 隧道直连；MongoDB、Redis、etcd、Kafka 则各自配备专属管理面板。" },
+  "query.desc": { "message": "MySQL、PostgreSQL、SQL Server、SQLite 共用同一个 SQL 编辑器，可经 SSH 隧道直连；MongoDB、Redis、etcd、Kafka 和对象存储则各自配备专属管理面板。" },
   "query.b1": { "message": "SQL 语法高亮与分页执行" },
   "query.b2": { "message": "结果表筛选 / 排序 / 一键导出" },
   "query.b3": { "message": "只读连接保护，防误操作" },
@@ -75,11 +78,11 @@
   "query.run": { "message": "运行" },
   "query.window.title": { "message": "查询编辑器 — prod-mysql" },
   "audit.eyebrow": { "message": "安全可控" },
-  "audit.title": { "message": "每一次操作，都有策略与留痕" },
-  "audit.desc": { "message": "命令、SQL、Redis 操作先过放行 / 拦截策略，再写入全量审计日志；危险操作触发审批工作流，opsctl 与桌面共享同一套规则。" },
+  "audit.title": { "message": "受保护的操作，都有策略与留痕" },
+  "audit.desc": { "message": "受支持的 AI 与 opsctl 操作会经过各自的策略和审批路径，并把工具结果与决策上下文写入审计日志。" },
   "audit.b1": { "message": "内置 + 自定义策略组，按资产 / 分组继承" },
   "audit.b2": { "message": "危险命令自动拦截或二次确认" },
-  "audit.b3": { "message": "全量审计，可追溯每个决策" },
+  "audit.b3": { "message": "工具审计记录来源、结果与决策上下文" },
   "audit.link": { "message": "查看策略与审计文档" },
   "audit.col.time": { "message": "时间" },
   "audit.col.asset": { "message": "资产" },
@@ -94,7 +97,7 @@
   "audit.window.title": { "message": "审计日志 · 今日" },
   "auto.eyebrow": { "message": "自动化 · 命令行 & AI" },
   "auto.heading": { "message": "脚本化，或用一句话交给 AI" },
-  "auto.sub": { "message": "opsctl 把整个工作台带到终端与 CI；需要时，AI 用自然语言替你执行——两者共享同一套连接池、策略与审计。" },
+  "auto.sub": { "message": "opsctl 把受支持的服务器、文件、数据库与 Redis 操作带到终端和 CI；AI 则可用自然语言驱动它自身支持的受保护操作。" },
   "auto.cli.title": { "message": "opsctl CLI" },
   "auto.cli.desc": { "message": "脚本 · CI · 批量执行" },
   "auto.cli.c1": { "message": "执行远程命令" },
@@ -123,160 +126,31 @@
   "footer.contributing": { "message": "贡献指南" },
   "footer.issues": { "message": "问题反馈" },
   "footer.releases": { "message": "发布版本" },
-  "footer.tagline": { "message": "一站式服务器运维工作台。SSH、数据库、中间件、云原生，统一纳管。开源 · 跨平台。" },
+  "footer.tagline": { "message": "一站式服务器运维工作台。SSH、RDP、数据库、对象存储、中间件与云原生，统一纳管。开源 · 跨平台。" },
   "footer.copyright": { "message": "© 2026 OpsKat · GPL-3.0 许可证 · 用终端构建" },
   "homepage.title": {
     "message": "一站式服务器运维工作台"
   },
   "homepage.description": {
-    "message": "一个跨平台桌面应用，统一管理 SSH、数据库、Redis、Kafka 与 Kubernetes——内置策略、审计与可选的 AI 助手。"
+    "message": "一个跨平台桌面应用，统一管理 SSH、RDP、数据库、对象存储、Redis、Kafka 与 Kubernetes——内置策略、审计与可选的 AI 助手。"
   },
   "navbar.docs": {
     "message": "文档"
   },
-  "navbar.guide": {
-    "message": "指南"
-  },
-  "navbar.cli": {
-    "message": "CLI"
-  },
   "navbar.download": {
     "message": "下载"
-  },
-  "apppreview.heading": {
-    "message": "桌面端 + CLI，同一核心"
-  },
-  "apppreview.subtitle": {
-    "message": "桌面应用用于可视化操作，CLI 用于脚本和 CI —— 共享同一连接池和策略引擎。"
-  },
-  "cli.heading": {
-    "message": "opsctl 命令行工具"
-  },
-  "cli.description": {
-    "message": "一个 Go 二进制文件，将 OpsKat 的全部能力带到你的终端。编写常用操作脚本、集成 CI 流水线，或进入交互式会话。在 Claude Code、Codex 或 Gemini CLI 中安装 Skill，让 AI 编程助手通过 opsctl 直接管理你的基础设施 —— 全程策略管控和审计日志。"
-  },
-  "cli.feature.exec": {
-    "message": "跨服务器执行命令"
-  },
-  "cli.feature.transfer": {
-    "message": "文件传输（本地、远程、跨服务器）"
-  },
-  "cli.feature.sql": {
-    "message": "SQL 和 Redis 查询"
-  },
-  "cli.feature.ssh": {
-    "message": "交互式 SSH 会话"
-  },
-  "cli.feature.approval": {
-    "message": "预审批授权工作流"
-  },
-  "cli.feature.pool": {
-    "message": "与桌面应用共享连接池"
-  },
-  "cli.feature.ai_skill": {
-    "message": "一键安装 Claude Code / Codex / Gemini CLI Skill，让 AI 通过 opsctl 管理基础设施"
   },
   "cta.heading": {
     "message": "准备好把运维收进一个 App 了吗？"
   },
-  "cta.subtitle": {
-    "message": "下载桌面应用或安装 CLI，开始用 AI 管理你的基础设施。"
-  },
-  "cta.download": {
-    "message": "下载"
-  },
-  "cta.github": {
-    "message": "在 GitHub 上查看"
-  },
-  "features.heading": {
-    "message": "运维所需，一应俱全"
-  },
-  "features.subtitle": {
-    "message": "一个统一平台，集成 AI、终端、数据库工具和策略执行。"
-  },
-  "features.ai_agent.title": {
-    "message": "AI 智能体"
-  },
-  "features.ai_agent.desc": {
-    "message": "支持多轮对话和工具调用。兼容 OpenAI API 和 Anthropic API，内置模型参数预设和上下文自动压缩。"
-  },
-  "features.ssh_terminal.title": {
-    "message": "SSH 终端"
-  },
-  "features.ssh_terminal.desc": {
-    "message": "交互式终端，支持分屏、SFTP 浏览器、跳板机链、端口转发和 SOCKS 代理。"
-  },
-  "features.query_editor.title": {
-    "message": "查询编辑器"
-  },
-  "features.query_editor.desc": {
-    "message": "通过 SSH 隧道连接 MySQL/PostgreSQL 的 SQL 编辑器。Redis 命令执行和键浏览器。"
-  },
-  "features.policy.title": {
-    "message": "策略执行"
-  },
-  "features.policy.desc": {
-    "message": "SSH 命令、SQL 语句和 Redis 操作的允许/拒绝规则。内置和自定义策略组。"
-  },
-  "features.audit.title": {
-    "message": "审计与审批"
-  },
-  "features.audit.desc": {
-    "message": "每个操作都记录决策跟踪。opsctl 的授权/审批工作流，支持命令模式预审批。"
-  },
-  "features.ai_tool.title": {
-    "message": "AI 工具集成"
-  },
-  "features.ai_tool.desc": {
-    "message": "一键安装技能，教会 Claude Code、Codex 和 Gemini CLI 使用 opsctl 进行基础设施管理。"
-  },
   "hero.badge": {
     "message": "开源 · 跨平台 · macOS / Linux / Windows"
-  },
-  "hero.headline.line2": {
-    "message": "用 AI 重新定义基础设施运维"
-  },
-  "hero.description": {
-    "message": "描述你的需求 —— AI 智能体代你执行命令、查询和文件传输，同时强制执行策略并记录完整的审计日志。"
   },
   "hero.cta.download": {
     "message": "下载 {os} 版"
   },
-  "hero.cta.download.prefix": {
-    "message": "下载"
-  },
-  "hero.cta.download.current": {
-    "message": "当前"
-  },
   "hero.cta.docs": {
     "message": "查看文档"
-  },
-  "hero.cli.prefix": {
-    "message": "或安装 CLI："
-  },
-  "changelog.title": {
-    "message": "更新日志"
-  },
-  "changelog.subtitle": {
-    "message": "版本发布历史和每个版本的更新内容。"
-  },
-  "changelog.error": {
-    "message": "加载发布信息失败。"
-  },
-  "changelog.viewOnGithub": {
-    "message": "在 GitHub 上查看"
-  },
-  "changelog.noReleases": {
-    "message": "暂无发布版本。"
-  },
-  "changelog.downloads": {
-    "message": "下载"
-  },
-  "footer.documentation": {
-    "message": "文档"
-  },
-  "footer.releaseNotes": {
-    "message": "发布日志"
   },
   "theme.ErrorPageContent.title": {
     "message": "页面已崩溃。",

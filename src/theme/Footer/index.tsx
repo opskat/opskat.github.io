@@ -58,7 +58,7 @@ function Footer(): React.ReactElement {
             </Link>
             <p className="text-[13.5px] leading-relaxed text-muted-foreground">
               <Translate id="footer.tagline">
-                The all-in-one server ops workstation. SSH, databases, middleware and cloud-native — managed in one place. Open source · cross-platform.
+                The all-in-one server ops workstation. SSH, RDP, databases, object storage, middleware and cloud-native — managed in one place. Open source · cross-platform.
               </Translate>
             </p>
           </div>

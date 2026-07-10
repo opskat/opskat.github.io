@@ -41,7 +41,7 @@ opsctl --help
 
 | 依赖 | 版本 | 用途 |
 |---|---|---|
-| [Go](https://go.dev/) | 1.25+ | 后端 |
+| [Go](https://go.dev/) | 1.26（以 `go.mod` 为准） | 后端 |
 | [Node.js](https://nodejs.org/) | 22+ | 前端构建 |
 | [pnpm](https://pnpm.io/) | 最新版 | 前端包管理器 |
 | [Wails v2 CLI](https://wails.io/docs/gettingstarted/installation) | v2 | 桌面应用框架 |
@@ -87,7 +87,7 @@ OpsKat 在以下位置存储数据库、配置和日志：
 | 平台 | 路径 |
 |---|---|
 | macOS | `~/Library/Application Support/opskat` |
-| Windows | `%APPDATA%/opskat` |
+| Windows | `%LOCALAPPDATA%/opskat` |
 | Linux | `~/.config/opskat` |
 
 `opsctl` CLI 默认使用相同目录，可通过 `--data-dir` 覆盖。

@@ -218,7 +218,7 @@ export function Showcase() {
             eyebrowId="query.eyebrow" eyebrow="Data query"
             titleId="query.title" title="One SQL editor across every relational database"
             descId="query.desc"
-            desc="MySQL, PostgreSQL, SQL Server and SQLite share one SQL editor and can connect over an SSH tunnel; MongoDB, Redis, etcd and Kafka each get their own dedicated panel."
+            desc="MySQL, PostgreSQL, SQL Server and SQLite share one SQL editor and can connect over an SSH tunnel; MongoDB, Redis, etcd, Kafka and object storage each get their own dedicated panel."
             bullets={[
               { id: "query.b1", text: "SQL highlighting and paged execution" },
               { id: "query.b2", text: "Filter / sort / one-click export of results" },
@@ -235,13 +235,13 @@ export function Showcase() {
           <div className="order-1 lg:order-2 lg:justify-self-end">
             <ShowcaseText
               eyebrowId="audit.eyebrow" eyebrow="Stays in control"
-              titleId="audit.title" title="Every action carries policy and a paper trail"
+              titleId="audit.title" title="Guarded operations carry policy and a paper trail"
               descId="audit.desc"
-              desc="Commands, SQL and Redis ops pass allow / deny policy first, then land in a full audit log; dangerous operations trigger an approval flow, and opsctl shares the same rules as the desktop app."
+              desc="Supported AI and opsctl operations pass their policy and approval path, then record the tool result and decision context in the audit log."
               bullets={[
                 { id: "audit.b1", text: "Built-in + custom policy groups, inherited by asset / group" },
                 { id: "audit.b2", text: "Dangerous commands auto-blocked or double-confirmed" },
-                { id: "audit.b3", text: "Full audit — every decision is traceable" },
+                { id: "audit.b3", text: "Tool audit records source, result and decision context" },
               ]}
               linkId="audit.link" linkText="Read the Policy & Audit docs" linkTo="/docs/guide/policy"
             />

@@ -5,7 +5,7 @@ sidebar_label: batch
 
 # opsctl batch
 
-Execute multiple commands in parallel with a single approval request. Supports mixing exec (SSH), sql, and redis command types in a single batch.
+Execute multiple commands in parallel with a single approval request. Supports mixing exec (SSH), sql, redis, and mongo command types in a single batch.
 
 ## Syntax
 
@@ -24,14 +24,14 @@ echo '{"commands":[...]}' | opsctl [global-flags] batch
 
 Format: `asset:command` (default type `exec`) or `type:asset:command`.
 
-The first `:` is checked — if the left side is a known type (`exec`, `sql`, `redis`), it's treated as a type prefix. Otherwise the entire left side is the asset identifier and the type defaults to `exec`.
+The first `:` is checked — if the left side is a known type (`exec`, `sql`, `redis`, `mongo`), it's treated as a type prefix. Otherwise the entire left side is the asset identifier and the type defaults to `exec`.
 
 ```bash
 # Default exec
 opsctl batch 'web-01:uptime' 'db-server:df -h'
 
 # Mixed types
-opsctl batch 'web-01:uptime' 'sql:prod-db:SELECT 1' 'redis:cache:PING'
+opsctl batch 'web-01:uptime' 'sql:prod-db:SELECT 1' 'redis:cache:PING' 'mongo:analytics:db.events.countDocuments({})'
 
 # Group/name asset reference
 opsctl batch 'exec:production/web-01:uptime'
@@ -45,7 +45,8 @@ Primary mode for AI and scripting. Each command specifies `asset`, `type` (optio
 echo '{"commands":[
   {"asset": "web-01", "type": "exec", "command": "uptime"},
   {"asset": "prod-db", "type": "sql", "command": "SELECT COUNT(*) FROM users"},
-  {"asset": "cache", "type": "redis", "command": "INFO keyspace"}
+  {"asset": "cache", "type": "redis", "command": "INFO keyspace"},
+  {"asset": "analytics", "type": "mongo", "command": "db.events.countDocuments({})"}
 ]}' | opsctl batch
 ```
 

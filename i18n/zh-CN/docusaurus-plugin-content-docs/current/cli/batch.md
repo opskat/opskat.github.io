@@ -5,7 +5,7 @@ sidebar_label: batch
 
 # opsctl batch
 
-并行执行多条命令，仅需一次审批。支持在单个批次中混合使用 exec（SSH）、sql 和 redis 命令类型。
+并行执行多条命令，仅需一次审批。支持在单个批次中混合使用 exec（SSH）、sql、redis 和 mongo 命令类型。
 
 ## 语法
 
@@ -24,14 +24,14 @@ echo '{"commands":[...]}' | opsctl [全局参数] batch
 
 格式：`asset:command`（默认类型 `exec`）或 `type:asset:command`。
 
-第一个 `:` 前的内容会被检查——如果是已知类型（`exec`、`sql`、`redis`），则作为类型前缀；否则整体作为资产标识，类型默认为 `exec`。
+第一个 `:` 前的内容会被检查——如果是已知类型（`exec`、`sql`、`redis`、`mongo`），则作为类型前缀；否则整体作为资产标识，类型默认为 `exec`。
 
 ```bash
 # 默认 exec
 opsctl batch 'web-01:uptime' 'db-server:df -h'
 
 # 混合类型
-opsctl batch 'web-01:uptime' 'sql:prod-db:SELECT 1' 'redis:cache:PING'
+opsctl batch 'web-01:uptime' 'sql:prod-db:SELECT 1' 'redis:cache:PING' 'mongo:analytics:db.events.countDocuments({})'
 
 # 分组/名称方式引用资产
 opsctl batch 'exec:production/web-01:uptime'
@@ -45,7 +45,8 @@ opsctl batch 'exec:production/web-01:uptime'
 echo '{"commands":[
   {"asset": "web-01", "type": "exec", "command": "uptime"},
   {"asset": "prod-db", "type": "sql", "command": "SELECT COUNT(*) FROM users"},
-  {"asset": "cache", "type": "redis", "command": "INFO keyspace"}
+  {"asset": "cache", "type": "redis", "command": "INFO keyspace"},
+  {"asset": "analytics", "type": "mongo", "command": "db.events.countDocuments({})"}
 ]}' | opsctl batch
 ```
 

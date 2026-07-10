@@ -41,7 +41,7 @@ If you prefer to build from source, you'll need:
 
 | Dependency | Version | Purpose |
 |---|---|---|
-| [Go](https://go.dev/) | 1.25+ | Backend |
+| [Go](https://go.dev/) | 1.26 (see `go.mod`) | Backend |
 | [Node.js](https://nodejs.org/) | 22+ | Frontend build |
 | [pnpm](https://pnpm.io/) | latest | Frontend package manager |
 | [Wails v2 CLI](https://wails.io/docs/gettingstarted/installation) | v2 | Desktop app framework |
@@ -87,7 +87,7 @@ OpsKat stores its database, configuration, and logs in:
 | Platform | Path |
 |---|---|
 | macOS | `~/Library/Application Support/opskat` |
-| Windows | `%APPDATA%/opskat` |
+| Windows | `%LOCALAPPDATA%/opskat` |
 | Linux | `~/.config/opskat` |
 
 The `opsctl` CLI uses the same directory by default. Override with `--data-dir`.

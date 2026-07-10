@@ -5,6 +5,17 @@ sidebar_position: 100
 
 # Changelog
 
+## Unreleased
+
+The next release expands OpsKat beyond terminal and data consoles with two new built-in asset experiences: an S3-compatible object-storage browser and an embedded RDP remote desktop.
+
+### 🚀 Major New Features
+
+- ✨ **Object Storage assets** — connect to Amazon S3, Alibaba Cloud OSS, Tencent COS, Huawei OBS, Volcengine TOS, Qiniu Kodo, Cloudflare R2, Backblaze B2, DigitalOcean Spaces, Wasabi, MinIO, and generic S3-compatible endpoints. Browse buckets and prefixes, upload/download, copy/move/delete objects, preview supported images, monitor transfers, and create presigned upload/download URLs ([#223](https://github.com/opskat/opskat/pull/223)).
+- ✨ **RDP assets** — open Windows remote desktops inside OpsKat with direct, SSH-tunnel, or SOCKS-proxy connectivity; fit/actual-size and fullscreen views; special-key shortcuts; reconnect controls; and bidirectional text/file clipboard support ([#225](https://github.com/opskat/opskat/pull/225)).
+
+Neither interactive asset currently adds a dedicated opsctl operation command or built-in allow/deny policy kind.
+
 ## v1.9.1 (2026-06-16)
 
 v1.9.1 is a patch release that fixes binary file corruption during ZMODEM (rz/sz) terminal transfers and refines the click behavior of highlighted links in the terminal.

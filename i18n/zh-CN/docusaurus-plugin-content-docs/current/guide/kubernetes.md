@@ -5,7 +5,7 @@ sidebar_label: Kubernetes
 
 # Kubernetes
 
-OpsKat 通过 kubeconfig 连接 Kubernetes 集群，提供可视化的集群浏览器和实时日志流。AI 智能体和 `opsctl` 可以对相同的资产运行 `kubectl`，每条命令都会经过策略和审计。
+OpsKat 通过 kubeconfig 连接 Kubernetes 集群，提供可视化的集群浏览器和实时日志流。AI 智能体可以针对同一资产运行受保护的 `kubectl` 操作。
 
 ## 连接
 
@@ -41,4 +41,4 @@ Kubernetes 资产通过 `kubectl` 操作：
 - 在 **AI 智能体** 中，`exec_k8s` 工具对资产运行 `kubectl` 命令（智能体使用此工具而非 `run_command`）。
 - 命令可选择通过资产上配置的 SSH 跳板机路由。
 
-每次 `kubectl` 调用都会与资产的 [Kubernetes 策略](/docs/guide/policy)进行比对，其允许/拒绝列表匹配 `kubectl` 命令模式（例如允许 `kubectl get *`、拒绝 `kubectl delete *`）。新建的 Kubernetes 资产默认采用只读策略加危险命令拒绝列表。
+AI 发起的每次 `kubectl` 调用都会与资产的 [Kubernetes 策略](/docs/guide/policy)进行比对，其允许/拒绝列表匹配 `kubectl` 命令模式（例如允许 `kubectl get *`、拒绝 `kubectl delete *`）。新建的 Kubernetes 资产默认采用只读策略加危险命令拒绝列表。`opsctl` 可以创建 Kubernetes 资产，但目前没有用于执行 Kubernetes 操作的专用命令。

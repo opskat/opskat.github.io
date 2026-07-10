@@ -5,6 +5,17 @@ sidebar_position: 100
 
 # 更新日志
 
+## 未发布
+
+下一个版本将 OpsKat 从终端与数据控制台扩展到两种新的内置资产体验：S3 兼容对象存储浏览器与内嵌 RDP 远程桌面。
+
+### 🚀 主要新功能
+
+- ✨ **对象存储资产** — 支持 Amazon S3、阿里云 OSS、腾讯 COS、华为 OBS、火山 TOS、七牛 Kodo、Cloudflare R2、Backblaze B2、DigitalOcean Spaces、Wasabi、MinIO 和通用 S3 兼容端点；可浏览 Bucket 与前缀、上传/下载、复制/移动/删除对象、预览支持的图片、查看传输任务，并生成预签名上传/下载 URL（[#223](https://github.com/opskat/opskat/pull/223)）。
+- ✨ **RDP 资产** — 在 OpsKat 内打开 Windows 远程桌面，支持直连、SSH 隧道或 SOCKS 代理，适应/实际尺寸与全屏视图、特殊按键、重连控件，以及双向文本/文件剪贴板（[#225](https://github.com/opskat/opskat/pull/225)）。
+
+这两种交互式资产目前都不提供专用的 opsctl 操作命令，也不定义内置放行/拦截策略类型。
+
 ## v1.9.1 (2026-06-16)
 
 v1.9.1 是一个补丁版本，修复了 ZMODEM(rz/sz) 终端传输二进制文件损坏的问题，并优化了终端高亮链接的点击交互。

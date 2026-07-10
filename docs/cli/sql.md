@@ -5,7 +5,7 @@ sidebar_label: sql
 
 # opsctl sql
 
-Execute SQL queries against MySQL or PostgreSQL database assets. Database connections are tunneled through SSH when the asset is configured with an SSH tunnel.
+Execute SQL against a database asset. Network drivers include MySQL, PostgreSQL, and SQL Server; SQLite assets use their configured local or remote file source. Network connections honor the asset's configured SSH tunnel or proxy.
 
 ## Syntax
 

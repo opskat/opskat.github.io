@@ -5,7 +5,7 @@ sidebar_label: Kubernetes
 
 # Kubernetes
 
-OpsKat connects to Kubernetes clusters with a kubeconfig and provides a visual cluster browser plus live log streaming. The AI Agent and `opsctl` can run `kubectl` against the same assets, with every command passing through policy and audit.
+OpsKat connects to Kubernetes clusters with a kubeconfig and provides a visual cluster browser plus live log streaming. The AI Agent can run guarded `kubectl` operations against the same assets.
 
 ## Connecting
 
@@ -41,4 +41,4 @@ Kubernetes assets are operated through `kubectl`:
 - In the **AI Agent**, the `exec_k8s` tool runs `kubectl` commands against the asset (the agent uses this rather than `run_command`).
 - Commands can optionally be routed through an SSH jump host configured on the asset.
 
-Every `kubectl` invocation is evaluated against the asset's [Kubernetes policy](/docs/guide/policy), whose allow/deny lists match `kubectl` command patterns (for example `kubectl get *` to allow and `kubectl delete *` to deny). New Kubernetes assets default to read-only plus a dangerous-command deny list.
+Every AI `kubectl` invocation is evaluated against the asset's [Kubernetes policy](/docs/guide/policy), whose allow/deny lists match `kubectl` command patterns (for example `kubectl get *` to allow and `kubectl delete *` to deny). New Kubernetes assets default to read-only plus a dangerous-command deny list. `opsctl` can create Kubernetes assets but currently has no dedicated command for running Kubernetes operations.

@@ -5,243 +5,68 @@ sidebar_label: Architecture
 
 # Architecture Overview
 
-OpsKat is a **dual-mode application**: a Wails v2 desktop app (Go backend + React frontend) and an `opsctl` CLI tool. Both modes share core infrastructure through `internal/bootstrap/`.
+OpsKat is a Wails v2 desktop application with a Go backend and React frontend. The desktop UI uses Wails IPC—there is no HTTP API for the shipped app. The repository also builds the standalone `opsctl` CLI, while extensions run as sandboxed WebAssembly modules inside the backend.
 
-## System Components
+For the canonical, code-oriented subsystem map, read [`docs/ARCHITECTURE.md`](https://github.com/opskat/opskat/blob/main/docs/ARCHITECTURE.md) in the application repository. It is maintained together with the code and owns the detailed process topology, layering rules, data model, AI flow, extension runtime, and frontend structure. This page gives contributors a shorter orientation without duplicating that changing inventory.
 
-```
-┌──────────────────────────────────────────────────────┐
-│                   Desktop App (Wails v2)             │
-│  ┌────────────────┐        ┌───────────────────────┐ │
-│  │  React Frontend │◄─────►│    Go Backend (app.go) │ │
-│  │  (Bindings +    │       │                       │ │
-│  │   Events)       │       │                       │ │
-│  └────────────────┘        └───────────┬───────────┘ │
-│                                        │             │
-│                              ┌─────────▼──────────┐  │
-│                              │  bootstrap.Init()   │  │
-│                              └─────────┬──────────┘  │
-│                                        │             │
-│  ┌─────────────────────────────────────▼───────────┐ │
-│  │  Service → Repository → Entity                  │ │
-│  │  AI Module │ ConnPool │ SSHPool │ Approval       │ │
-│  └─────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────┘
+## Runtime Topology
 
-┌──────────────────────────────────────────────────────┐
-│                   opsctl CLI                         │
-│  cmd/opsctl/ ──► bootstrap.Init() ──► same core     │
-│  (accepts --data-dir, --master-key / OPSKAT_MASTER_KEY)│
-└──────────────────────────────────────────────────────┘
+```text
+React frontend ── Wails IPC/events ── internal/app bindings
+                                      │
+                                      ▼
+                              internal/service
+                                      │
+                                      ▼
+                              internal/repository ── GORM/SQLite
+
+opsctl ── approval.sock / sshpool.sock ── running desktop app
+extensions ── wazero WASM runtime ── capability-checked host functions
 ```
 
-### Shared Bootstrap (`internal/bootstrap/`)
+- The desktop process owns the database, credential services, connection pools, AI runner, approval server, and extension runtime.
+- `opsctl` shares the application data and business helpers. When the app is running, it can request approval and reuse pooled SSH connections through local Unix-domain sockets; supported commands can fall back to direct connections when it is offline.
+- `cmd/devserver` is a development-only extension harness with a local HTTP/WebSocket interface. It is not the shipped desktop application's transport.
 
-Both the Wails app (`main.go`) and the CLI (`cmd/opsctl/`) call `bootstrap.Init()` to initialize the database, repositories, credential service, and migrations. The CLI accepts `--data-dir` and `--master-key` (or `OPSKAT_MASTER_KEY` env) overrides.
+## Backend Layers
 
-### opsctl CLI (`cmd/opsctl/`)
+The normal request path is:
 
-Standalone CLI for asset management and remote operations without the GUI:
-
-- `list assets|groups`, `get asset <id>`, `create asset`, `update asset <id>`
-- `exec <asset-id> -- <command>` -- SSH command execution with stdio piping
-- `cp` -- scp-style file transfer: local-to-remote, remote-to-local, and remote-to-remote (direct streaming, no local disk)
-- `ssh <asset-id>` -- Interactive SSH terminal session
-- `sql <asset-id>` -- Database query execution
-- `redis <asset-id>` -- Redis command execution
-- `session` -- Session management for batch approval workflows
-- `grant submit` -- Submit command patterns for pre-approval
-
-## Backend Layers (cago framework)
-
-OpsKat's backend follows a layered architecture using the [cago](https://github.com/cago-frame/cago) framework:
-
-```
-app.go (Wails bindings / controller layer)
-  └── internal/service/       (business logic)
-        └── internal/repository/  (data access)
-              └── internal/model/entity/  (rich domain model)
+```text
+internal/app (IPC boundary) → internal/service (business logic)
+                            → internal/repository (data access)
+                            → internal/model/entity (persisted domain data)
 ```
 
-### `app.go` -- Wails App Struct
+Bindings parse and validate boundary input, then delegate. Services call repository interfaces through their registered getters rather than concrete implementations or GORM. Protocol-specific behavior is registered through handlers and policy registries instead of type-string switches.
 
-All public methods on the `App` struct become frontend-callable bindings. This replaces the traditional controller/handler layer.
+`main.go` is the composition root. `internal/bootstrap` opens SQLite, resolves the credential master key, registers repositories, and runs append-only migrations. Long-lived protocol connections live in `internal/sshpool` and `internal/connpool`.
 
-### `internal/service/` -- Services
+## Frontend
 
-Business logic layer. Each service is defined as an interface with a singleton accessor pattern:
+The frontend is a pnpm workspace built with React, TypeScript, Vite, Tailwind CSS, Zustand, and the shared `@opskat/ui` component package. Navigation uses OpsKat's tab store rather than React Router. Backend calls use generated bindings under `frontend/wailsjs/`; backend-to-frontend streams and notifications use Wails events.
 
-```go
-// e.g., Asset() returns the AssetSvc singleton
-Asset() AssetSvc
-```
+State is organized by domain in `frontend/src/stores/`. Asset-type UI is registered through the frontend asset-type registry; detailed interactive surfaces such as terminals, data consoles, RDP, and object storage own their task-specific event lifecycle.
 
-### `internal/repository/` -- Repositories
+## AI, Policy, and Audit
 
-Data access layer. Uses interface + `RegisterX(impl)` dependency injection pattern. Queries use `db.Ctx(ctx)` for GORM operations.
+The AI subsystem under `internal/ai/` registers tools for supported asset operations. Before an operation runs, its policy kind can produce `Allow`, `Deny`, or `NeedConfirm`; approval grants can authorize later matching operations. Tool execution is audited with its source and decision details.
 
-### `internal/model/entity/` -- Entities
+Built-in policy kinds currently cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, and etcd. Interactive RDP and built-in object-storage browsing do not currently add their own policy kinds or dedicated `opsctl` operation commands.
 
-**Rich domain model** -- entities contain business logic (e.g., `Validate`, `GetSSHConfig`, `CanConnect`), not just data fields. Type-specific configuration is stored as a JSON string in the `Config` field, accessed via entity methods like `GetSSHConfig()`/`SetSSHConfig()`, `GetDatabaseConfig()`/`SetDatabaseConfig()`, `GetRedisConfig()`/`SetRedisConfig()`.
+Extensions expose AI tools through one `exec_tool` dispatcher. Their manifests declare tools, asset types, capabilities, and optional policy types; host calls enforce the declared capability surface.
 
-### Cago Integration
+## Data and Credentials
 
-Cago components start immediately via `Registry()`. Do **not** call `Start()` (it blocks forever):
+- Application state is stored in `opskat.db` through GORM and SQLite.
+- Migrations are append-only and registered from `migrations/migrations.go`.
+- Asset deletion uses the entity `Status` field rather than GORM `DeletedAt`.
+- Credential encryption is implemented by `internal/service/credential_svc`: Argon2id derives the encryption key and AES-256-GCM encrypts secrets. The master key is resolved from an explicit value, the OS keychain, or the protected data-directory key file.
 
-```go
-cago.New(ctx, cfg).
-    Registry(component.Core()).
-    Registry(component.Database()).
-    DisableLogger()
-```
+## Contributor References
 
-Requires `_ "github.com/cago-frame/cago/database/db/sqlite"` import for the SQLite driver.
-
-## Frontend Stack
-
-- **React 19** + **TypeScript 5**
-- **Tailwind CSS 4** (with `tw-animate-css`)
-- **Zustand 5** for state management
-- **Vite 6** for build tooling
-- **xterm.js 6** for terminal emulation
-- **i18next** / **react-i18next** for internationalization
-- **Radix UI** + **Lucide icons** for components
-- **react-markdown** for markdown rendering
-
-### Frontend State (Zustand Stores)
-
-| Store | Responsibility |
-|---|---|
-| `assetStore` | Assets/groups CRUD, selection state, breadcrumb path resolution via `getAssetPath()` |
-| `terminalStore` | SSH terminal tabs with split pane support. Tabs use a `SplitNode` binary tree structure with ratio management |
-| `aiStore` | Multi-tab AI chat with per-tab state (`tabStates`), generation-based stream event deduplication, conversation persistence |
-| `queryStore` | Database/Redis query editor state per asset tab |
-| `sftpStore` | SFTP file browser state |
-| `tabStore` | Tab navigation state |
-| `shortcutStore` | Configurable keyboard shortcut bindings |
-| `terminalThemeStore` | xterm terminal color themes with custom editor |
-
-## Frontend-Backend Communication
-
-### Bindings (request/response)
-
-Frontend calls `App.Method()` via generated TypeScript bindings at `wailsjs/go/main/App`. After changing `app.go` methods, regenerate bindings with:
-
-```bash
-wails generate module
-```
-
-### Events (streaming)
-
-Backend emits events via `wailsRuntime.EventsEmit()`, frontend subscribes via `EventsOn()`.
-
-Key event channels:
-- SSH terminal data: `ssh:data:{sessionID}` / `ssh:closed:{sessionID}` (base64 encoded)
-- AI streaming: `ai:event:{conversationID}` with `StreamEvent` objects
-
-### Language Context
-
-Backend methods use `a.langCtx()` which calls `i18n.WithLanguage(ctx, lang)` so cago i18n errors are translated based on the frontend's language setting.
-
-## AI Module (`internal/ai/`)
-
-Provider-based abstraction with tool execution, policy enforcement, and audit logging.
-
-### Providers
-
-| File | Provider | Notes |
-|---|---|---|
-| `openai.go` | OpenAI-compatible API | Streaming SSE, tool calling |
-| `localcli.go` | Local CLI provider | Claude CLI, Codex CLI -- converts messages to plain text |
-| `cli_claude.go` | Claude CLI | NDJSON stream parser, session resume via `-r <sessionID>` |
-| `cli_codex.go` | Codex CLI | JSON-RPC 2.0 over stdin/stdout, subprocess lifecycle management |
-| `cli_process.go` | CLI subprocess | Start, write JSON, read lines, context-aware shutdown |
-
-### Conversation Loop (`agent.go`)
-
-Runs a tool execution loop with a max of **10 rounds** to prevent infinite loops.
-
-### Tools (`tool_registry.go`)
-
-Available tools: `list_assets`, `get_asset`, `run_command`, `add_asset`, `update_asset`, `list_groups`, `get_group`, `upload_file`, `download_file`, `exec_sql`, `exec_redis`, `request_permission`.
-
-Tool handlers are shared with opsctl via `AllToolDefs()`.
-
-### Policy Enforcement
-
-Three policy types, all supporting policy group inheritance:
-
-| File | Type | Details |
-|---|---|---|
-| `command_policy.go` | SSH commands | Per-asset/group allow/deny lists. Uses `mvdan.cc/sh` to parse shell commands. Decisions: Allow, Deny, NeedConfirm. Checks approved grant items with `MatchCommandRule()` |
-| `query_policy.go` | SQL statements | Uses TiDB parser to classify statements (SELECT/INSERT/UPDATE/DELETE/DROP/etc.) and detect dangerous patterns (no-WHERE delete/update, PREPARE, CALL) |
-| `redis_policy.go` | Redis commands | Multi-word command matching (e.g., `CONFIG SET`). Per-asset allow/deny lists |
-| `policy_group_resolve.go` | Group resolution | Resolves policy group inheritance chains, merges into final allow/deny rules |
-| `policy_tester.go` | Testing | Real-time policy testing for all 3 types, used by frontend PolicyTestPanel |
-
-### Policy Groups (`internal/service/policy_group_svc/`)
-
-- **Built-in groups** (negative IDs, immutable): Linux ReadOnly, K8s ReadOnly, Docker ReadOnly, Dangerous Deny (SSH); ReadOnly, Dangerous Deny (SQL); ReadOnly, Dangerous Deny (Redis)
-- **User-defined groups** (positive IDs): CRUD + copy from built-in
-- Assets/groups reference policy groups via `Groups` field in their policy JSON. At evaluation time, referenced groups are resolved and merged.
-
-### Audit (`audit.go`)
-
-`AuditingExecutor` wraps `ToolExecutor` to automatically log all tool calls with decision info (decision, source, matched pattern, session ID). Audit context injected via `context.Value`.
-
-Sources: `"ai"`, `"opsctl"`, `"mcp"` -- injected via `WithAuditSource(ctx, source)`. Logs stored in `audit_logs` table.
-
-### Connection Caching
-
-`SSHClientCache` (in `tool_registry.go`) and `ConnCache[C]` (generic, in `conn_cache.go`) reuse SSH/DB/Redis connections within a single AI conversation.
-
-## Connection Pooling (`internal/connpool/`)
-
-| File | Functionality |
-|---|---|
-| `database.go` | `sql.DB` connections for MySQL/PostgreSQL with optional SSH tunnel |
-| `redis.go` | Redis clients with optional SSH tunnel |
-| `tunnel.go` | SSH tunnel dial adapter for MySQL |
-| `pg_tunnel.go` | SSH tunnel dial adapter for PostgreSQL |
-
-## SSH Architecture (`internal/sshpool/`)
-
-- `ssh_svc` manages sessions via `sync.Map` registry
-- `internal/sshpool/` provides a Unix socket server for opsctl to access the desktop app's pooled SSH connections
-- Jump host chains resolved recursively with max depth **5** to prevent circular references
-- Supports port forwarding and SOCKS proxy
-- Credentials encrypted via `credential_svc` (AES) before database storage; resolved via `credential_resolver`
-
-## Approval & Grant System (`internal/approval/`)
-
-Unix socket protocol (`<data-dir>/approval.sock`) for opsctl to request approval from the desktop app.
-
-**Flow**: opsctl sends `ApprovalRequest` (type: exec/cp/create/update/grant) -> desktop app shows dialog -> user approves/denies -> `ApprovalResponse` sent back.
-
-**Grant system**: AI (`request_permission` tool) or opsctl (`grant submit`) submits command patterns as `GrantSession` + `GrantItem` records. Approved grant items are matched against subsequent commands using `MatchCommandRule()` (supports `*` wildcard). Grant items persist for the session.
-
-## Database & Migrations
-
-- **SQLite** database (`opskat.db`)
-- Schema managed via [gormigrate](https://github.com/go-gormigrate/gormigrate) in `migrations/migrations.go`
-- Each migration is a numbered function (e.g., `202603220001`)
-- Add new migrations to the `Migrations` slice
-
-### App Data Directories
-
-Resolved by `bootstrap.AppDataDir()`:
-
-| Platform | Path |
-|---|---|
-| macOS | `~/Library/Application Support/opskat` |
-| Windows | `%APPDATA%/opskat` |
-| Linux | `~/.config/opskat` |
-
-Database, config, and logs (`logs/opskat.log`, `logs/error.log`) are stored here. opsctl can override with `--data-dir`.
-
-## Key Conventions
-
-- **i18n**: All user-facing text uses i18next keys (frontend) or cago error codes (backend). Both support zh-CN and en.
-- **Soft delete**: Assets use `Status = StatusDeleted` instead of hard delete.
-- **Asset types**: `ssh`, `database` (MySQL/PostgreSQL), `redis` -- each with type-specific config and policy support.
-- **Error handling**: Never ignore errors silently. Use cago zap logger: `logger.Default().Warn/Error(msg, zap.Error(err))`.
+- [Development guide](https://github.com/opskat/opskat/blob/main/docs/DEVELOP.md) — commands, tests, CI, logging, and generated files
+- [Architecture map](https://github.com/opskat/opskat/blob/main/docs/ARCHITECTURE.md) — canonical subsystem details
+- [Adding an asset type](https://github.com/opskat/opskat/blob/main/docs/adding-an-asset-type.md) — backend and frontend registration seams
+- [Design system](https://github.com/opskat/opskat/blob/main/docs/DESIGN.md) — UI primitives, tokens, and surface patterns
+- [Repository guidance](https://github.com/opskat/opskat/blob/main/AGENTS.md) — engineering principles and fix policy

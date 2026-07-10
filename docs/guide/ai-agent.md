@@ -38,46 +38,19 @@ Each conversation is a multi-turn dialogue between you and the AI agent. The flo
 2. The AI decides which **tools** to call based on your request.
 3. Each tool call is executed, with results fed back to the AI.
 4. The AI processes the results and may call additional tools or respond.
-5. This loop continues for up to **10 rounds** per message to prevent infinite loops.
+5. The runner continues the guarded tool loop until it produces a response, is cancelled, or reaches its configured execution limits.
 
-Tool execution results are capped at 32KB. If output exceeds this limit, it is truncated with a suggestion to use more precise filters (e.g., `| head`, `| grep`).
-
-SSH connections are cached and reused within a single conversation for efficiency.
+Protocol helpers reuse the application's connection pools where applicable.
 
 ## Available Tools
 
-The agent has access to the following tools:
+The tool registry includes asset and group management, SSH/file operations, batch execution, SQL and supported data-service operations, Kubernetes and Kafka operations, permission requests, and local workspace tools. Installed extensions are exposed through a single `exec_tool` dispatcher rather than one hard-coded AI tool per extension.
 
-### Asset Management
-
-| Tool | Description |
-|---|---|
-| `list_assets` | List all managed assets. Supports filtering by type and group. |
-| `get_asset` | Get detailed info about a specific asset (connection config, description). |
-| `add_asset` | Add a new asset (SSH, database, or Redis). |
-| `update_asset` | Update an existing asset's properties. |
-| `list_groups` | List all asset groups. |
-| `get_group` | Get detailed info about a specific group. |
-
-### Remote Operations
-
-| Tool | Description |
-|---|---|
-| `run_command` | Execute a shell command on a remote server via SSH. |
-| `upload_file` | Upload a local file to a remote server via SFTP. |
-| `download_file` | Download a file from a remote server via SFTP. |
-| `exec_sql` | Execute SQL on a database asset (MySQL/PostgreSQL). Returns rows as JSON for queries, or affected count for statements. |
-| `exec_redis` | Execute a Redis command on a Redis asset. |
-
-### Permission
-
-| Tool | Description |
-|---|---|
-| `request_permission` | Request pre-approval for command patterns before executing them. Supports `*` wildcard. Once approved, matching commands are auto-approved for the session. |
+Tool availability is capability-specific: not every asset has an AI operation helper. In particular, the built-in RDP session and object-storage browser are currently interactive app surfaces rather than AI helpers. The registry evolves with the application, so the tool cards shown in a conversation are the authoritative list for the running version.
 
 ## Policy Enforcement on AI Actions
 
-Every tool call from the AI agent passes through the same policy pipeline as manual operations:
+Operations with a registered policy kind pass through the policy pipeline:
 
 1. **Policy check** — The command/query is evaluated against the asset's allow/deny rules and policy groups.
 2. **Grant matching** — If a grant session has been approved (via `request_permission`), matching patterns are auto-approved.
@@ -113,4 +86,4 @@ Other tools install skill files to their standard locations:
 
 Skills are automatically updated when the desktop app is updated.
 
-Once installed, these AI coding tools can use `opsctl` commands as part of their workflow, with all operations routed through OpsKat's policy and audit pipeline.
+Once installed, these AI coding tools can use supported `opsctl` commands as part of their workflow. Commands retain the policy, approval, and audit behavior documented for their individual operation paths.

@@ -12,12 +12,12 @@ export default function Privacy() {
 
           <p>
             OpsKat is a local-first desktop application for managing infrastructure assets such as SSH hosts,
-            databases, Redis, MongoDB, Kafka, Kubernetes, and etcd.
+            RDP desktops, databases, object storage, Redis, MongoDB, Kafka, Kubernetes, and etcd.
           </p>
           <p>This policy explains what information OpsKat stores or transmits when you use the app.</p>
 
           <h2>Local Data</h2>
-          <p>OpsKat stores app data locally on your Mac. This may include:</p>
+          <p>OpsKat stores app data locally on your device. This may include:</p>
           <ul>
             <li>Infrastructure asset names and connection settings</li>
             <li>Hostnames, ports, usernames, and related configuration</li>
@@ -30,11 +30,11 @@ export default function Privacy() {
 
           <h2>Network Connections You Configure</h2>
           <p>
-            OpsKat connects from your Mac to the infrastructure endpoints that you configure, such as SSH servers,
-            SFTP servers, databases, Redis, MongoDB, Kafka, Kubernetes, and etcd endpoints.
+            OpsKat connects from your device to the infrastructure endpoints that you configure, such as SSH servers,
+            SFTP and RDP servers, databases, object-storage services, Redis, MongoDB, Kafka, Kubernetes, and etcd endpoints.
           </p>
           <p>
-            Connection data, commands, queries, files, and responses are exchanged directly between your Mac and the
+            Connection data, commands, queries, files, and responses are exchanged directly between your device and the
             endpoints you configure. OpsKat does not relay this infrastructure traffic through an OpsKat-operated
             service.
           </p>
@@ -47,7 +47,7 @@ export default function Privacy() {
           <p>
             If you add an OpenAI-compatible, Anthropic-compatible, or other supported AI provider endpoint, OpsKat may
             send your prompts, selected context, operation descriptions, tool results, and related technical information
-            directly from your Mac to that provider endpoint so it can respond to your request.
+            directly from your device to that provider endpoint so it can respond to your request.
           </p>
           <p>
             Your use of a third-party AI provider is governed by that provider's terms and privacy policy. Do not send
@@ -58,7 +58,7 @@ export default function Privacy() {
           <h2>Credentials</h2>
           <p>
             OpsKat is designed to store sensitive credentials locally in encrypted form. You are responsible for
-            protecting access to your Mac user account, disk, backups, and exported files.
+            protecting access to your operating-system account, disk, backups, and exported files.
           </p>
           <p>OpsKat does not ask you to send infrastructure credentials to an OpsKat-operated backend service.</p>
 

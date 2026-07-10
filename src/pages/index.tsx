@@ -18,7 +18,7 @@ export default function Home() {
       description={translate({
         id: "homepage.description",
         message:
-          "One cross-platform desktop app for SSH, databases, Redis, Kafka and Kubernetes — with policy, audit and an optional AI assistant.",
+          "One cross-platform desktop app for SSH, RDP, databases, object storage, Redis, Kafka and Kubernetes — with policy, audit and an optional AI assistant.",
       })}
     >
       <main className="landing-page relative overflow-hidden">

@@ -32,7 +32,7 @@ This command requires approval from the running desktop app:
 
 - Commands matching the asset's **allow list** execute without approval
 - Commands matching the **deny list** are rejected immediately
-- A session is auto-created if not specified. Clicking "Remember" in the approval dialog stores the pattern, auto-approving matching subsequent commands in the same session
+- A session is auto-created if not specified. Reusable authorization comes from explicitly saved grant patterns; matching later commands can then skip another prompt
 - When the desktop app is offline, only commands matching the allow-list policy or a pre-approved grant are permitted
 
 ## Examples

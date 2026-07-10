@@ -5,6 +5,10 @@ import {
   Server,
   SquareTerminal,
   Cable,
+  Monitor,
+  Cloud,
+  HardDrive,
+  Boxes,
   Database,
   Layers,
   Hexagon,
@@ -41,6 +45,7 @@ const categories: Category[] = [
       { icon: <Server className={logo} />, label: "SSH" },
       { icon: <SquareTerminal className={logo} />, label: "Local terminal", labelId: "res.chip.local" },
       { icon: <Cable className={logo} />, label: "Serial", labelId: "res.chip.serial" },
+      { icon: <Monitor className={logo} />, label: "RDP" },
     ],
   },
   {
@@ -71,6 +76,21 @@ const categories: Category[] = [
     id: "res.cat.cloud",
     name: "Cloud-native",
     chips: [{ icon: <SiKubernetes className={logo} />, label: "Kubernetes", color: "#326CE5" }],
+  },
+  {
+    icon: <Boxes className="size-4" />,
+    id: "res.cat.storage",
+    name: "Object storage",
+    chips: [
+      {
+        icon: <Boxes className={logo} />,
+        label: "S3-compatible object storage",
+        labelId: "res.chip.s3compat",
+        color: "#569A31",
+      },
+      { icon: <Cloud className={logo} />, label: "Cloud providers", labelId: "res.chip.cloudStorage" },
+      { icon: <HardDrive className={logo} />, label: "Self-hosted", labelId: "res.chip.selfHosted" },
+    ],
   },
 ];
 
