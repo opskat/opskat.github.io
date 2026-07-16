@@ -5,6 +5,25 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.11.0 (2026-07-16)
+
+This release adds **VNC** as a remote desktop asset type, rounding out graphical remote access alongside the RDP support introduced in v1.10.0. A unified proxy chain model lets you stack SSH tunnels, SOCKS5, and HTTP tunnels into an ordered multi-hop route, wired into every connection-based asset. A portable Windows build is also available — unzip and run, with all data kept next to the executable.
+
+### 🚀 Major New Features
+
+- 💥 **VNC remote connections** — an embedded noVNC client opens right in a tab, reaching the target through your existing SSH / SOCKS5 / HTTP proxy chain, with no dependency on guacd. Connection tests perform a real RFB handshake and password authentication (including RealVNC's `RFB 005.000` downgrade), CJK clipboard text transfers correctly in both directions, and an optional SSH asset binding reuses the existing SFTP file panel [#222](https://github.com/opskat/opskat/issues/222) ([#227](https://github.com/opskat/opskat/pull/227)) (by @fr58386612)
+- 💥 **Proxy chain configuration** — a unified `proxy_chain` model and chained dialer let you order and combine SSH tunnel, SOCKS5, and HTTP script tunnel hops. Now used by every connection path: SSH, K8s, Database, Redis, MongoDB, Kafka, and Etcd [#203](https://github.com/opskat/opskat/issues/203) ([#221](https://github.com/opskat/opskat/pull/221)) (by @fr58386612)
+- ✨ Portable Windows build `opskat-<version>-windows-amd64-portable.zip` — unzip and run. Data travels with the folder, and nothing is written to the host registry, PATH, or credential manager ([#231](https://github.com/opskat/opskat/pull/231)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed several remote desktop issues when switching tabs: the connection was rebuilt, the previous frame lingered, and the window shrank to 200x200 ([#234](https://github.com/opskat/opskat/pull/234)) (by @CodFrm)
+- 🐛 Fixed the window controls overlapping the tab menu after hiding the toolbar [#233](https://github.com/opskat/opskat/issues/233) ([#236](https://github.com/opskat/opskat/pull/236)) (by @CodFrm)
+- 🐛 Fixed a stack overflow when browsing OSS directories, and polished the interaction ([#235](https://github.com/opskat/opskat/pull/235)) (by @CodFrm)
+- 🐛 Fixed the Wails binding types for AI tool calls
+
+**Full Changelog**: [v1.10.0...v1.11.0](https://github.com/opskat/opskat/compare/v1.10.0...v1.11.0)
+
 ## v1.10.0 (2026-07-11)
 
 This release adds two new remote asset types — **RDP remote desktop** and **Object Storage (OSS)** — along with a full **database object browser**, plus a wide range of enhancements and fixes across databases, terminals, and AI sessions.

@@ -5,6 +5,25 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.11.0 (2026-07-16)
+
+本版本新增 VNC 远程桌面资产，与 v1.10.0 的 RDP 一同补齐图形化远程连接；统一的代理链模型把 SSH 隧道、SOCKS5、HTTP 隧道串成可排序的多级链路，并接入全部连接型资产。此外新增 Windows 便携版，解压即用、数据随目录搬迁，不写宿主机注册表与凭据管理器。
+
+### 🚀 主要新功能
+
+- 💥 **VNC 远程连接** — 内嵌 noVNC 直接在标签页中打开，复用现有 SSH / SOCKS5 / HTTP 代理链连接目标，不依赖 guacd；连接测试执行真实 RFB 协商与密码认证（兼容 RealVNC `RFB 005.000` 降级握手），支持中文剪贴板互通，可选绑定 SSH 资产复用现有 SFTP 文件面板 [#222](https://github.com/opskat/opskat/issues/222) ([#227](https://github.com/opskat/opskat/pull/227)) (by @fr58386612)
+- 💥 **代理链配置** — 新增统一的 `proxy_chain` 模型与链式拨号器，SSH 隧道 / SOCKS5 / HTTP 脚本隧道可排序组合，并接入 SSH、K8s、Database、Redis、MongoDB、Kafka、Etcd 全部连接路径 [#203](https://github.com/opskat/opskat/issues/203) ([#221](https://github.com/opskat/opskat/pull/221)) (by @fr58386612)
+- ✨ 新增 Windows 便携版 `opskat-<version>-windows-amd64-portable.zip`：解压即用，数据随目录搬迁，不写宿主机注册表 / PATH / 凭据管理器 ([#231](https://github.com/opskat/opskat/pull/231)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 修复远程桌面切换标签页引发的多个问题：连接被重建、画面残影、窗口被缩至 200x200 ([#234](https://github.com/opskat/opskat/pull/234)) (by @CodFrm)
+- 🐛 修复隐藏工具条后右上角窗口按钮与 Tab 菜单重叠 [#233](https://github.com/opskat/opskat/issues/233) ([#236](https://github.com/opskat/opskat/pull/236)) (by @CodFrm)
+- 🐛 修复 OSS 目录浏览栈溢出并完善交互 ([#235](https://github.com/opskat/opskat/pull/235)) (by @CodFrm)
+- 🐛 修复 AI 工具调用的 Wails 绑定类型
+
+**完整更新记录**: [v1.10.0...v1.11.0](https://github.com/opskat/opskat/compare/v1.10.0...v1.11.0)
+
 ## v1.10.0 (2026-07-11)
 
 本次版本新增两大远程资产类型 —— **RDP 远程桌面** 与 **对象存储（OSS）**，并带来完整的**数据库对象浏览器**；同时围绕数据库、终端与 AI 会话做了大量增强与修复。
