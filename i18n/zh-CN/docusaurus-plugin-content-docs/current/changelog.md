@@ -5,6 +5,27 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.11.1 (2026-07-23)
+
+本次为 v1.11.0 的补丁版本：新增服务器 GPU 监控，补齐文件传输（cp）的审批与审计一致性，并修复 SFTP 符号链接、高 DPI 显示、GitHub 登录状态等问题。
+
+### 🚀 主要新功能
+
+- ✨ 服务器状态新增 GPU 监控 ([#245](https://github.com/opskat/opskat/pull/245)) (by @CodFrm)
+
+### 🔒 安全性改进
+
+- 🔒 补齐 cp 文件传输审批：`upload_file` / `download_file` 与 `opsctl cp` 不再绕过审批 ([#251](https://github.com/opskat/opskat/pull/251)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 修复 cp 审计状态与上下文一致性 ([#252](https://github.com/opskat/opskat/pull/252)) (by @CodFrm)
+- 🐛 修复 SFTP 目录符号链接无法进入 [#239](https://github.com/opskat/opskat/issues/239) ([#243](https://github.com/opskat/opskat/pull/243)) (by @CodFrm)
+- 🐛 修复高 DPI 下路径下划线被裁剪 [#240](https://github.com/opskat/opskat/issues/240) ([#244](https://github.com/opskat/opskat/pull/244)) (by @CodFrm)
+- 🐛 修复 GitHub 登录重启后误失效 [#229](https://github.com/opskat/opskat/issues/229) ([#237](https://github.com/opskat/opskat/pull/237)) (by @CodFrm)
+
+**完整更新记录**: [v1.11.0...v1.11.1](https://github.com/opskat/opskat/compare/v1.11.0...v1.11.1)
+
 ## v1.11.0 (2026-07-16)
 
 本版本新增 VNC 远程桌面资产，与 v1.10.0 的 RDP 一同补齐图形化远程连接；统一的代理链模型把 SSH 隧道、SOCKS5、HTTP 隧道串成可排序的多级链路，并接入全部连接型资产。此外新增 Windows 便携版，解压即用、数据随目录搬迁，不写宿主机注册表与凭据管理器。

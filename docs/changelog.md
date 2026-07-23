@@ -5,6 +5,27 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.11.1 (2026-07-23)
+
+A patch release on top of v1.11.0: adds **GPU monitoring** to server status, closes the approval and audit-consistency gaps in file transfers (cp), and fixes SFTP symlink navigation, high-DPI rendering, and GitHub login state.
+
+### 🚀 Major New Features
+
+- ✨ Added GPU monitoring to server status ([#245](https://github.com/opskat/opskat/pull/245)) (by @CodFrm)
+
+### 🔒 Security
+
+- 🔒 Closed the file-transfer approval gap: `upload_file` / `download_file` and `opsctl cp` no longer bypass approval ([#251](https://github.com/opskat/opskat/pull/251)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed cp audit status and context consistency ([#252](https://github.com/opskat/opskat/pull/252)) (by @CodFrm)
+- 🐛 Fixed SFTP directory symlinks not being enterable [#239](https://github.com/opskat/opskat/issues/239) ([#243](https://github.com/opskat/opskat/pull/243)) (by @CodFrm)
+- 🐛 Fixed path underline being clipped under high DPI [#240](https://github.com/opskat/opskat/issues/240) ([#244](https://github.com/opskat/opskat/pull/244)) (by @CodFrm)
+- 🐛 Fixed GitHub login being wrongly invalidated after restart [#229](https://github.com/opskat/opskat/issues/229) ([#237](https://github.com/opskat/opskat/pull/237)) (by @CodFrm)
+
+**Full Changelog**: [v1.11.0...v1.11.1](https://github.com/opskat/opskat/compare/v1.11.0...v1.11.1)
+
 ## v1.11.0 (2026-07-16)
 
 This release adds **VNC** as a remote desktop asset type, rounding out graphical remote access alongside the RDP support introduced in v1.10.0. A unified proxy chain model lets you stack SSH tunnels, SOCKS5, and HTTP tunnels into an ordered multi-hop route, wired into every connection-based asset. A portable Windows build is also available — unzip and run, with all data kept next to the executable.
