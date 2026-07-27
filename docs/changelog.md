@@ -5,6 +5,26 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.11.2 (2026-07-25)
+
+This release focuses on the **AI and terminal experience**: the AI chat panel now supports per-session model switching, a bug causing fabricated results in multi-turn conversations is fixed, and the AI tool surface is substantially consolidated (29 → 15); the terminal gains OSC 52 clipboard pass-through and local true-color; and database assets can configure their query timeout individually.
+
+### 🚀 Major New Features
+
+- ✨ AI chat panel supports per-session model switching ([#264](https://github.com/opskat/opskat/pull/264)) (by @CodFrm)
+- ✨ Database assets support a per-asset query timeout [#257](https://github.com/opskat/opskat/issues/257) ([#263](https://github.com/opskat/opskat/pull/263)) (by @CodFrm)
+- ✨ Terminal supports OSC 52 clipboard pass-through and local true-color ([#260](https://github.com/opskat/opskat/pull/260)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed the built-in AI dropping tool history across multi-turn conversations, which led to fabricated results [#230](https://github.com/opskat/opskat/issues/230) ([#261](https://github.com/opskat/opskat/pull/261)) (by @CodFrm)
+
+### ♻️ Refactoring
+
+- ♻️ Consolidated the AI tool surface: unified exec foundation + CRUD convergence, 29 → 15 tools [#123](https://github.com/opskat/opskat/issues/123) ([#247](https://github.com/opskat/opskat/pull/247)) (by @CodFrm)
+
+**Full Changelog**: [v1.11.1...v1.11.2](https://github.com/opskat/opskat/compare/v1.11.1...v1.11.2)
+
 ## v1.11.1 (2026-07-23)
 
 A patch release on top of v1.11.0: adds **GPU monitoring** to server status, closes the approval and audit-consistency gaps in file transfers (cp), and fixes SFTP symlink navigation, high-DPI rendering, and GitHub login state.

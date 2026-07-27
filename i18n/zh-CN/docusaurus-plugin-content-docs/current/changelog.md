@@ -5,6 +5,26 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.11.2 (2026-07-25)
+
+本次版本聚焦 **AI 与终端体验**：AI 对话框支持按会话切换模型、修复多轮对话编造结果的问题，并大幅收敛 AI 工具面（29 → 15）；终端新增 OSC 52 剪贴板透传与本地真彩；数据库资产可单独配置查询超时。
+
+### 🚀 主要新功能
+
+- ✨ AI 对话框支持按会话切换模型 ([#264](https://github.com/opskat/opskat/pull/264)) (by @CodFrm)
+- ✨ 数据库资产支持单独配置查询超时 [#257](https://github.com/opskat/opskat/issues/257) ([#263](https://github.com/opskat/opskat/pull/263)) (by @CodFrm)
+- ✨ 终端支持 OSC 52 剪贴板透传并补齐本地真彩 ([#260](https://github.com/opskat/opskat/pull/260)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 修复内置 AI 多轮对话丢弃工具历史导致编造结果 [#230](https://github.com/opskat/opskat/issues/230) ([#261](https://github.com/opskat/opskat/pull/261)) (by @CodFrm)
+
+### ♻️ 重构与兼容性
+
+- ♻️ AI 工具面收敛：统一 exec 基座 + CRUD 收敛，工具面 29 → 15 [#123](https://github.com/opskat/opskat/issues/123) ([#247](https://github.com/opskat/opskat/pull/247)) (by @CodFrm)
+
+**完整更新记录**: [v1.11.1...v1.11.2](https://github.com/opskat/opskat/compare/v1.11.1...v1.11.2)
+
 ## v1.11.1 (2026-07-23)
 
 本次为 v1.11.0 的补丁版本：新增服务器 GPU 监控，补齐文件传输（cp）的审批与审计一致性，并修复 SFTP 符号链接、高 DPI 显示、GitHub 登录状态等问题。
