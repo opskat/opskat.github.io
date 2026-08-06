@@ -5,6 +5,18 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.12.0 (2026-08-06)
+
+本次版本带来两项重大新能力：SSH 资产全面支持 SSH Agent 认证（多来源、精确指纹选择、单一签名器认证与 MFA 延续），以及 OSS 对象存储资产补齐 AI / CLI 操作能力并将文件传输收敛为单个 `cp`。此外文件传输新增读写方向策略与远端 home 路径支持。
+
+### 🚀 主要新功能
+
+- 💥 SSH 资产支持 SSH Agent 认证：多个来源、精确指纹选择、单一签名器认证与 MFA 延续 [#267](https://github.com/opskat/opskat/issues/267) ([#270](https://github.com/opskat/opskat/pull/270)) (by @CodFrm)
+- 💥 OSS 对象存储资产补齐 AI / CLI 操作能力，文件传输收敛成单个 cp [#250](https://github.com/opskat/opskat/issues/250) ([#266](https://github.com/opskat/opskat/pull/266)) (by @CodFrm)
+- ✨ 文件传输支持读写方向策略与远端 home 路径 (by @CodFrm)
+
+**完整更新记录**: [v1.11.2...v1.12.0](https://github.com/opskat/opskat/compare/v1.11.2...v1.12.0)
+
 ## v1.11.2 (2026-07-25)
 
 本次版本聚焦 **AI 与终端体验**：AI 对话框支持按会话切换模型、修复多轮对话编造结果的问题，并大幅收敛 AI 工具面（29 → 15）；终端新增 OSC 52 剪贴板透传与本地真彩；数据库资产可单独配置查询超时。

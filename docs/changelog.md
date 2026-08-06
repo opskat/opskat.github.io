@@ -5,6 +5,18 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.12.0 (2026-08-06)
+
+This release brings two major capabilities: SSH assets now fully support SSH Agent authentication (multiple sources, precise fingerprint selection, single-signer authentication with MFA continuation), and OSS object-storage assets gain AI / CLI operations with file transfers consolidated into a single `cp`. File transfer also gains read/write direction policies and a remote home path.
+
+### 🚀 Major New Features
+
+- 💥 SSH assets support SSH Agent authentication: multiple sources, precise fingerprint selection, single-signer authentication with MFA continuation [#267](https://github.com/opskat/opskat/issues/267) ([#270](https://github.com/opskat/opskat/pull/270)) (by @CodFrm)
+- 💥 OSS object-storage assets gain AI / CLI operations; file transfers consolidated into a single cp [#250](https://github.com/opskat/opskat/issues/250) ([#266](https://github.com/opskat/opskat/pull/266)) (by @CodFrm)
+- ✨ File transfer supports read/write direction policies and a remote home path (by @CodFrm)
+
+**Full Changelog**: [v1.11.2...v1.12.0](https://github.com/opskat/opskat/compare/v1.11.2...v1.12.0)
+
 ## v1.11.2 (2026-07-25)
 
 This release focuses on the **AI and terminal experience**: the AI chat panel now supports per-session model switching, a bug causing fabricated results in multi-turn conversations is fixed, and the AI tool surface is substantially consolidated (29 → 15); the terminal gains OSC 52 clipboard pass-through and local true-color; and database assets can configure their query timeout individually.
