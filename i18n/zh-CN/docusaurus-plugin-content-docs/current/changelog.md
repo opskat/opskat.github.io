@@ -5,6 +5,33 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.12.1 (2026-08-10)
+
+修复旧版 WebView2 下界面失色的问题，并大幅提升 SFTP 传输速度。
+
+### 🚀 主要新功能
+
+- ✨ 支持为 Pi 安装 opsctl AI Skill 插件 ([#276](https://github.com/opskat/opskat/pull/276)) (by @Pililink)
+
+### ⚡️ 性能优化
+
+- ⚡️ SFTP 启用并发读写，文件传输提速约 4 倍（24MiB 上传 78.2s → 19.5s） ([#272](https://github.com/opskat/opskat/pull/272)) (by @moonmicah)
+
+### 🐛 Bug 修复
+
+- 🐛 修复旧版 WebView2（低于 Chrome 111）下界面失色、弹窗透明、只剩线条的问题 [#273](https://github.com/opskat/opskat/issues/273) ([#277](https://github.com/opskat/opskat/pull/277)) (by @CodFrm)
+- 🐛 修复目录传输中进度显示错乱、文件权限丢失与短读静默失败 ([#272](https://github.com/opskat/opskat/pull/272)) (by @moonmicah)
+
+### ♻️ 重构与兼容性
+
+- ♻️ AI 插件安装改为通用目录 `~/.agents/skills` 优先，并自动清理旧版本残留副本 ([#276](https://github.com/opskat/opskat/pull/276)) (by @Pililink)
+
+### 🎨 UI 改进
+
+- 🔥 移除窗口左右两侧的边缘展开条
+
+**完整更新记录**: [v1.12.0...v1.12.1](https://github.com/opskat/opskat/compare/v1.12.0...v1.12.1)
+
 ## v1.12.0 (2026-08-06)
 
 本次版本带来两项重大新能力：SSH 资产全面支持 SSH Agent 认证（多来源、精确指纹选择、单一签名器认证与 MFA 延续），以及 OSS 对象存储资产补齐 AI / CLI 操作能力并将文件传输收敛为单个 `cp`。此外文件传输新增读写方向策略与远端 home 路径支持。

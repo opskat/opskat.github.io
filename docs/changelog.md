@@ -5,6 +5,33 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.12.1 (2026-08-10)
+
+Fixes washed-out UI on older WebView2 runtimes and makes SFTP transfers substantially faster.
+
+### 🚀 Major New Features
+
+- ✨ Install the opsctl AI Skill plugin for Pi ([#276](https://github.com/opskat/opskat/pull/276)) (by @Pililink)
+
+### ⚡️ Performance
+
+- ⚡️ SFTP now uses concurrent reads and writes, making transfers about 4× faster (24 MiB upload: 78.2s → 19.5s) ([#272](https://github.com/opskat/opskat/pull/272)) (by @moonmicah)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fix washed-out UI on WebView2 runtimes older than Chrome 111, where dialogs turned transparent and only outlines remained [#273](https://github.com/opskat/opskat/issues/273) ([#277](https://github.com/opskat/opskat/pull/277)) (by @CodFrm)
+- 🐛 Fix garbled progress reporting, lost file permissions, and silent short-read failures in directory transfers ([#272](https://github.com/opskat/opskat/pull/272)) (by @moonmicah)
+
+### ♻️ Refactoring
+
+- ♻️ AI plugin installation now prefers the shared `~/.agents/skills` directory and cleans up leftover copies from older versions ([#276](https://github.com/opskat/opskat/pull/276)) (by @Pililink)
+
+### 🎨 UI Improvements
+
+- 🔥 Remove the edge reveal strips along the left and right window borders
+
+**Full Changelog**: [v1.12.0...v1.12.1](https://github.com/opskat/opskat/compare/v1.12.0...v1.12.1)
+
 ## v1.12.0 (2026-08-06)
 
 This release brings two major capabilities: SSH assets now fully support SSH Agent authentication (multiple sources, precise fingerprint selection, single-signer authentication with MFA continuation), and OSS object-storage assets gain AI / CLI operations with file transfers consolidated into a single `cp`. File transfer also gains read/write direction policies and a remote home path.
