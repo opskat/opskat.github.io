@@ -82,7 +82,7 @@ const features: Feature[] = [
     titleId: "feat.ai.title",
     title: "AI ops assistant",
     descId: "feat.ai.desc",
-    desc: "Drive supported operations in natural language, or install the opsctl skill for Claude Code, Codex, OpenCode and Gemini CLI.",
+    desc: "Drive supported operations in natural language, or install the opsctl skill once and use it from Claude Code, Codex, Cursor and other AI coding tools.",
   },
 ];
 

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Translate from "@docusaurus/Translate";
-import { SquareTerminal, Sparkles, Code, Braces, Gem } from "lucide-react";
+import { SquareTerminal, Sparkles, Code, Braces, Gem, MousePointer2, Wind, Bot, Pi } from "lucide-react";
 import { WIN, TrafficLights } from "./Window";
 
 function TerminalWindow({ title, children }: { title: ReactNode; children: ReactNode }) {
@@ -43,7 +43,11 @@ const chips = [
   { icon: <Sparkles className="size-[15px]" />, label: "Claude Code" },
   { icon: <Code className="size-[15px]" />, label: "Codex" },
   { icon: <Braces className="size-[15px]" />, label: "OpenCode" },
+  { icon: <MousePointer2 className="size-[15px]" />, label: "Cursor" },
   { icon: <Gem className="size-[15px]" />, label: "Gemini CLI" },
+  { icon: <Bot className="size-[15px]" />, label: "GitHub Copilot" },
+  { icon: <Wind className="size-[15px]" />, label: "Windsurf" },
+  { icon: <Pi className="size-[15px]" />, label: "Pi" },
 ];
 
 export function Automation() {
@@ -108,7 +112,7 @@ export function Automation() {
         {/* Integration chips */}
         <div className="mt-9 flex flex-col items-center gap-3.5">
           <span className="text-sm text-muted-foreground">
-            <Translate id="auto.integration">Or one-click install the Skill so your AI coding assistant runs ops through opsctl</Translate>
+            <Translate id="auto.integration">Install the Skill once — your AI coding assistant runs ops through opsctl</Translate>
           </span>
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {chips.map((c) => (
@@ -118,6 +122,9 @@ export function Automation() {
               </span>
             ))}
           </div>
+          <span className="text-[12.5px] text-muted-foreground/80">
+            <Translate id="auto.integration.more">…and other tools that support Agent Skills</Translate>
+          </span>
         </div>
       </div>
     </section>
