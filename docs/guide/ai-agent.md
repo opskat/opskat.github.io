@@ -62,27 +62,30 @@ See [Policy Enforcement](/docs/guide/policy) for details on configuring rules.
 
 ## AI Coding Tool Integration
 
-OpsKat integrates with AI coding CLIs like **Claude Code**, **Codex**, **OpenCode**, and **Gemini CLI**. Skill/plugin installation teaches these AI assistants how to use `opsctl`, enabling them to directly manage servers, run commands, transfer files, and query databases.
+OpsKat integrates with AI coding CLIs like **Claude Code**, **Codex**, **OpenCode**, **Pi**, and **Gemini CLI**. Skill/plugin installation teaches these AI assistants how to use `opsctl`, enabling them to directly manage servers, run commands, transfer files, and query databases.
 
 ### Installing Skills
 
 1. Open **Settings** and go to the **AI** tab.
-2. Click **Install** next to the target AI tool.
+2. Under **Universal Install**, click **Install**. Most tools are covered by this one step.
+3. Install any tool listed under **Separate Install** that you use.
 
-For **Claude Code**, this installs a plugin (to `~/.claude/plugins/`) that provides two skill commands:
+#### Universal install
+
+The universal install writes the skill to `~/.agents/skills/opsctl/`, the shared Agent Skills location. A single install is picked up by every tool that reads it:
+
+Pi · Codex · OpenCode · Cursor · GitHub Copilot · Windsurf · Gemini CLI · Cline · Warp · Rovo Dev · Amp
+
+The **AI** tab lists the current set, so check there if you are unsure whether your tool is covered.
+
+#### Separate install
+
+**Claude Code** reads `~/.claude/skills/` rather than the shared directory, so it is installed on its own — as a plugin under `~/.claude/plugins/`, which also gives you two slash commands:
 
 | Command | Description |
 |---|---|
 | `/opsctl` | Full opsctl CLI reference — asset management, exec, ssh, cp, sql, redis, grant, session |
 | `/opsctl:init` | Server environment auto-discovery — scans a server via SSH and generates a structured description |
-
-Other tools install skill files to their standard locations:
-
-| Tool | Install Path |
-|---|---|
-| Codex | `~/.agents/skills/opsctl/` |
-| OpenCode | `~/.config/opencode/skills/opsctl/` |
-| Gemini CLI | `~/.gemini/extensions/opsctl/` |
 
 Skills are automatically updated when the desktop app is updated.
 

@@ -62,27 +62,30 @@ AI 智能体可以主动调用 `request_permission` 提交命令模式进行批�
 
 ## AI 编程工具集成
 
-OpsKat 与 **Claude Code**、**Codex**、**OpenCode** 和 **Gemini CLI** 等 AI 编程 CLI 工具集成。通过设置页面一键安装技能/插件，让这些 AI 助手学会使用 `opsctl`，从而直接管理服务器、执行命令、传输文件和查询数据库。
+OpsKat 与 **Claude Code**、**Codex**、**OpenCode**、**Pi** 和 **Gemini CLI** 等 AI 编程 CLI 工具集成。通过设置页面一键安装技能/插件，让这些 AI 助手学会使用 `opsctl`，从而直接管理服务器、执行命令、传输文件和查询数据库。
 
 ### 安装技能
 
 1. 打开 **设置**，进入 **AI** 选项卡。
-2. 点击目标 AI 工具旁边的 **安装**。
+2. 在 **通用安装** 一栏点击 **安装**，大部分工具装这一次就够了。
+3. 如果你用的工具出现在 **单独安装** 一栏，再单独装一次。
 
-**Claude Code** 会以插件形式安装到 `~/.claude/plugins/`，提供以下技能命令：
+#### 通用安装
+
+通用安装把技能写到 `~/.agents/skills/opsctl/` —— Agent Skills 的共享约定目录。装一次，下列工具都能读到：
+
+Pi · Codex · OpenCode · Cursor · GitHub Copilot · Windsurf · Gemini CLI · Cline · Warp · Rovo Dev · Amp
+
+**AI** 选项卡里会列出当前支持的工具，不确定自己用的工具在不在其中时看那里。
+
+#### 单独安装
+
+**Claude Code** 读的是 `~/.claude/skills/` 而不是共享目录，因此需要单独安装。它以插件形式装到 `~/.claude/plugins/`，额外提供两个斜杠命令：
 
 | 命令 | 说明 |
 |---|---|
 | `/opsctl` | 完整的 opsctl CLI 参考 — 资产管理、exec、ssh、cp、sql、redis、grant、session |
 | `/opsctl:init` | 服务器环境自动发现 — 通过 SSH 扫描服务器并生成结构化描述 |
-
-其他工具的安装路径：
-
-| 工具 | 安装路径 |
-|---|---|
-| Codex | `~/.agents/skills/opsctl/` |
-| OpenCode | `~/.config/opencode/skills/opsctl/` |
-| Gemini CLI | `~/.gemini/extensions/opsctl/` |
 
 桌面端更新时，技能会自动同步更新。
 
