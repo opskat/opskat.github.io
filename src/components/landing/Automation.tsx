@@ -84,7 +84,7 @@ export function Automation() {
               <Cmd>opsctl exec prod-web-1 -- nginx -t</Cmd>
               <div className="h-2" />
               <Cmt id="auto.cli.c2">Database query</Cmt>
-              <Cmd>opsctl sql prod-mysql "SELECT count(*) FROM users"</Cmd>
+              <Cmd>opsctl exec prod-mysql -- "SELECT count(*) FROM users"</Cmd>
               <div className="h-2" />
               <Cmt id="auto.cli.c3">Batch in parallel</Cmt>
               <Cmd>opsctl batch 'web-01:uptime' 'web-02:uptime'</Cmd>

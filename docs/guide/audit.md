@@ -14,7 +14,7 @@ Tool calls that enter the AI runner's audit middleware or an audited `opsctl` ha
 | Field | Description |
 |---|---|
 | **Source** | Where the action originated, currently including `ai` and `opsctl` |
-| **Tool Name** | The tool that was called (e.g., `run_command`, `exec_sql`, `upload_file`) |
+| **Tool Name** | The tool that was called (e.g., `exec`, `cp`, `batch_exec`, `put_asset`) |
 | **Asset** | The target asset (ID and name) |
 | **Command** | The command or query that was executed |
 | **Request / Result** | Request parameters (truncated to 4KB) and execution result (truncated to 32KB) |
@@ -59,16 +59,32 @@ When the `opsctl` CLI is used while the desktop app is running, operations that 
 3. The user reviews and approves or denies.
 4. The response is sent back to `opsctl`, which proceeds or aborts.
 
-This applies to operations including `exec`, `cp`, `sql`, `redis`, `mongo`, `create`, `update`, `batch`, and `grant`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its current handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog.
+This applies to CLI commands including `exec`, `cp`, `batch`, `create`, `update`, `delete`, and `grant`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its current handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog.
 
 ### Approval Types
 
+The approval type is what the dialog badges and what policy and grant patterns are matched against. For `opsctl exec` and `opsctl batch` it is derived from the **asset's own type**, so a command against a `database` asset is checked by the SQL policy rather than the shell policy:
+
+| Asset type | Approval type |
+|---|---|
+| `ssh` | `exec` |
+| `database` | `sql` |
+| `redis` | `redis` |
+| `mongodb` | `mongo` |
+| `etcd` | `etcd` |
+| `kafka` | `kafka` |
+| `k8s` | `k8s` |
+| `oss` | `oss` |
+| `serial` | `serial` |
+
+The remaining operations carry a fixed type:
+
 | Type | Description |
 |---|---|
-| `exec` | Remote command execution |
-| `cp` | File transfer (local-to-remote, remote-to-local, or cross-server) |
-| `create` | Creating a new asset |
-| `update` | Updating an existing asset |
+| `cp` | File transfer (local, remote server, or object storage — in any combination) |
+| `create` | Creating a new asset or group |
+| `update` | Updating an existing asset or group |
+| `delete` | Deleting an asset or group — always confirmed, never pre-approvable |
 | `grant` | Submitting command patterns for pre-approval |
 | `batch` | Approving multiple supported operations together |
 

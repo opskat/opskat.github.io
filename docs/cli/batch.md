@@ -1,11 +1,11 @@
 ---
-sidebar_position: 3
+sidebar_position: 5
 sidebar_label: batch
 ---
 
 # opsctl batch
 
-Execute multiple commands in parallel with a single approval request. Supports mixing exec (SSH), sql, redis, and mongo command types in a single batch.
+Execute multiple commands in parallel with a single approval request. A single batch can mix any asset types — SSH, database, Redis, MongoDB, etcd, Kafka, Kubernetes, and more. Each command is written in the syntax for its asset's type; see [`opsctl exec`](./exec.md#command-syntax-per-asset-type) or run `opsctl help <asset>`.
 
 ## Syntax
 
@@ -22,37 +22,39 @@ echo '{"commands":[...]}' | opsctl [global-flags] batch
 
 ### Positional Args
 
-Format: `asset:command` (default type `exec`) or `type:asset:command`.
+Format: `asset:command` or `type:asset:command`.
 
-The first `:` is checked — if the left side is a known type (`exec`, `sql`, `redis`, `mongo`), it's treated as a type prefix. Otherwise the entire left side is the asset identifier and the type defaults to `exec`.
+Dispatch always comes from the asset's **real** type. The optional `type` prefix is an **assertion**, not a selector: it fails that one item fast if the asset isn't actually of that type. A bare `asset:command` entry makes no assertion and runs against any asset type.
+
+The first `:` is checked — if the left side is a known type it's treated as a prefix, otherwise the whole left side is the asset identifier. Recognized prefixes are the canonical asset types (`ssh`, `database`, `redis`, `mongodb`, `etcd`, `kafka`, `k8s`, `serial`) plus the compatibility aliases `exec`, `sql`, and `mongo`.
 
 ```bash
-# Default exec
+# No assertion — each asset is dispatched by its own type
 opsctl batch 'web-01:uptime' 'db-server:df -h'
 
-# Mixed types
-opsctl batch 'web-01:uptime' 'sql:prod-db:SELECT 1' 'redis:cache:PING' 'mongo:analytics:db.events.countDocuments({})'
+# Mixed types, with assertions
+opsctl batch 'ssh:web-01:uptime' 'database:prod-db:SELECT 1' 'redis:cache:PING' 'mongodb:analytics:countDocuments events'
 
 # Group/name asset reference
-opsctl batch 'exec:production/web-01:uptime'
+opsctl batch 'ssh:production/web-01:uptime'
 ```
 
 ### Stdin JSON
 
-Primary mode for AI and scripting. Each command specifies `asset`, `type` (optional, defaults to `exec`), and `command`.
+Primary mode for AI and scripting. Each command specifies `asset`, `command`, and an optional `type` (the same assertion as the positional prefix — omit it to make no assertion).
 
 ```bash
 echo '{"commands":[
-  {"asset": "web-01", "type": "exec", "command": "uptime"},
-  {"asset": "prod-db", "type": "sql", "command": "SELECT COUNT(*) FROM users"},
+  {"asset": "web-01", "type": "ssh", "command": "uptime"},
+  {"asset": "prod-db", "type": "database", "command": "SELECT COUNT(*) FROM users"},
   {"asset": "cache", "type": "redis", "command": "INFO keyspace"},
-  {"asset": "analytics", "type": "mongo", "command": "db.events.countDocuments({})"}
+  {"asset": "analytics", "type": "mongodb", "command": "countDocuments events"}
 ]}' | opsctl batch
 ```
 
 ## Output
 
-Structured JSON with per-command results:
+Structured JSON with per-command results. The `type` field echoes back the type you asserted for that item, or `exec` when you asserted none — it is not a report of the asset's real type.
 
 ```json
 {
@@ -60,7 +62,7 @@ Structured JSON with per-command results:
     {
       "asset_id": 1,
       "asset_name": "web-01",
-      "type": "exec",
+      "type": "ssh",
       "command": "uptime",
       "exit_code": 0,
       "stdout": " 14:32:01 up 30 days...\n",
@@ -69,7 +71,7 @@ Structured JSON with per-command results:
     {
       "asset_id": 2,
       "asset_name": "prod-db",
-      "type": "sql",
+      "type": "database",
       "command": "SELECT COUNT(*) FROM users",
       "exit_code": 0,
       "stdout": "{\"columns\":[\"COUNT(*)\"],\"rows\":[[42]]}",
@@ -102,8 +104,9 @@ opsctl batch '1:uptime' '2:uptime' '3:uptime'
 # Gather info from different asset types
 opsctl batch \
   'web-01:free -h' \
-  'sql:prod-db:SELECT version()' \
-  'redis:cache:INFO server'
+  'database:prod-db:SELECT version()' \
+  'redis:cache:INFO server' \
+  'k8s:prod-cluster:get nodes'
 
 # Use with explicit session
 opsctl --session $ID batch '1:uptime' '2:hostname'
@@ -113,7 +116,7 @@ cat <<'EOF' | opsctl batch
 {"commands":[
   {"asset":"web-01","command":"kubectl get pods -A --no-headers | wc -l"},
   {"asset":"web-01","command":"kubectl get namespaces --no-headers"},
-  {"asset":"db-01","type":"sql","command":"SELECT table_name FROM information_schema.tables LIMIT 10"}
+  {"asset":"db-01","type":"database","command":"SELECT table_name FROM information_schema.tables LIMIT 10"}
 ]}
 EOF
 ```
