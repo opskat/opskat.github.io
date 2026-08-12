@@ -5,7 +5,7 @@ sidebar_label: SSH Terminal
 
 # SSH Terminal
 
-OpsKat provides a full-featured SSH terminal with split pane, SFTP file browsing, jump host chains, port forwarding, and SOCKS proxy support.
+OpsKat provides a full-featured SSH terminal with split pane, SFTP file browsing, jump host chains, port forwarding, and proxy chains.
 
 ## Connecting to Assets
 
@@ -68,13 +68,13 @@ Forward a remote port back to a local host/port. Useful for exposing local servi
 
 Port forwarding configurations are saved per-asset and can include multiple rules grouped into named configurations.
 
-## SOCKS Proxy
+## Proxy Chain
 
-Configure a SOCKS proxy for the SSH connection. This is useful when the SSH server is only reachable through a proxy.
+Configure a proxy chain for the SSH connection. This is useful when the SSH server is only reachable through one or more intermediate hops.
 
-Set the proxy in the asset's SSH configuration:
+Set the chain in the asset's SSH configuration. Each layer has:
 
-- **Type** — SOCKS5
+- **Layer type** — SSH jump host, SOCKS5, or HTTP Tunnel (layers can be mixed and reordered)
 - **Host / Port** — Proxy server address
 - **Username / Password** — Optional proxy authentication
 

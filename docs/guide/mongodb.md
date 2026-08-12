@@ -12,7 +12,9 @@ MongoDB assets have their own console — separate from the SQL editor — combi
 Create a MongoDB asset (see [Asset Management](/docs/guide/asset-management)) with:
 
 - **Host** / **Port** — MongoDB server address (default port: 27017)
-- **Username** / **Password** — optional (auth source defaults to `admin`)
+- **Username** / **Password** — optional
+- **Auth Source** — optional auth database (e.g. `admin`); when empty, the default database is used
+- **Replica Set** — optional replica-set name
 - **Database** — optional default database
 - **SSH Asset** — optional SSH tunnel
 

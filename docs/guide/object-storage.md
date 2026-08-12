@@ -54,7 +54,7 @@ Open the asset to launch the object browser. It supports:
 - Copying or moving objects between keys and buckets.
 - Deleting one or multiple objects.
 - Generating temporary presigned download and upload URLs.
-- Monitoring active, completed, failed, and cancelled transfers in the transfer dock.
+- Monitoring active, completed, and failed transfers in the transfer dock (a cancelled transfer is shown among the failed ones).
 
 Object storage is flat: folders are key prefixes, and an explicitly created folder is represented by a zero-byte object whose key ends in `/`.
 

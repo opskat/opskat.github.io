@@ -25,11 +25,11 @@ etcd 面板左侧展示一个键树，可按前缀导航。选择某个键会打
 - 编辑并保存值
 - 删除键
 
-破坏性操作（put、delete、事务）会要求确认。
+破坏性操作（`put`、`del`）会要求确认。
 
 ## 查询栏
 
-查询视图允许你直接运行 etcd 操作 —— `get`、`put`、`delete` 和事务 —— 结果以表格形式展示。前缀列举可从树浏览器中使用。
+查询视图允许你直接运行 etcd 操作 —— `get`、`put`、`del`，以及 `lease grant` / `lease revoke` / `lease list`、`member list`、`endpoint status` / `endpoint health` —— 结果以表格形式展示。前缀列举可从树浏览器中使用。
 
 ## 策略
 

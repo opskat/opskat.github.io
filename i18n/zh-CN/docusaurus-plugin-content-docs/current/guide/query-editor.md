@@ -40,14 +40,15 @@ OpsKat 为每种数据资产类型都内置了控制台。每种类型使用最�
 
 ### SQL 分析
 
-OpsKat 使用 **TiDB Parser** 在执行前分析 SQL 语句。这提供了以下能力：
+在 AI 智能体与 `opsctl` 这条路径上，OpsKat 会先用 **TiDB Parser** 分析 SQL，再与资产的[查询策略](/docs/guide/policy)比对。这提供了以下能力：
 
 - **语句分类** — 自动识别语句类型（SELECT、INSERT、UPDATE、DELETE、DROP、TRUNCATE 等）
 - **危险模式检测** — 标记高风险操作，例如：
   - 不带 `WHERE` 子句的 `DELETE` 或 `UPDATE`
   - `PREPARE` 语句
   - `CALL` 语句
-- **策略执行** — 语句类型和标记会在执行前与资产的[查询策略](/docs/guide/policy)进行比对
+
+本页的 SQL 编辑器不做这套分析，只对 `DELETE`、`DROP`、`TRUNCATE`、`ALTER` 弹确认框。
 
 ### 结果网格
 
@@ -56,7 +57,7 @@ OpsKat 使用 **TiDB Parser** 在执行前分析 SQL 语句。这提供了以下
 - 列标题与查询输出的列名对应
 - 每页行数可配置（50 / 100 / 200 / 500 行）
 - `INSERT` / `UPDATE` / `DELETE` 会显示受影响的行数
-- 结果可以导出
+- 结果行可复制为 INSERT / UPDATE 语句或 TSV；导出到文件仅在浏览数据表时可用，临时查询结果不支持
 
 ## Redis
 

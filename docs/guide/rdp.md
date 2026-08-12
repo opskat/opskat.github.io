@@ -15,7 +15,7 @@ Add an asset and select **RDP**. Configure:
 - **Username / Password** — The Windows sign-in credentials. You can store the password on the asset or select a managed credential.
 - **Domain** — Optional Active Directory domain.
 - **Clipboard** — Enables clipboard synchronization; on by default.
-- **Connection** — Connect directly, through an SSH tunnel, or through a SOCKS proxy. SSH tunnel and proxy modes are mutually exclusive.
+- **Connection** — Connect directly, or through an ordered proxy chain of SSH-tunnel / SOCKS5 / HTTP-tunnel layers.
 
 Use **Test connection** before saving to verify that the endpoint and credentials work.
 
@@ -44,8 +44,7 @@ Clipboard access crosses a trust boundary. Disable it from the toolbar or asset 
 ## Connectivity Notes
 
 - **Direct** connects from the machine running OpsKat to the RDP endpoint.
-- **SSH tunnel** routes the RDP TCP connection through a selected SSH asset.
-- **SOCKS proxy** routes the connection through the configured proxy.
+- **Proxy chain** routes the RDP TCP connection through its layers in order — an SSH asset for an SSH-tunnel layer, or the configured server for a SOCKS5 / HTTP-tunnel layer.
 - The requested desktop size follows the mounted panel, with the saved asset dimensions used as defaults.
 
 RDP is currently an interactive desktop surface. It does not define an allow/deny policy kind and does not add a dedicated `opsctl rdp` command.

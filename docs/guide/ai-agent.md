@@ -84,7 +84,7 @@ The **AI** tab lists the current set, so check there if you are unsure whether y
 
 | Command | Description |
 |---|---|
-| `/opsctl` | Full opsctl CLI reference — asset management, exec, ssh, cp, sql, redis, grant, session |
+| `/opsctl` | Full opsctl CLI reference — asset management, help, exec, ssh, cp, batch, grant, session |
 | `/opsctl:init` | Server environment auto-discovery — scans a server via SSH and generates a structured description |
 
 Skills are automatically updated when the desktop app is updated.

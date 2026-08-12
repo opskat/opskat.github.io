@@ -13,7 +13,7 @@ Tool calls that enter the AI runner's audit middleware or an audited `opsctl` ha
 
 | Field | Description |
 |---|---|
-| **Source** | Where the action originated, currently including `ai` and `opsctl` |
+| **Source** | Where the action originated: `ai`, `opsctl`, or `desktop` |
 | **Tool Name** | The tool that was called (e.g., `exec`, `cp`, `batch_exec`, `put_asset`) |
 | **Asset** | The target asset (ID and name) |
 | **Command** | The command or query that was executed |

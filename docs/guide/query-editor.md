@@ -40,14 +40,15 @@ A schema/table tree on the left lets you browse databases and tables, and open a
 
 ### SQL Analysis
 
-OpsKat uses **TiDB Parser** to analyze SQL statements before execution. This powers:
+On the AI Agent and `opsctl` path, OpsKat uses **TiDB Parser** to analyze SQL before checking it against the asset's [query policy](/docs/guide/policy). This powers:
 
 - **Statement classification** — Automatically identifies the statement type (SELECT, INSERT, UPDATE, DELETE, DROP, TRUNCATE, etc.)
 - **Dangerous pattern detection** — Flags risky operations such as:
   - `DELETE` or `UPDATE` without a `WHERE` clause
   - `PREPARE` statements
   - `CALL` statements
-- **Policy enforcement** — Statement types and flags are checked against the asset's [query policy](/docs/guide/policy) before execution
+
+The SQL editor on this page does not run that analysis — it only confirms `DELETE`, `DROP`, `TRUNCATE`, and `ALTER`.
 
 ### Result Grid
 
@@ -56,7 +57,7 @@ Query results are displayed in a paginated table:
 - Column headers match the query's output columns
 - Page size is configurable (50 / 100 / 200 / 500 rows)
 - Affected-row count is shown for `INSERT` / `UPDATE` / `DELETE`
-- Results can be exported
+- Rows can be copied out as INSERT / UPDATE statements or TSV; export to file is available when browsing a table, not for ad-hoc query results
 
 ## Redis
 

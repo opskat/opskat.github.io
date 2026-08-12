@@ -86,7 +86,7 @@ OpsKat 桌面应用运行时，`opsctl` 会通过本地套接字连接应用：
 # 显式管理会话
 opsctl session start               # 创建会话并打印 ID
 opsctl exec web-01 -- uptime       # 复用 .opskat/sessions/ 里的会话
-opsctl exec web-02 -- df -h        # 同一会话 —— 首次点「允许本会话」后自动放行
+opsctl exec web-02 -- df -h        # 命中「记住」保存的模式即可跳过审批
 opsctl session end                 # 结束会话
 
 # 也可以让它自动创建

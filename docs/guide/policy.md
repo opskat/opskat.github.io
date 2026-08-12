@@ -5,7 +5,7 @@ sidebar_label: Policy
 
 # Policy Enforcement
 
-OpsKat evaluates supported commands and data operations against asset and group policies, whether they originate from the AI Agent, an in-app data console, or an applicable `opsctl` command. A policy decision is `Allow`, `Deny`, or `NeedConfirm`.
+OpsKat evaluates supported commands and data operations against asset and group policies, when they originate from the AI Agent or an applicable `opsctl` command. A policy decision is `Allow`, `Deny`, or `NeedConfirm`. The in-app data consoles are not policy-checked — see [Query Editor](/docs/guide/query-editor#policy-enforcement).
 
 Policy coverage is capability-specific. Built-in kinds cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, etcd, and object storage. Interactive RDP and VNC sessions currently have no dedicated allow/deny policy kind.
 
@@ -52,7 +52,7 @@ Controls MongoDB operations by method type. Policies can allow read operations s
 
 ### Kafka Policy
 
-Controls Kafka actions using action and resource patterns. This covers the broker, topic, consumer-group, ACL, schema, and message operations exposed by the Kafka tools and panel.
+Controls Kafka actions using action and resource patterns. This covers the broker, topic, consumer-group, ACL, schema, and message operations reachable through the AI Agent and `opsctl`; the Kafka panel itself is not policy-checked.
 
 ### Kubernetes Policy
 
@@ -60,7 +60,7 @@ Controls `kubectl` command patterns for Kubernetes assets. New assets use read-o
 
 ### etcd Policy
 
-Controls etcd operations by action and key pattern. It applies to the built-in etcd panel and AI helper operations.
+Controls etcd operations by action and key pattern. It applies to AI Agent and `opsctl` operations; the built-in etcd panel is not policy-checked.
 
 ## Decision Flow
 
@@ -93,7 +93,7 @@ OpsKat ships with built-in policy groups (these cannot be modified):
 | **Linux Read-Only** | Common Linux read-only commands (`ls`, `cat`, `head`, `tail`, `grep`, `ps`, `df`, `netstat`, etc.) |
 | **Kubernetes Read-Only** | Kubernetes read-only commands (`kubectl get`, `kubectl describe`, `kubectl logs`, etc.) |
 | **Docker Read-Only** | Docker read-only commands (`docker ps`, `docker images`, `docker logs`, etc.) |
-| **Dangerous Deny** | Blocks dangerous system commands (`rm -rf /*`, `mkfs`, `dd`, `shutdown`, `reboot`, etc.) |
+| **Dangerous Command Deny** | Blocks dangerous system commands (`rm -rf /*`, `mkfs`, `dd`, `shutdown`, `reboot`, etc.) |
 
 #### SQL Query Groups
 
@@ -124,7 +124,7 @@ You can also **copy** a built-in group to create a user-defined group based on i
 
 Policy groups are assigned to assets or groups via their policy configuration. When an asset or group references a policy group, the group's rules are merged into the asset's effective policy.
 
-By default, new SSH assets reference the **Linux Read-Only** and **Dangerous Deny** groups. New database assets reference **SQL Read-Only** and **SQL Dangerous Deny**. New Redis assets reference **Redis Read-Only** and **Redis Dangerous Deny**.
+By default, new SSH assets reference the **Linux Read-Only** and **Dangerous Command Deny** groups. New database assets reference **SQL Read-Only** and **SQL Dangerous Deny**. New Redis assets reference **Redis Read-Only** and **Redis Dangerous Deny**.
 
 ## Policy Group Inheritance
 

@@ -84,7 +84,7 @@ Pi · Codex · OpenCode · Cursor · GitHub Copilot · Windsurf · Gemini CLI ·
 
 | 命令 | 说明 |
 |---|---|
-| `/opsctl` | 完整的 opsctl CLI 参考 — 资产管理、exec、ssh、cp、sql、redis、grant、session |
+| `/opsctl` | 完整的 opsctl CLI 参考 — 资产管理、help、exec、ssh、cp、batch、grant、session |
 | `/opsctl:init` | 服务器环境自动发现 — 通过 SSH 扫描服务器并生成结构化描述 |
 
 桌面端更新时，技能会自动同步更新。

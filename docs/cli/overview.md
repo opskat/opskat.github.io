@@ -86,7 +86,7 @@ Sessions group multiple operations under a single approval scope. They are auto-
 # Explicit session management
 opsctl session start               # Creates a session, prints its ID
 opsctl exec web-01 -- uptime       # Uses the session from .opskat/sessions/
-opsctl exec web-02 -- df -h        # Same session — auto-approved after first "Allow Session"
+opsctl exec web-02 -- df -h        # Skips approval if it matches a pattern saved with "Remember"
 opsctl session end                  # Ends the session
 
 # Or just let it auto-create

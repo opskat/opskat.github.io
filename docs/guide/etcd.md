@@ -25,11 +25,11 @@ The etcd panel shows a key tree on the left that you navigate by prefix. Selecti
 - Edit and save the value
 - Delete the key
 
-Destructive operations (put, delete, transactions) prompt for confirmation.
+Destructive operations (`put`, `del`) prompt for confirmation.
 
 ## Query Bar
 
-A query view lets you run etcd operations directly — `get`, `put`, `delete`, and transactions — with results shown in a table. Prefix listing is available from the tree browser.
+A query view lets you run etcd operations directly — `get`, `put`, `del`, plus `lease grant` / `lease revoke` / `lease list`, `member list`, and `endpoint status` / `endpoint health` — with results shown in a table. Prefix listing is available from the tree browser.
 
 ## Policy
 

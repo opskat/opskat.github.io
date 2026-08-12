@@ -5,7 +5,7 @@ sidebar_label: 策略
 
 # 策略执行
 
-OpsKat 会根据资产和分组策略评估受支持的命令与数据操作，无论操作来自 AI 智能体、应用内数据控制台还是适用的 `opsctl` 命令。策略决策为 `Allow`、`Deny` 或 `NeedConfirm`。
+OpsKat 会根据资产和分组策略评估受支持的命令与数据操作，前提是操作来自 AI 智能体或适用的 `opsctl` 命令。策略决策为 `Allow`、`Deny` 或 `NeedConfirm`。应用内的数据控制台不走策略检查，详见[查询编辑器](/docs/guide/query-editor#policy-enforcement)。
 
 策略覆盖范围取决于具体能力。内置类型覆盖 shell 命令、SQL、Redis、MongoDB、Kafka、Kubernetes、etcd 和对象存储。交互式 RDP 与 VNC 会话目前没有专用的放行/拦截策略类型。
 
@@ -52,7 +52,7 @@ SQL 语句通过 **TiDB Parser** 进行分析，用于分类语句类型和检�
 
 ### Kafka 策略
 
-通过动作和资源模式控制 Kafka 操作，覆盖 Kafka 工具与面板暴露的 Broker、Topic、消费者组、ACL、Schema 和消息操作。
+通过动作和资源模式控制 Kafka 操作，覆盖 AI 智能体与 `opsctl` 可触达的 Broker、Topic、消费者组、ACL、Schema 和消息操作；Kafka 面板本身不做策略检查。
 
 ### Kubernetes 策略
 
@@ -60,7 +60,7 @@ SQL 语句通过 **TiDB Parser** 进行分析，用于分类语句类型和检�
 
 ### etcd 策略
 
-按动作和 Key 模式控制 etcd 操作，适用于内置 etcd 面板与 AI 辅助操作。
+按动作和 Key 模式控制 etcd 操作，适用于 AI 智能体与 `opsctl` 的操作；内置 etcd 面板不做策略检查。
 
 ## 决策流程
 
@@ -93,7 +93,7 @@ OpsKat 内置了以下策略组（不可修改）：
 | **Linux Read-Only** | 常用的 Linux 只读命令（`ls`、`cat`、`head`、`tail`、`grep`、`ps`、`df`、`netstat` 等） |
 | **Kubernetes Read-Only** | Kubernetes 只读命令（`kubectl get`、`kubectl describe`、`kubectl logs` 等） |
 | **Docker Read-Only** | Docker 只读命令（`docker ps`、`docker images`、`docker logs` 等） |
-| **Dangerous Deny** | 阻止危险的系统命令（`rm -rf /*`、`mkfs`、`dd`、`shutdown`、`reboot` 等） |
+| **Dangerous Command Deny** | 阻止危险的系统命令（`rm -rf /*`、`mkfs`、`dd`、`shutdown`、`reboot` 等） |
 
 #### SQL 查询组
 
@@ -124,7 +124,7 @@ OpsKat 内置了以下策略组（不可修改）：
 
 策略组通过资产或分组的策略配置进行分配。当资产或分组引用了一个策略组时，该策略组的规则会被合并到资产的有效策略中。
 
-默认情况下，新建的 SSH 资产会引用 **Linux Read-Only** 和 **Dangerous Deny** 策略组。新建的数据库资产会引用 **SQL Read-Only** 和 **SQL Dangerous Deny**。新建的 Redis 资产会引用 **Redis Read-Only** 和 **Redis Dangerous Deny**。
+默认情况下，新建的 SSH 资产会引用 **Linux Read-Only** 和 **Dangerous Command Deny** 策略组。新建的数据库资产会引用 **SQL Read-Only** 和 **SQL Dangerous Deny**。新建的 Redis 资产会引用 **Redis Read-Only** 和 **Redis Dangerous Deny**。
 
 ## 策略组继承
 

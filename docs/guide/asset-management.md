@@ -18,9 +18,8 @@ SSH server assets for terminal access, command execution, and file transfer.
 - **Host** — Hostname or IP address
 - **Port** — SSH port (default: 22)
 - **Username** — Login user
-- **Auth Type** — `password` or `key`
-- **Jump Host** — Optional jump host chain for bastion access
-- **Proxy** — Optional SOCKS5 proxy
+- **Auth Type** — `password`, `key`, or `agent` (SSH Agent; pick the agent source and identity)
+- **Connection** — Direct, or an ordered proxy chain whose layers can be SSH jump hosts, SOCKS5 proxies, and HTTP tunnels (mix and order them freely)
 
 ### Local Terminal
 
@@ -72,7 +71,9 @@ Redis assets for command execution and key browsing.
 MongoDB assets for document queries via the [MongoDB panel](/docs/guide/mongodb) or the AI Agent.
 
 - **Host** / **Port** — MongoDB server address (default port: 27017)
-- **Username** / **Password** — Optional authentication (auth source defaults to `admin`)
+- **Username** / **Password** — Optional authentication
+- **Auth Source** — Optional auth database (e.g. `admin`); when empty, the default database is used
+- **Replica Set** — Optional replica-set name
 - **Database** — Default database
 - **SSH Asset** — Optional SSH asset for tunnel connections
 
@@ -179,10 +180,9 @@ OpsKat supports importing assets from external sources and exporting your invent
 | **SSH Config** | Parse your `~/.ssh/config` file. Preview entries and select which ones to import. |
 | **Tabby** | Import from a [Tabby](https://tabby.sh/) configuration file. |
 | **WindTerm** | Import from a WindTerm session file. |
-| **File** | Import from an OpsKat backup file (JSON format). |
 
-When importing, you can preview entries before confirming, and choose whether to merge with existing assets.
+When importing, you can preview entries before confirming, and choose whether to merge with existing assets. Restoring an OpsKat backup is done from the **Backup** tab in Settings, not the Import picker.
 
 ### Export
 
-Export your inventory to a local JSON backup file. The export includes assets, groups, credentials (encrypted), and policy configurations.
+Export your inventory to a local backup file. Assets and groups are always included; credentials (off by default — enabling them forces the backup file to be encrypted), policy groups, port forwards, shortcuts, and terminal themes are opt-in.
