@@ -28,7 +28,26 @@ opsctl [global-flags] exec <asset> [--type <type>] [--] <command>
 
 | 选项 | 说明 |
 |------|------|
-| `--type <type>` | 可选的**断言**：资产类型不符时立即报错退出。它**不**决定派发方式 —— 派发永远由资产的真实类型决定。可填规范类型（`ssh`、`database`、`redis`、`mongodb`、`etcd`、`kafka`、`k8s`、`oss`、`serial`），也接受兼容别名 `sql` 和 `mongo`。 |
+| `--type <type>` | 可选的**断言**：资产类型不符时立即报错退出。它**不**决定派发方式 —— 派发永远由资产的真实类型决定。可填的值见[`--type` 可填哪些值](#--type-可填哪些值)。 |
+
+### `--type` 可填哪些值
+
+可填三类值：
+
+| 类别 | 取值 | 断言什么 |
+|------|------|----------|
+| 规范资产类型 | `ssh`、`serial`、`database`、`redis`、`mongodb`、`etcd`、`kafka`、`k8s`、`oss` | 资产类型 |
+| 协议别名 | `exec` → ssh，`sql` / `db` → database，`mongo` → mongodb，`kubernetes` / `kube` → k8s | 资产类型 |
+| 数据库驱动名 | `mysql`、`postgresql` / `postgres`、`mssql` / `sqlserver`、`sqlite` / `sqlite3` | 资产类型**外加**驱动 |
+
+驱动名的断言是刻意更严的。`--type mysql` 要求资产是 `database` 且驱动确实是 MySQL，打在 PostgreSQL 资产上会直接失败：
+
+```console
+$ opsctl exec analytics --type mysql -- "SELECT 1"
+Error: asset "analytics" is a database with driver=postgresql, but you passed type=mysql — call help(asset="analytics") for its command syntax
+```
+
+如果 `mysql` 只是 `database` 的普通同义词，这条命令就会照跑不误 —— 断言也就白设了。日常优先写规范类型，只有当方言真的影响这条命令时才用驱动名。
 
 ## 派发方式
 

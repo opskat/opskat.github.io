@@ -28,7 +28,26 @@ opsctl [global-flags] exec <asset> [--type <type>] [--] <command>
 
 | Flag | Description |
 |------|-------------|
-| `--type <type>` | Optional **assertion**: fails fast if the asset is not of this type. It does *not* select dispatch — that always comes from the asset's real type. Accepts canonical types (`ssh`, `database`, `redis`, `mongodb`, `etcd`, `kafka`, `k8s`, `oss`, `serial`) and the compatibility aliases `sql` and `mongo`. |
+| `--type <type>` | Optional **assertion**: fails fast if the asset is not of this type. It does *not* select dispatch — that always comes from the asset's real type. See [Accepted `--type` values](#accepted---type-values). |
+
+### Accepted `--type` values
+
+Three kinds of value are accepted:
+
+| Kind | Values | Asserts |
+|------|--------|---------|
+| Canonical asset types | `ssh`, `serial`, `database`, `redis`, `mongodb`, `etcd`, `kafka`, `k8s`, `oss` | the asset's type |
+| Protocol aliases | `exec` → ssh, `sql` / `db` → database, `mongo` → mongodb, `kubernetes` / `kube` → k8s | the asset's type |
+| Database driver names | `mysql`, `postgresql` / `postgres`, `mssql` / `sqlserver`, `sqlite` / `sqlite3` | the asset's type **and** its driver |
+
+Driver names are stricter on purpose. `--type mysql` requires a `database` asset whose driver really is MySQL, so pointing it at a PostgreSQL asset fails:
+
+```console
+$ opsctl exec analytics --type mysql -- "SELECT 1"
+Error: asset "analytics" is a database with driver=postgresql, but you passed type=mysql — call help(asset="analytics") for its command syntax
+```
+
+Had `mysql` been a plain synonym for `database`, that command would have run — which would defeat the point of the assertion. Prefer the canonical type; reach for a driver name only when the dialect matters to the command you are about to run.
 
 ## Dispatch
 
