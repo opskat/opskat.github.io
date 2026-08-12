@@ -13,8 +13,8 @@ Tool calls that enter the AI runner's audit middleware or an audited `opsctl` ha
 
 | Field | Description |
 |---|---|
-| **Source** | Where the action originated, currently including `ai` and `opsctl` |
-| **Tool Name** | The tool that was called (e.g., `run_command`, `exec_sql`, `upload_file`) |
+| **Source** | Where the action originated: `ai`, `opsctl`, or `desktop` |
+| **Tool Name** | The tool that was called (e.g., `exec`, `cp`, `batch_exec`, `put_asset`) |
 | **Asset** | The target asset (ID and name) |
 | **Command** | The command or query that was executed |
 | **Request / Result** | Request parameters (truncated to 4KB) and execution result (truncated to 32KB) |
@@ -59,16 +59,32 @@ When the `opsctl` CLI is used while the desktop app is running, operations that 
 3. The user reviews and approves or denies.
 4. The response is sent back to `opsctl`, which proceeds or aborts.
 
-This applies to operations including `exec`, `cp`, `sql`, `redis`, `mongo`, `create`, `update`, `batch`, and `grant`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its current handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog.
+This applies to CLI commands including `exec`, `cp`, `batch`, `create`, `update`, `delete`, and `grant`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its current handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog.
 
 ### Approval Types
 
+The approval type is what the dialog badges and what policy and grant patterns are matched against. For `opsctl exec` and `opsctl batch` it is derived from the **asset's own type**, so a command against a `database` asset is checked by the SQL policy rather than the shell policy:
+
+| Asset type | Approval type |
+|---|---|
+| `ssh` | `exec` |
+| `database` | `sql` |
+| `redis` | `redis` |
+| `mongodb` | `mongo` |
+| `etcd` | `etcd` |
+| `kafka` | `kafka` |
+| `k8s` | `k8s` |
+| `oss` | `oss` |
+| `serial` | `serial` |
+
+The remaining operations carry a fixed type:
+
 | Type | Description |
 |---|---|
-| `exec` | Remote command execution |
-| `cp` | File transfer (local-to-remote, remote-to-local, or cross-server) |
-| `create` | Creating a new asset |
-| `update` | Updating an existing asset |
+| `cp` | File transfer (local, remote server, or object storage — in any combination) |
+| `create` | Creating a new asset or group |
+| `update` | Updating an existing asset or group |
+| `delete` | Deleting an asset or group — always confirmed, never pre-approvable |
 | `grant` | Submitting command patterns for pre-approval |
 | `batch` | Approving multiple supported operations together |
 
@@ -94,7 +110,7 @@ opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
 1. A `GrantSession` is created with status **pending** and one or more `GrantItem` records (each specifying an asset and command pattern).
 2. The desktop app shows an approval dialog where the user can review and **edit** the patterns before approving.
 3. Once approved, the grant session status changes to **approved**.
-4. Subsequent `run_command` calls matching any approved pattern are auto-approved (decision source: `grant_allow`).
+4. Subsequent `exec` calls matching any approved pattern are auto-approved (decision source: `grant_allow`).
 
 Grant items support `*` wildcard matching (e.g., `cat /var/log/*` matches `cat /var/log/syslog`). Approved grant items are **not consumed** — they persist for the entire session and can match multiple commands.
 

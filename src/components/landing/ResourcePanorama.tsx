@@ -6,6 +6,7 @@ import {
   SquareTerminal,
   Cable,
   Monitor,
+  ScreenShare,
   Cloud,
   HardDrive,
   Boxes,
@@ -46,6 +47,7 @@ const categories: Category[] = [
       { icon: <SquareTerminal className={logo} />, label: "Local terminal", labelId: "res.chip.local" },
       { icon: <Cable className={logo} />, label: "Serial", labelId: "res.chip.serial" },
       { icon: <Monitor className={logo} />, label: "RDP" },
+      { icon: <ScreenShare className={logo} />, label: "VNC" },
     ],
   },
   {

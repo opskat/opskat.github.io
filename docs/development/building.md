@@ -43,7 +43,7 @@ All commands are run from the project root (`opskat/`).
 |---|---|
 | `make lint` | Go lint with `golangci-lint` (10 minute timeout, matches CI) |
 | `make lint-fix` | Go lint with auto-fix |
-| `make test` | Run all Go tests (`./internal/...` and `./cmd/opsctl/...`) |
+| `make test` | Run the Go test suite (`./internal/...`, `./cmd/opsctl/...`, `./pkg/...`, `./cmd/devserver/...`) |
 | `make test-cover` | Run tests with coverage report, opens `coverage.html` in browser |
 | `make test-e2e` | Run the Playwright suite against the real Wails app |
 
@@ -75,7 +75,7 @@ For full-stack development with hot reload on both frontend and backend, use `ma
 
 ## Backend Testing
 
-Run all tests (matches what CI runs):
+Run the Go test suite (CI runs the broader `go test ./...`):
 
 ```bash
 make test

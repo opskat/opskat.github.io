@@ -43,7 +43,7 @@ sidebar_label: 构建
 |---|---|
 | `make lint` | 使用 `golangci-lint` 检查 Go 代码（10 分钟超时，与 CI 一致） |
 | `make lint-fix` | 运行 Go lint 并自动修复 |
-| `make test` | 运行全部 Go 测试（`./internal/...` 与 `./cmd/opsctl/...`） |
+| `make test` | 运行 Go 测试套件（`./internal/...`、`./cmd/opsctl/...`、`./pkg/...`、`./cmd/devserver/...`） |
 | `make test-cover` | 运行覆盖率测试并在浏览器中打开 `coverage.html` |
 | `make test-e2e` | 针对真实 Wails 应用运行 Playwright 测试套件 |
 
@@ -75,7 +75,7 @@ pnpm preview      # 预览生产构建
 
 ## 后端测试
 
-运行与 CI 一致的全部测试：
+运行 Go 测试套件（CI 跑的是范围更大的 `go test ./...`）：
 
 ```bash
 make test

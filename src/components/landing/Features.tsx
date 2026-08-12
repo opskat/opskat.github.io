@@ -26,7 +26,7 @@ const features: Feature[] = [
     titleId: "feat.terminal.title",
     title: "Terminal & remote desktop",
     descId: "feat.terminal.desc",
-    desc: "SSH, local shell / PowerShell / WSL, serial consoles and built-in RDP, with split panes, SFTP, tunnels, fullscreen and clipboard sync.",
+    desc: "SSH, local shell / PowerShell / WSL, serial consoles and built-in RDP / VNC, with split panes, SFTP, tunnels, fullscreen and clipboard sync.",
   },
   {
     icon: <Database className="size-[21px]" />,
@@ -54,7 +54,7 @@ const features: Feature[] = [
     titleId: "feat.policy.title",
     title: "Policy & audit",
     descId: "feat.policy.desc",
-    desc: "Allow / deny rules across commands, SQL, Redis, Mongo, Kafka, K8s and etcd, with approvals and audit context on supported tool paths.",
+    desc: "Allow / deny rules across commands, SQL, Redis, Mongo, Kafka, K8s, etcd and object storage, with approvals and audit context on supported tool paths.",
   },
   {
     icon: <Terminal className="size-[21px]" />,

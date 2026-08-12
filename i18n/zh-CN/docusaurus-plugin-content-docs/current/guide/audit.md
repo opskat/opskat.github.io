@@ -13,8 +13,8 @@ OpsKat 会记录 AI 与 `opsctl` 的工具执行，包括来源、结果以及�
 
 | 字段 | 说明 |
 |---|---|
-| **来源** | 操作发起方，目前包括 `ai` 和 `opsctl` |
-| **工具名称** | 被调用的工具（例如 `run_command`、`exec_sql`、`upload_file`） |
+| **来源** | 操作发起方：`ai`、`opsctl` 或 `desktop` |
+| **工具名称** | 被调用的工具（例如 `exec`、`cp`、`batch_exec`、`put_asset`） |
 | **资产** | 目标资产（ID 和名称） |
 | **命令** | 执行的命令或查询 |
 | **请求 / 结果** | 请求参数截断至 4KB，执行结果截断至 32KB |
@@ -59,16 +59,32 @@ OpsKat 会记录 AI 与 `opsctl` 的工具执行，包括来源、结果以及�
 3. 用户审核后批准或拒绝。
 4. 响应发送回 `opsctl`，后者继续执行或中止。
 
-根据各命令的审批路径，这适用于 `exec`、`cp`、`sql`、`redis`、`mongo`、`create`、`update`、`batch` 和 `grant` 等操作。扩展工具委托也经过 `approval.sock`，但当前处理器会在桌面扩展运行时中直接执行，而不是显示常规审批对话框。
+根据各命令的审批路径，这适用于 `exec`、`cp`、`batch`、`create`、`update`、`delete` 和 `grant` 等 CLI 命令。扩展工具委托也经过 `approval.sock`，但当前处理器会在桌面扩展运行时中直接执行，而不是显示常规审批对话框。
 
 ### 审批类型
 
+审批类型决定弹窗上的类型标签，也是策略和 Grant 模式的匹配依据。`opsctl exec` 和 `opsctl batch` 的审批类型由**资产自身的类型**推导而来，因此对 `database` 资产执行的命令走 SQL 策略，而不是 shell 策略：
+
+| 资产类型 | 审批类型 |
+|---|---|
+| `ssh` | `exec` |
+| `database` | `sql` |
+| `redis` | `redis` |
+| `mongodb` | `mongo` |
+| `etcd` | `etcd` |
+| `kafka` | `kafka` |
+| `k8s` | `k8s` |
+| `oss` | `oss` |
+| `serial` | `serial` |
+
+其余操作使用固定的审批类型：
+
 | 类型 | 说明 |
 |---|---|
-| `exec` | 远程命令执行 |
-| `cp` | 文件传输（本地到远程、远程到本地或跨服务器） |
-| `create` | 创建新资产 |
-| `update` | 更新已有资产 |
+| `cp` | 文件传输（本地、远程服务器、对象存储任意组合） |
+| `create` | 创建资产或分组 |
+| `update` | 更新已有资产或分组 |
+| `delete` | 删除资产或分组 —— 始终需要确认，无法预先授权 |
 | `grant` | 提交命令模式进行预审批 |
 | `batch` | 一起审批多个受支持的操作 |
 
@@ -94,7 +110,7 @@ opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
 1. 创建一个 `GrantSession`，状态为 **pending**（待处理），包含一条或多条 `GrantItem` 记录（每条指定一个资产和命令模式）。
 2. 桌面应用显示审批对话框，用户可以在批准前审核并**编辑**模式。
 3. 批准后，授权会话状态变为 **approved**（已批准）。
-4. 后续匹配已批准模式的 `run_command` 调用将自动通过（决策来源：`grant_allow`）。
+4. 后续匹配已批准模式的 `exec` 调用将自动通过（决策来源：`grant_allow`）。
 
 授权项支持 `*` 通配符匹配（例如 `cat /var/log/*` 匹配 `cat /var/log/syslog`）。已批准的授权项**不会被消耗** — 它们在整个会话期间持续有效，可以匹配多个命令。
 

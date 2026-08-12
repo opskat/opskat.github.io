@@ -38,7 +38,7 @@ OpsKat 通过 kubeconfig 连接 Kubernetes 集群，提供可视化的集群浏�
 
 Kubernetes 资产通过 `kubectl` 操作：
 
-- 在 **AI 智能体** 中，`exec_k8s` 工具对资产运行 `kubectl` 命令（智能体使用此工具而非 `run_command`）。
+- 在 **AI 智能体** 中，统一的 `exec` 工具对该资产运行 `kubectl` 命令。
 - 命令可选择通过资产上配置的 SSH 跳板机路由。
 
-AI 发起的每次 `kubectl` 调用都会与资产的 [Kubernetes 策略](/docs/guide/policy)进行比对，其允许/拒绝列表匹配 `kubectl` 命令模式（例如允许 `kubectl get *`、拒绝 `kubectl delete *`）。新建的 Kubernetes 资产默认采用只读策略加危险命令拒绝列表。`opsctl` 可以创建 Kubernetes 资产，但目前没有用于执行 Kubernetes 操作的专用命令。
+AI 发起的每次 `kubectl` 调用都会与资产的 [Kubernetes 策略](/docs/guide/policy)进行比对，其允许/拒绝列表匹配 `kubectl` 命令模式（例如允许 `kubectl get *`、拒绝 `kubectl delete *`）。新建的 Kubernetes 资产默认采用只读策略加危险命令拒绝列表。`opsctl` 既可以创建 Kubernetes 资产，也可以通过 `opsctl exec <asset> -- <kubectl 命令>` 执行 Kubernetes 操作，并接受同一套策略检查。

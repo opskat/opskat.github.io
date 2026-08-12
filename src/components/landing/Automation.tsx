@@ -84,7 +84,7 @@ export function Automation() {
               <Cmd>opsctl exec prod-web-1 -- nginx -t</Cmd>
               <div className="h-2" />
               <Cmt id="auto.cli.c2">Database query</Cmt>
-              <Cmd>opsctl sql prod-mysql "SELECT count(*) FROM users"</Cmd>
+              <Cmd>opsctl exec prod-mysql -- "SELECT count(*) FROM users"</Cmd>
               <div className="h-2" />
               <Cmt id="auto.cli.c3">Batch in parallel</Cmt>
               <Cmd>opsctl batch 'web-01:uptime' 'web-02:uptime'</Cmd>
@@ -99,7 +99,7 @@ export function Automation() {
               <div><span style={{ color: WIN.green, fontWeight: 600 }}>you&gt;</span> <span style={{ color: WIN.text }}><Translate id="auto.ai.you">Check nginx on prod-web-1 and reload if the config is valid</Translate></span></div>
               <div className="h-2" />
               <div><span style={{ color: WIN.blue, fontWeight: 600 }}>agent&gt;</span> <span style={{ color: WIN.text }}><Translate id="auto.ai.a1">Sure — I'll check it and reload once it passes.</Translate></span></div>
-              <div style={{ color: WIN.faint }}>{"  ┌ run_command · prod-web-1"}</div>
+              <div style={{ color: WIN.faint }}>{"  ┌ exec · prod-web-1"}</div>
               <div style={{ color: WIN.faint }}>{"  │ $ nginx -t  →  syntax ok"}</div>
               <div style={{ color: WIN.faint }}>{"  │ "}<Translate id="auto.ai.policy">🛡 policy: allowed · 📋 audit: logged</Translate></div>
               <div style={{ color: WIN.faint }}>{"  └ systemctl reload nginx  →  ✓"}</div>

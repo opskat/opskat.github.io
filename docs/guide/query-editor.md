@@ -36,18 +36,19 @@ A schema/table tree on the left lets you browse databases and tables, and open a
 - `INSERT`, `UPDATE`, and `DELETE` statements return the number of affected rows
 - You can override the default database for a specific query from a dropdown
 - A query history popover keeps recent statements, and SQL snippets can be inserted from your library
-- Statements are evaluated by policy: an explicit deny is blocked, an explicit allow runs immediately, and an unmatched statement prompts for confirmation
+- Dangerous statements (`DELETE`, `DROP`, `TRUNCATE`, `ALTER`) raise a confirmation dialog before they run
 
 ### SQL Analysis
 
-OpsKat uses **TiDB Parser** to analyze SQL statements before execution. This powers:
+On the AI Agent and `opsctl` path, OpsKat uses **TiDB Parser** to analyze SQL before checking it against the asset's [query policy](/docs/guide/policy). This powers:
 
 - **Statement classification** — Automatically identifies the statement type (SELECT, INSERT, UPDATE, DELETE, DROP, TRUNCATE, etc.)
 - **Dangerous pattern detection** — Flags risky operations such as:
   - `DELETE` or `UPDATE` without a `WHERE` clause
   - `PREPARE` statements
   - `CALL` statements
-- **Policy enforcement** — Statement types and flags are checked against the asset's [query policy](/docs/guide/policy) before execution
+
+The SQL editor on this page does not run that analysis — it only confirms `DELETE`, `DROP`, `TRUNCATE`, and `ALTER`.
 
 ### Result Grid
 
@@ -56,7 +57,7 @@ Query results are displayed in a paginated table:
 - Column headers match the query's output columns
 - Page size is configurable (50 / 100 / 200 / 500 rows)
 - Affected-row count is shown for `INSERT` / `UPDATE` / `DELETE`
-- Results can be exported
+- Rows can be copied out as INSERT / UPDATE statements or TSV; export to file is available when browsing a table, not for ad-hoc query results
 
 ## Redis
 
@@ -82,12 +83,11 @@ Each key detail view includes a command input for running arbitrary Redis comman
 
 ## Policy Enforcement
 
-All queries and commands executed through these consoles are subject to the same [policy rules](/docs/guide/policy) as AI Agent operations:
+[Policy rules](/docs/guide/policy) govern operations issued by the **AI Agent** and by **`opsctl`** — an operation denied by policy is not executed, and one that needs confirmation prompts first. Policy kinds exist for SQL, Redis, MongoDB, etcd, Kafka, Kubernetes, and object storage.
 
-- **SQL** — Checked against the asset's query policy (allowed/denied statement types, dangerous pattern flags)
-- **Redis** — Checked against the asset's Redis policy (allowed/denied command patterns)
-- **MongoDB**, **etcd**, and **Kafka** — Checked against their respective policy kinds
+The desktop consoles on this page are a different path: they are driven by you, not by an agent, and they are **not** policy-checked. What guards them instead:
 
-The Object Storage browser is an interactive file-management surface and currently has no allow/deny policy kind.
+- **Confirmation dialogs** — the SQL editor prompts before running `DELETE`, `DROP`, `TRUNCATE`, or `ALTER`; the other consoles confirm their own destructive actions
+- **Read-only assets** — a database asset marked read-only is opened in a read-only connection, so writes fail at the driver
 
-If an operation is denied by policy, it will not be executed. If it requires confirmation, you will be prompted before execution.
+If you want allow/deny enforcement on a set of statements, drive them through the AI Agent or `opsctl` rather than the console.

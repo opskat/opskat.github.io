@@ -44,9 +44,9 @@ Protocol helpers reuse the application's connection pools where applicable.
 
 ## Available Tools
 
-The tool registry includes asset and group management, SSH/file operations, batch execution, SQL and supported data-service operations, Kubernetes and Kafka operations, permission requests, and local workspace tools. Installed extensions are exposed through a single `exec_tool` dispatcher rather than one hard-coded AI tool per extension.
+The tool registry includes asset and group management, SSH/file operations, batch execution, SQL and supported data-service operations, Kubernetes and Kafka operations, permission requests, and local workspace tools. Installed extensions are exposed through a single `ext_exec` dispatcher rather than one hard-coded AI tool per extension.
 
-Tool availability is capability-specific: not every asset has an AI operation helper. In particular, the built-in RDP session and object-storage browser are currently interactive app surfaces rather than AI helpers. The registry evolves with the application, so the tool cards shown in a conversation are the authoritative list for the running version.
+Tool availability is capability-specific: not every asset has an AI operation helper. In particular, the built-in RDP and VNC sessions are currently interactive app surfaces rather than AI helpers. The registry evolves with the application, so the tool cards shown in a conversation are the authoritative list for the running version.
 
 ## Policy Enforcement on AI Actions
 
@@ -84,7 +84,7 @@ The **AI** tab lists the current set, so check there if you are unsure whether y
 
 | Command | Description |
 |---|---|
-| `/opsctl` | Full opsctl CLI reference — asset management, exec, ssh, cp, sql, redis, grant, session |
+| `/opsctl` | Full opsctl CLI reference — asset management, help, exec, ssh, cp, batch, grant, session |
 | `/opsctl:init` | Server environment auto-discovery — scans a server via SSH and generates a structured description |
 
 Skills are automatically updated when the desktop app is updated.

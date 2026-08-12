@@ -29,7 +29,7 @@ Do not edit generated Wails bindings, mocks, embedded binaries, or lockfiles man
 
 - Wails bindings in `internal/app/` are IPC boundaries; business logic belongs in `internal/service/`, and persistence belongs in `internal/repository/`.
 - Services depend on repository interfaces through registered getters, not concrete implementations or GORM.
-- New built-in asset types implement and register an `assettype.AssetTypeHandler`; the frontend registers the matching asset definition. Follow the [asset-type guide](https://github.com/opskat/opskat/blob/main/docs/adding-an-asset-type.md) rather than copying an older type.
+- New built-in asset types implement and register an `assettype.AssetTypeHandler`; the frontend registers the matching asset definition. Follow the [asset-type guide](https://github.com/opskat/opskat/blob/main/docs/references/adding-an-asset-type.md) rather than copying an older type.
 - AI tools and policies use their registries. Do not add shared `switch assetType` or protocol-string branches.
 - User-facing frontend text uses i18next. Backend errors use the established localized error-code path.
 

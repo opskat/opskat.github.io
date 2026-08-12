@@ -5,12 +5,12 @@ sidebar_label: cp
 
 # opsctl cp
 
-在本地与远程主机之间，或两台远程主机之间传输文件。
+在本地路径、远程主机和对象存储之间传输文件，任意两端组合均可，也包括两个资产之间直传。
 
 ## 语法
 
 ```bash
-opsctl [global-flags] cp <source> <destination>
+opsctl [global-flags] cp [-r] <source>... <destination>
 ```
 
 ## 路径格式
@@ -18,21 +18,28 @@ opsctl [global-flags] cp <source> <destination>
 | 格式 | 说明 |
 |------|------|
 | `/path/to/file` 或 `./relative/path` | 本地路径 |
-| `<asset>:<remote-path>` | 远程路径（资产名称或 ID） |
+| `<asset>:/<remote-path>` | SSH 服务器路径（资产名称、ID 或 `分组/名称`） |
+| `<asset>:/<bucket>/<key>` | 对象存储路径 |
 
-源路径和目标路径中至少有一个必须是远程路径。远程路径必须以 `/` 开头。
+源路径和目标路径中至少有一个必须位于资产上。两端可以任意组合，包括从 SSH 服务器直传到对象存储。
 
-## 传输模式
+## 参数选项
 
-| 模式 | 说明 |
+| 选项 | 说明 |
 |------|------|
-| **本地到远程** | 通过 SFTP 将文件上传到远程服务器 |
-| **远程到本地** | 通过 SFTP 从远程服务器下载文件 |
-| **远程到远程** | 在两个资产之间直接传输文件（不经过本地磁盘） |
+| `-r`、`--recursive` | 传输整个目录树 / 对象前缀 |
+
+## 多个源
+
+使用 `-r`、通配符或指定多个源时，目标路径必须以 `/` 结尾，每一项会落到 `<destination>/<相对源基准的路径>`。
+
+远程通配符请加引号，避免被本地 shell 抢先展开。展开过程中遇到的符号链接会被跳过并报告。
 
 ## 审批
 
-文件传输需要桌面应用审批。如果未指定会话，系统会自动创建一个。
+在传输任何一个字节之前，每一端的资产都会按其自身的策略单独授权。递归 / 通配符传输会先对源和目标的目录（或对象前缀）范围完成审批，再去列举其内容。
+
+如果未指定会话，系统会自动创建一个。
 
 ## 示例
 
@@ -48,6 +55,19 @@ opsctl cp 1:/etc/hosts 2:/tmp/hosts
 
 # 使用 分组/名称 格式消歧上传文件
 opsctl cp ./deploy.sh production/web-01:/opt/scripts/deploy.sh
+
+# 对象存储，上传与下载
+opsctl cp ./dump.sql.gz s3-prod:/backups/dump.sql.gz
+opsctl cp s3-prod:/backups/dump.sql.gz ./dump.sql.gz
+
+# 从服务器直传对象存储，不经过本地磁盘
+opsctl cp web-01:/var/log/app.log s3-prod:/logs/app.log
+
+# 传输整个目录树
+opsctl cp -r ./dist s3-prod:/releases/v2/
+
+# 远程通配符（加引号，避免本地 shell 展开）
+opsctl cp 'web-01:/var/log/*.log' s3-prod:/logs/
 
 # 使用显式会话
 opsctl --session $ID cp ./app.tar.gz web-server:/opt/releases/
