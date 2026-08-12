@@ -7,7 +7,7 @@ sidebar_label: Policy
 
 OpsKat evaluates supported commands and data operations against asset and group policies, whether they originate from the AI Agent, an in-app data console, or an applicable `opsctl` command. A policy decision is `Allow`, `Deny`, or `NeedConfirm`.
 
-Policy coverage is capability-specific. Built-in kinds cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, and etcd. Interactive RDP sessions and the built-in object-storage browser currently have no dedicated allow/deny policy kind.
+Policy coverage is capability-specific. Built-in kinds cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, etcd, and object storage. Interactive RDP and VNC sessions currently have no dedicated allow/deny policy kind.
 
 ## Policy Types
 

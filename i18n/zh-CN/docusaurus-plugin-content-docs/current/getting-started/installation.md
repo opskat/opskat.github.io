@@ -16,7 +16,11 @@ OpsKat 支持 macOS、Linux 和 Windows。
 | macOS | Apple Silicon (M1/M2/M3/M4) | `opskat-vX.X.X-darwin-arm64.dmg` |
 | macOS | Intel | `opskat-vX.X.X-darwin-amd64.dmg` |
 | Windows | x64 | `opskat-vX.X.X-windows-amd64-installer.exe` |
+| Windows | arm64 | `opskat-vX.X.X-windows-arm64-installer.exe` |
 | Linux | x64 | `opskat-vX.X.X-linux-amd64.deb` |
+| Linux | arm64 | `opskat-vX.X.X-linux-arm64.deb` |
+
+Windows 另有免安装的便携版 `opskat-vX.X.X-windows-<arch>-portable.zip`，数据目录与可执行文件放在一起。
 
 - **macOS** — 打开 `.dmg` 文件，将 OpsKat 拖入应用程序文件夹。
 - **Windows** — 运行 `.exe` 安装程序，按提示完成安装。
@@ -26,7 +30,7 @@ OpsKat 支持 macOS、Linux 和 Windows。
 
 `opsctl` 命令行工具有两种安装方式：
 
-1. **从桌面端安装（推荐）** — 在设置页面一键安装。内嵌的二进制文件会被释放到 `~/.local/bin/`（Linux/macOS）或 `%LOCALAPPDATA%/opsctl`（Windows）。
+1. **从桌面端安装（推荐）** — 在设置页面一键安装。内嵌的二进制文件会被释放到 `~/.local/bin/`（Linux/macOS）或 `%LOCALAPPDATA%/opskat`（Windows）。
 2. **从源码构建** — 执行 `make install-cli`，安装到 `$GOPATH/bin`。
 
 验证安装：
@@ -77,8 +81,8 @@ make build-embed   # 生产构建（内嵌 opsctl）
 ## 平台支持
 
 - **macOS** — Intel 和 Apple Silicon
-- **Linux** — x86_64
-- **Windows** — x86_64
+- **Linux** — x86_64 和 arm64
+- **Windows** — x86_64 和 arm64
 
 ## 数据目录
 

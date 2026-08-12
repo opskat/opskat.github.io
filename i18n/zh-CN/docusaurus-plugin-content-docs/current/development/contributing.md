@@ -29,7 +29,7 @@ sidebar_label: 贡献指南
 
 - `internal/app/` 中的 Wails 绑定是 IPC 边界；业务逻辑属于 `internal/service/`，持久化属于 `internal/repository/`。
 - 服务通过已注册的 getter 依赖仓库接口，而不是具体实现或 GORM。
-- 新内置资产类型需要实现并注册 `assettype.AssetTypeHandler`，前端再注册对应资产定义。请遵循[添加资产类型指南](https://github.com/opskat/opskat/blob/main/docs/adding-an-asset-type.md)，不要复制旧资产类型。
+- 新内置资产类型需要实现并注册 `assettype.AssetTypeHandler`，前端再注册对应资产定义。请遵循[添加资产类型指南](https://github.com/opskat/opskat/blob/main/docs/references/adding-an-asset-type.md)，不要复制旧资产类型。
 - AI 工具与策略通过各自注册表扩展。不要在共享代码中增加 `switch assetType` 或协议字符串分支。
 - 面向用户的前端文本使用 i18next；后端错误使用既有的本地化错误码路径。
 

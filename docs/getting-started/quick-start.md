@@ -108,7 +108,7 @@ You can manage multiple providers and switch between them in **Settings > AI**.
 
 3. The AI will:
    - Call `list_assets` to find available servers
-   - Call `run_command` with `df -h` on the target asset
+   - Call `exec` with `df -h` on the target asset
    - Return the results in a readable format
 
 4. If the command matches a **deny** policy, it will be blocked. If it requires confirmation, you will see a prompt before execution.

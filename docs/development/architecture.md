@@ -52,9 +52,9 @@ State is organized by domain in `frontend/src/stores/`. Asset-type UI is registe
 
 The AI subsystem under `internal/ai/` registers tools for supported asset operations. Before an operation runs, its policy kind can produce `Allow`, `Deny`, or `NeedConfirm`; approval grants can authorize later matching operations. Tool execution is audited with its source and decision details.
 
-Built-in policy kinds currently cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, and etcd. Interactive RDP and built-in object-storage browsing do not currently add their own policy kinds or dedicated `opsctl` operation commands.
+Built-in policy kinds currently cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, etcd, and object storage. Interactive RDP and VNC do not currently add their own policy kinds. No asset type has a dedicated `opsctl` operation command — they all run through `opsctl exec`, which dispatches on the asset's real type.
 
-Extensions expose AI tools through one `exec_tool` dispatcher. Their manifests declare tools, asset types, capabilities, and optional policy types; host calls enforce the declared capability surface.
+Extensions expose AI tools through one `ext_exec` dispatcher. Their manifests declare tools, asset types, capabilities, and optional policy types; host calls enforce the declared capability surface.
 
 ## Data and Credentials
 
@@ -67,6 +67,6 @@ Extensions expose AI tools through one `exec_tool` dispatcher. Their manifests d
 
 - [Development guide](https://github.com/opskat/opskat/blob/main/docs/DEVELOP.md) — commands, tests, CI, logging, and generated files
 - [Architecture map](https://github.com/opskat/opskat/blob/main/docs/ARCHITECTURE.md) — canonical subsystem details
-- [Adding an asset type](https://github.com/opskat/opskat/blob/main/docs/adding-an-asset-type.md) — backend and frontend registration seams
+- [Adding an asset type](https://github.com/opskat/opskat/blob/main/docs/references/adding-an-asset-type.md) — backend and frontend registration seams
 - [Design system](https://github.com/opskat/opskat/blob/main/docs/DESIGN.md) — UI primitives, tokens, and surface patterns
 - [Repository guidance](https://github.com/opskat/opskat/blob/main/AGENTS.md) — engineering principles and fix policy

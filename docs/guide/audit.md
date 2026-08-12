@@ -110,7 +110,7 @@ opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
 1. A `GrantSession` is created with status **pending** and one or more `GrantItem` records (each specifying an asset and command pattern).
 2. The desktop app shows an approval dialog where the user can review and **edit** the patterns before approving.
 3. Once approved, the grant session status changes to **approved**.
-4. Subsequent `run_command` calls matching any approved pattern are auto-approved (decision source: `grant_allow`).
+4. Subsequent `exec` calls matching any approved pattern are auto-approved (decision source: `grant_allow`).
 
 Grant items support `*` wildcard matching (e.g., `cat /var/log/*` matches `cat /var/log/syslog`). Approved grant items are **not consumed** — they persist for the entire session and can match multiple commands.
 

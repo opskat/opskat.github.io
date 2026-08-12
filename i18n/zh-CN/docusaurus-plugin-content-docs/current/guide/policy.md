@@ -7,7 +7,7 @@ sidebar_label: 策略
 
 OpsKat 会根据资产和分组策略评估受支持的命令与数据操作，无论操作来自 AI 智能体、应用内数据控制台还是适用的 `opsctl` 命令。策略决策为 `Allow`、`Deny` 或 `NeedConfirm`。
 
-策略覆盖范围取决于具体能力。内置类型覆盖 shell 命令、SQL、Redis、MongoDB、Kafka、Kubernetes 和 etcd。交互式 RDP 会话与内置对象存储浏览器目前没有专用的放行/拦截策略类型。
+策略覆盖范围取决于具体能力。内置类型覆盖 shell 命令、SQL、Redis、MongoDB、Kafka、Kubernetes、etcd 和对象存储。交互式 RDP 与 VNC 会话目前没有专用的放行/拦截策略类型。
 
 ## 策略类型
 

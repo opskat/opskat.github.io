@@ -38,7 +38,7 @@ Open a pod to stream its logs in real time. You can choose the container and a t
 
 Kubernetes assets are operated through `kubectl`:
 
-- In the **AI Agent**, the `exec_k8s` tool runs `kubectl` commands against the asset (the agent uses this rather than `run_command`).
+- In the **AI Agent**, the unified `exec` tool runs `kubectl` commands against the asset.
 - Commands can optionally be routed through an SSH jump host configured on the asset.
 
-Every AI `kubectl` invocation is evaluated against the asset's [Kubernetes policy](/docs/guide/policy), whose allow/deny lists match `kubectl` command patterns (for example `kubectl get *` to allow and `kubectl delete *` to deny). New Kubernetes assets default to read-only plus a dangerous-command deny list. `opsctl` can create Kubernetes assets but currently has no dedicated command for running Kubernetes operations.
+Every AI `kubectl` invocation is evaluated against the asset's [Kubernetes policy](/docs/guide/policy), whose allow/deny lists match `kubectl` command patterns (for example `kubectl get *` to allow and `kubectl delete *` to deny). New Kubernetes assets default to read-only plus a dangerous-command deny list. `opsctl` can both create Kubernetes assets and run Kubernetes operations through `opsctl exec <asset> -- <kubectl command>`, which is checked against the same policy.

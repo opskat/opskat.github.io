@@ -62,4 +62,4 @@ Object storage is flat: folders are key prefixes, and an explicitly created fold
 
 Grant the access key only the bucket permissions required for the intended workflow. Presigned URLs temporarily delegate access to anyone who receives the URL, so choose the shortest practical expiry and share them carefully.
 
-The built-in object browser currently has no allow/deny policy kind and no dedicated `opsctl oss` command. Its operations are initiated from the desktop UI rather than the AI operation helpers.
+Object storage has its own allow/deny policy kind. AI and `opsctl` object operations run through the unified `opsctl exec` (file transfer goes through `opsctl cp`) and are checked against that policy. The desktop object browser is the interactive file-management surface for the same assets.

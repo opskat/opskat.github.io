@@ -36,7 +36,7 @@ export function Hero() {
       {/* Subhead */}
       <p className="relative z-10 mb-8 max-w-[680px] text-[18px] leading-[1.6] text-muted-foreground">
         <Translate id="hero.sub">
-          SSH and RDP, local terminals, databases, object storage, Redis / etcd / Kafka middleware, and Kubernetes clusters — everything ops touches, unified in one cross-platform desktop app. Supported operations can also be driven by AI in natural language, with applicable policy, approval and audit controls.
+          SSH, RDP and VNC, local terminals, databases, object storage, Redis / etcd / Kafka middleware, and Kubernetes clusters — everything ops touches, unified in one cross-platform desktop app. Supported operations can also be driven by AI in natural language, with applicable policy, approval and audit controls.
         </Translate>
       </p>
 

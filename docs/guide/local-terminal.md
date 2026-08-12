@@ -23,4 +23,4 @@ Create a local asset (see [Asset Management](/docs/guide/asset-management)). Loc
 
 Open the asset to start a terminal session running the configured shell on your local machine. Local terminals share the same terminal features as SSH sessions, including split panes and customizable themes — see [SSH Terminal](/docs/guide/ssh-terminal).
 
-Because local terminals run on your machine, they are independent of any remote asset. The AI Agent's `local_*` tools operate on this same local environment, distinct from remote `run_command` execution.
+Because local terminals run on your machine, they are independent of any remote asset. The AI Agent's `local_*` tools operate on this same local environment, distinct from remote `exec` execution.

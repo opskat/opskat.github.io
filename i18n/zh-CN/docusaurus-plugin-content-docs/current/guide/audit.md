@@ -110,7 +110,7 @@ opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
 1. 创建一个 `GrantSession`，状态为 **pending**（待处理），包含一条或多条 `GrantItem` 记录（每条指定一个资产和命令模式）。
 2. 桌面应用显示审批对话框，用户可以在批准前审核并**编辑**模式。
 3. 批准后，授权会话状态变为 **approved**（已批准）。
-4. 后续匹配已批准模式的 `run_command` 调用将自动通过（决策来源：`grant_allow`）。
+4. 后续匹配已批准模式的 `exec` 调用将自动通过（决策来源：`grant_allow`）。
 
 授权项支持 `*` 通配符匹配（例如 `cat /var/log/*` 匹配 `cat /var/log/syslog`）。已批准的授权项**不会被消耗** — 它们在整个会话期间持续有效，可以匹配多个命令。
 

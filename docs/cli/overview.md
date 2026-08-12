@@ -14,7 +14,7 @@ sidebar_label: Overview
 Open OpsKat desktop app and use the one-click install button. This extracts the embedded `opsctl` binary to:
 
 - **macOS / Linux:** `~/.local/bin/opsctl`
-- **Windows:** `%LOCALAPPDATA%/opsctl/opsctl.exe`
+- **Windows:** `%LOCALAPPDATA%/opskat/opsctl.exe`
 
 ### Build from Source
 

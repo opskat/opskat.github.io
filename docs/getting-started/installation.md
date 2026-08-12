@@ -16,7 +16,11 @@ Download the latest release from [GitHub Releases](https://github.com/opskat/ops
 | macOS | Apple Silicon (M1/M2/M3/M4) | `opskat-vX.X.X-darwin-arm64.dmg` |
 | macOS | Intel | `opskat-vX.X.X-darwin-amd64.dmg` |
 | Windows | x64 | `opskat-vX.X.X-windows-amd64-installer.exe` |
+| Windows | arm64 | `opskat-vX.X.X-windows-arm64-installer.exe` |
 | Linux | x64 | `opskat-vX.X.X-linux-amd64.deb` |
+| Linux | arm64 | `opskat-vX.X.X-linux-arm64.deb` |
+
+Windows also ships a no-install portable build, `opskat-vX.X.X-windows-<arch>-portable.zip`, which keeps its data next to the executable.
 
 - **macOS** — Open the `.dmg` file and drag OpsKat to the Applications folder.
 - **Windows** — Run the `.exe` installer and follow the prompts.
@@ -26,7 +30,7 @@ Download the latest release from [GitHub Releases](https://github.com/opskat/ops
 
 The `opsctl` CLI tool can be installed in two ways:
 
-1. **From the desktop app (recommended)** — One-click install from the Settings page. The embedded binary is extracted to `~/.local/bin/` (Linux/macOS) or `%LOCALAPPDATA%/opsctl` (Windows).
+1. **From the desktop app (recommended)** — One-click install from the Settings page. The embedded binary is extracted to `~/.local/bin/` (Linux/macOS) or `%LOCALAPPDATA%/opskat` (Windows).
 2. **From source** — Run `make install-cli` to build and install to `$GOPATH/bin`.
 
 Verify the installation:
@@ -77,8 +81,8 @@ The built application will be in the `build/bin/` directory.
 ## Platform Support
 
 - **macOS** — Intel and Apple Silicon
-- **Linux** — x86_64
-- **Windows** — x86_64
+- **Linux** — x86_64 and arm64
+- **Windows** — x86_64 and arm64
 
 ## App Data Directory
 

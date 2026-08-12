@@ -14,7 +14,7 @@ sidebar_label: 概览
 打开 OpsKat 桌面应用并使用一键安装按钮。内嵌的 `opsctl` 会被释放到：
 
 - **macOS / Linux：** `~/.local/bin/opsctl`
-- **Windows：** `%LOCALAPPDATA%/opsctl/opsctl.exe`
+- **Windows：** `%LOCALAPPDATA%/opskat/opsctl.exe`
 
 ### 从源码构建
 
@@ -84,13 +84,13 @@ OpsKat 桌面应用运行时，`opsctl` 会通过本地套接字连接应用：
 
 ```bash
 # 显式管理会话
-opsctl session start
-opsctl exec web-01 -- uptime
-opsctl exec web-02 -- df -h
-opsctl session end
+opsctl session start               # 创建会话并打印 ID
+opsctl exec web-01 -- uptime       # 复用 .opskat/sessions/ 里的会话
+opsctl exec web-02 -- df -h        # 同一会话 —— 首次点「允许本会话」后自动放行
+opsctl session end                 # 结束会话
 
 # 也可以让它自动创建
-opsctl exec web-01 -- uptime
+opsctl exec web-01 -- uptime       # 首次调用时自动创建会话
 ```
 
 会话 ID 解析优先级：

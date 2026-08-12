@@ -52,9 +52,9 @@ internal/app（IPC 边界）→ internal/service（业务逻辑）
 
 `internal/ai/` 下的 AI 子系统为受支持的资产操作注册工具。操作执行前，对应策略类型可以返回 `Allow`、`Deny` 或 `NeedConfirm`；审批授权可以允许后续匹配的操作。工具执行会连同来源和决策详情写入审计日志。
 
-内置策略类型目前覆盖 shell 命令、SQL、Redis、MongoDB、Kafka、Kubernetes 和 etcd。交互式 RDP 与内置对象存储浏览器目前没有自己的策略类型，也没有专用的 `opsctl` 操作命令。
+内置策略类型目前覆盖 shell 命令、SQL、Redis、MongoDB、Kafka、Kubernetes、etcd 和对象存储。交互式 RDP 与 VNC 目前没有自己的策略类型。所有资产类型都没有专用的 `opsctl` 操作命令 —— 统一走 `opsctl exec`，由资产的真实类型决定派发。
 
-扩展通过统一的 `exec_tool` 分发器向 AI 暴露工具。扩展清单声明工具、资产类型、能力和可选策略类型；宿主调用会校验声明的能力范围。
+扩展通过统一的 `ext_exec` 分发器向 AI 暴露工具。扩展清单声明工具、资产类型、能力和可选策略类型；宿主调用会校验声明的能力范围。
 
 ## 数据与凭据
 
@@ -67,6 +67,6 @@ internal/app（IPC 边界）→ internal/service（业务逻辑）
 
 - [开发指南](https://github.com/opskat/opskat/blob/main/docs/DEVELOP.md) —— 命令、测试、CI、日志和生成文件
 - [架构地图](https://github.com/opskat/opskat/blob/main/docs/ARCHITECTURE.md) —— 权威的子系统详情
-- [添加资产类型](https://github.com/opskat/opskat/blob/main/docs/adding-an-asset-type.md) —— 后端与前端注册接缝
+- [添加资产类型](https://github.com/opskat/opskat/blob/main/docs/references/adding-an-asset-type.md) —— 后端与前端注册接缝
 - [设计系统](https://github.com/opskat/opskat/blob/main/docs/DESIGN.md) —— UI 原语、设计 token 和界面模式
 - [仓库开发约定](https://github.com/opskat/opskat/blob/main/AGENTS.md) —— 工程原则与修复策略
