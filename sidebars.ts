@@ -15,6 +15,7 @@ const sidebars: SidebarsConfig = {
         "guide/asset-management",
         "guide/ssh-terminal",
         "guide/rdp",
+        "guide/vnc",
         "guide/query-editor",
         "guide/object-storage",
         "guide/kubernetes",
