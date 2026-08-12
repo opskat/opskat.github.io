@@ -38,7 +38,17 @@ RDP assets open an embedded Windows remote-desktop session through the [RDP clie
 - **Host / Port** — Remote Windows endpoint (default port: 3389)
 - **Username / Password / Domain** — Windows sign-in details; passwords can use managed credentials
 - **Clipboard** — Optional bidirectional text and file clipboard synchronization
-- **Connection** — Direct, SSH tunnel, or SOCKS proxy
+- **Connection** — Direct, or an ordered proxy chain of SSH-tunnel / SOCKS5 / HTTP-tunnel layers
+
+### VNC
+
+VNC assets open an embedded RFB remote-desktop session through the [VNC client](/docs/guide/vnc).
+
+- **Host / Port** — Remote endpoint (default port: 5900)
+- **Username** — Optional; only when the server requires one
+- **Password** — Stored encrypted, or a managed credential
+- **SSH/SFTP file channel** — Optional SSH asset carrying file transfer, which VNC itself has no channel for
+- **Connection** — Direct, or an ordered proxy chain of SSH-tunnel / SOCKS5 / HTTP-tunnel layers
 
 ### Database (MySQL / PostgreSQL / SQL Server / SQLite)
 

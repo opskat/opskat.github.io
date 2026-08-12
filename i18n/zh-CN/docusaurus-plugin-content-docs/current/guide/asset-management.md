@@ -40,6 +40,16 @@ RDP 资产通过 [RDP 客户端](/docs/guide/rdp)打开内嵌的 Windows 远程�
 - **剪贴板** — 可选的双向文本和文件剪贴板同步
 - **连接方式** — 直连，或由 SSH 隧道 / SOCKS5 / HTTP 隧道各层组成的有序代理链
 
+### VNC
+
+VNC 资产通过 [VNC 客户端](/docs/guide/vnc)打开内嵌的 RFB 远程桌面会话。
+
+- **主机 / 端口** — 远程端点（默认端口：5900）
+- **用户名** — 可选，仅在服务端要求时填写
+- **密码** — 加密存储，或使用托管凭据
+- **SSH/SFTP 文件通道** — 可选的 SSH 资产，承载文件传输 —— VNC 自身没有这个通道
+- **连接方式** — 直连，或由 SSH 隧道 / SOCKS5 / HTTP 隧道各层组成的有序代理链
+
 ### 数据库（MySQL / PostgreSQL / SQL Server / SQLite）
 
 用于通过[查询编辑器](/docs/guide/query-editor)或 AI 智能体执行 SQL 的数据库资产。
