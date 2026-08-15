@@ -48,6 +48,14 @@ The audit log viewer in the desktop app provides:
 - **Session filtering** — View all actions within a specific session
 - **Detail view** — Inspect the stored request and result, subject to the 4KB / 32KB audit truncation limits
 
+## Audit Payload Boundaries
+
+Audit payloads are raw by default: the audit writer stores the command, request, result, error, and matched pattern it receives instead of scanning their contents and replacing suspected values with `<redacted>`. Existing command canonicalization, limited output buffers, and the 4KB / 32KB truncation limits still apply, so this is not a byte-for-byte forensic transcript.
+
+Some producers own a narrower write-only contract. AI/opsctl `put_asset`, desktop asset changes, and external-edit metadata write explicit allowlisted projections. For asset creation and updates, password, Secret Access Key, kubeconfig, private-key, and passphrase fields are omitted from the audit request; they do not appear as placeholder values. Safe asset and credential queries likewise return narrow metadata DTOs and never expose password, private-key, passphrase, token, kubeconfig, or SSH Agent endpoint values.
+
+Direct execution and approval surfaces are different boundaries. Tool input/output, command history, errors, and approval subjects preserve the content supplied to those surfaces. Do not pass secrets in commands or arguments on the assumption that Audit or the UI will redact them. Prefer managed credential references or a command's documented standard-input secret path, such as [`opsctl create asset --password-stdin`](/docs/cli/assets#passwords-and-authentication-references).
+
 ## Approval Workflow
 
 When the `opsctl` CLI is used while the desktop app is running, operations that require approval are routed through the app's UI.

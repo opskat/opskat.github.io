@@ -61,9 +61,9 @@ OpsKat 桌面应用运行时，`opsctl` 会通过本地套接字连接应用：
 | [`ext`](./ext.md) | 列出已安装扩展或执行扩展工具 |
 | `help` | 查看 CLI 用法，或用 `opsctl help <asset>` 查看该资产类型的命令语法 |
 | `session` | 管理审批会话（start、end、status） |
-| `list` | 列出资源（`assets` 或 `groups`） |
-| `get` | 获取资源详情 |
-| `create` | 创建受支持的 SSH、数据库、Redis、MongoDB 或 Kubernetes 资产，或创建分组 |
+| [`list`](./assets.md#安全发现凭据) | 列出资产、分组或安全凭据元数据 |
+| [`get`](./assets.md#安全发现凭据) | 获取资产详情，或通过类型化引用获取安全凭据详情 |
+| [`create`](./assets.md#创建资产) | 通过类型自有配置创建任意已注册的内建资产类型，或创建分组 |
 | `update` | 更新已有资产或分组 |
 | `delete` | 删除资产或分组（始终需要桌面端确认） |
 | `version` | 输出版本信息 |

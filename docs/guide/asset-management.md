@@ -162,7 +162,7 @@ Right-click an asset and select **Delete**. Assets are soft-deleted (marked as d
 
 ## Credential Management
 
-Managed secrets (including passwords, SSH private keys, and kubeconfigs) are encrypted with a key derived using **Argon2id** and stored using **AES-256-GCM**. OpsKat first resolves the master key from an explicit configuration, then the OS keyring, and can fall back to a protected key file in the application data directory:
+Sensitive connection material—including asset-local passwords and kubeconfigs, and managed password/SSH-key credentials—is encrypted with a key derived using **Argon2id** and stored using **AES-256-GCM**. OpsKat first resolves the master key from an explicit configuration, then the OS keyring, and can fall back to a protected key file in the application data directory:
 
 - **macOS** — Keychain
 - **Windows** — Windows Credential Manager
@@ -178,6 +178,10 @@ You can import SSH private keys in two ways:
 - **From PEM** — Paste the PEM-encoded key content directly
 
 Imported keys are stored as credentials and can be reused across multiple assets.
+
+### Automation
+
+`opsctl` and the AI Agent can create registered built-in asset types, reuse compatible managed credentials, and query safe credential metadata. Plaintext passwords supplied during automated asset creation are encrypted in the asset and do not implicitly create reusable credentials. See [Asset & Credential Automation](/docs/cli/assets) for the command contract, typed references, and secret-handling boundaries.
 
 ## Import / Export
 

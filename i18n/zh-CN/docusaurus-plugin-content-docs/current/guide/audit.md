@@ -48,6 +48,14 @@ OpsKat 会记录 AI 与 `opsctl` 的工具执行，包括来源、结果以及�
 - **会话筛选** — 查看特定会话中的所有操作
 - **详情视图** — 查看已存储的请求和结果，受 4KB / 32KB 审计截断上限约束
 
+## 审计载荷边界
+
+审计载荷默认保留原值：审计 writer 会保存其实际收到的 command、request、result、error 和 matched pattern，不会扫描内容并把疑似秘密替换为 `<redacted>`。既有的命令 canonicalization、有限输出缓冲区以及 4KB / 32KB 截断上限仍然生效，因此这不是逐字节的取证记录。
+
+部分 producer 拥有更窄的 write-only 契约。AI/opsctl `put_asset`、桌面资产变更和 external-edit 元数据会写入显式字段白名单投影。创建或更新资产时，password、Secret Access Key、kubeconfig、私钥和 passphrase 字段会从审计请求中省略，而不是显示为占位值。安全资产/凭据查询同样只返回窄元数据 DTO，绝不会暴露密码、私钥、passphrase、token、kubeconfig 或 SSH Agent endpoint 值。
+
+直接执行与审批表面属于不同边界：工具输入/输出、命令历史、错误和审批主体会保留传入这些表面的内容。不要假设 Audit 或 UI 会替你脱敏，从而把秘密写入命令或参数。应优先使用托管凭据引用，或命令明确提供的标准输入秘密通道，例如 [`opsctl create asset --password-stdin`](/docs/cli/assets#密码与认证引用)。
+
 ## 审批工作流
 
 当 `opsctl` CLI 在桌面应用运行期间使用时，需要审批的操作会被路由到应用的 UI 界面。

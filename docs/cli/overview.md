@@ -61,9 +61,9 @@ Assets can be referenced in all commands by:
 | [`ext`](./ext.md) | List installed extensions or execute an extension tool |
 | `help` | Show CLI usage, or `opsctl help <asset>` for that asset type's command syntax |
 | `session` | Manage approval sessions (start, end, status) |
-| `list` | List resources (`assets` or `groups`) |
-| `get` | Get detailed information about a resource |
-| `create` | Create a supported SSH, database, Redis, MongoDB, or Kubernetes asset, or a group |
+| [`list`](./assets.md#discover-credentials-safely) | List assets, groups, or safe credential metadata |
+| [`get`](./assets.md#discover-credentials-safely) | Get asset detail or safe credential detail by typed reference |
+| [`create`](./assets.md#create-an-asset) | Create any registered built-in asset type through its type-owned configuration, or create a group |
 | `update` | Update an existing asset or group |
 | `delete` | Delete an asset or group (always asks for desktop confirmation) |
 | `version` | Print version information |
