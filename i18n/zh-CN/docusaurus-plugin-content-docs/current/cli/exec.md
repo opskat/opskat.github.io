@@ -93,12 +93,12 @@ opsctl help kafka        # 传类型名，即使还没有该类型的资产也�
 
 ## 审批
 
-此命令需要运行中的桌面应用进行审批，并且按**资产自身类型**的策略检查 —— `database` 资产走 SQL 策略，`redis` 资产走 Redis 策略，以此类推：
+此命令按**资产自身类型**的策略检查 —— `database` 资产走 SQL 策略，`redis` 资产走 Redis 策略，以此类推：
 
 - 匹配资产**白名单**的命令无需审批即可执行
 - 匹配**黑名单**的命令会被立即拒绝
-- 如果未指定会话，系统会自动创建一个。可复用授权来自明确保存的 Grant 模式；匹配的后续命令可跳过再次提示
-- 当桌面应用离线时，仅允许执行匹配白名单策略或预审批授权的命令
+- 未命中规则时，交互调用会在当前终端提问；非交互调用可在桌面可达时使用桌面审批
+- 两种审批路径都不可用时，以退出码 3 输出 `NEEDS AUTHORIZATION` 和可复制的 `opsctl policy allow`；真人执行授权后再重试
 
 ## 示例
 
@@ -128,6 +128,6 @@ echo "hello" | opsctl exec web-server -- cat
 opsctl exec web-server -- cat /etc/nginx/nginx.conf | grep upstream
 opsctl exec web-server -- test -f /opt/app/config.yml && echo "exists"
 
-# 使用显式会话
-opsctl --session $ID exec web-01 -- systemctl restart nginx
+# 真人可先在交互终端写入永久规则
+opsctl policy allow web-01 -- 'systemctl restart *'
 ```

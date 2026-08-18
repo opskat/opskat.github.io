@@ -37,7 +37,7 @@ const sidebars: SidebarsConfig = {
         "cli/ssh",
         "cli/cp",
         "cli/batch",
-        "cli/grant",
+        "cli/policy",
         "cli/ext",
       ],
     },

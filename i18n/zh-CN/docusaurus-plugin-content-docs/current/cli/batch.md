@@ -5,7 +5,7 @@ sidebar_label: batch
 
 # opsctl batch
 
-并行执行多条命令，仅需一次审批。单个批次可以混合任意资产类型 —— SSH、数据库、Redis、MongoDB、etcd、Kafka、Kubernetes 等。每条命令按其资产类型的语法书写，参见 [`opsctl exec`](./exec.md#各类型的命令语法) 或执行 `opsctl help <asset>`。
+并行执行多条命令，仅需一次授权决策。单个批次可以混合任意资产类型 —— SSH、数据库、Redis、MongoDB、etcd、Kafka、Kubernetes 等。每条命令按其资产类型的语法书写，参见 [`opsctl exec`](./exec.md#各类型的命令语法) 或执行 `opsctl help <asset>`。
 
 ## 语法
 
@@ -84,16 +84,17 @@ echo '{"commands":[
 **退出码：**
 - `0` — 批量机制本身成功（即使个别命令失败；需检查每条结果的 `exit_code` 和 `error`）
 - `1` — 所有命令均失败，或批量级别错误（解析失败、全部被拒）
+- `3` — 需要授权或交互终端
 
 ## 审批
 
 batch 命令使用专门的审批流程：
 
 1. **策略预检** — 每条命令独立检查资产策略（白名单/黑名单）。自动放行的命令跳过审批；自动拒绝的命令在输出中报告错误。
-2. **单次批量审批** — 所有需要确认的命令在桌面应用中以单个审批弹窗呈现，列出每条命令及其类型标签。
+2. **单次批量审批** — 交互调用在终端一次展示所有待确认命令；非交互调用可在桌面可达时使用桌面审批。
 3. **并行执行** — 审批通过后，所有命令并发执行（最多 10 条并行）。
 
-桌面应用离线时，仅执行匹配策略或授权模式的命令；其余命令将被拒绝并提示允许的命令。
+既无终端也无桌面应用时，未决命令会使 batch 以退出码 3 和 `NEEDS AUTHORIZATION` 停止，并给出可复制的 `opsctl policy allow`。真人授权后再重试 batch。
 
 ## 示例
 
@@ -108,8 +109,8 @@ opsctl batch \
   'redis:cache:INFO server' \
   'k8s:prod-cluster:get nodes'
 
-# 使用显式会话
-opsctl --session $ID batch '1:uptime' '2:hostname'
+# 真人可在自动化前预授权模式
+opsctl policy allow 1 2 -- uptime hostname
 
 # 使用 JSON 输入执行复杂查询
 cat <<'EOF' | opsctl batch

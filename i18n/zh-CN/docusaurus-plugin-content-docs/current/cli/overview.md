@@ -5,98 +5,64 @@ sidebar_label: 概览
 
 # opsctl CLI 概览
 
-`opsctl` 是独立的 CLI 工具，与 OpsKat 共享数据和操作辅助模块。它为 SSH 命令、文件传输，数据库 / Redis / MongoDB / etcd / Kafka / Kubernetes / 对象存储操作，以及资产管理和扩展工具提供脚本化与自动化能力；受支持的操作路径带有对应的策略与审计覆盖。
+`opsctl` 是与 OpsKat 共享数据、凭据和业务服务的独立 CLI，可用于内建资产管理、命令执行、文件传输、授权与审计。扩展执行仍需桌面扩展运行时。
 
 ## 安装
 
-### 从桌面应用安装（推荐）
-
-打开 OpsKat 桌面应用并使用一键安装按钮。内嵌的 `opsctl` 会被释放到：
-
-- **macOS / Linux：** `~/.local/bin/opsctl`
-- **Windows：** `%LOCALAPPDATA%/opskat/opsctl.exe`
-
-### 从源码构建
+可在桌面应用中一键安装到 `~/.local/bin/opsctl`（macOS / Linux）或 `%LOCALAPPDATA%/opskat/opsctl.exe`（Windows），也可从源码构建：
 
 ```bash
-make build-cli        # 构建到 ./build/bin/opsctl
-make install-cli      # 安装到 $GOPATH/bin
+make build-cli
+make install-cli
 ```
 
 ## 全局参数
 
 | 参数 | 环境变量 | 说明 |
 |---|---|---|
-| `--data-dir <path>` | — | 覆盖应用数据目录（默认值依平台而定，例如 `~/Library/Application Support/opskat`） |
-| `--master-key <key>` | `OPSKAT_MASTER_KEY` | 覆盖用于解密凭据的主密钥 |
-| `--session <id>` | `OPSKAT_SESSION_ID` | 批量审批的会话 ID（未指定时自动创建） |
+| `--data-dir <path>` | — | 覆盖应用数据目录 |
+| `--master-key <key>` | `OPSKAT_MASTER_KEY` | 覆盖凭据解密主密钥 |
 
 ## 桌面应用集成
 
-OpsKat 桌面应用运行时，`opsctl` 会通过本地套接字连接应用：
+桌面应用运行时，opsctl 可通过 `sshpool.sock` 复用 SSH 连接；非交互调用也可通过 `approval.sock` 请求桌面审批。桌面未运行时，内建协议可以使用共享数据库和凭据直连。`ext exec` 是例外：它必须委托桌面进程中的 WASM 运行时，无法连接时会安全失败。
 
-- **连接池** —— 通过 `sshpool.sock` 复用桌面应用的 SSH 连接，而不是重新连接
-- **审批工作流** —— 需要确认的操作通过 `approval.sock` 在桌面应用中显示审批对话框
-- **持久化授权** —— 审批被明确保存为可复用模式后，后续匹配操作可通过 Grant 系统获得授权
+## 资产引用
 
-桌面应用未运行时，支持离线模式的命令会使用共享数据库和凭据直连。
-
-## 资产解析
-
-所有命令都可以通过以下方式引用资产：
-
-- **数字 ID：** `opsctl exec 1 -- uptime`
-- **名称：** `opsctl exec web-server -- uptime`
-- **分组/名称：** `opsctl exec production/web-01 -- uptime`（存在同名资产时用于消歧）
+- 数字 ID：`opsctl exec 1 -- uptime`
+- 名称：`opsctl exec web-server -- uptime`
+- 分组/名称：`opsctl exec production/web-01 -- uptime`
 
 ## 命令
 
 | 命令 | 说明 |
 |---|---|
-| [`exec`](./exec.md) | 在任意资产上执行命令（ssh、database、redis、mongodb、etcd、kafka、k8s、oss） |
-| [`batch`](./batch.md) | 跨资产并行执行多个命令 |
-| [`ssh`](./ssh.md) | 打开交互式 SSH 终端会话 |
-| [`cp`](./cp.md) | 在本地、远程服务器与对象存储之间复制文件（scp 风格） |
-| [`grant`](./grant.md) | 提交批量授权以供预审批 |
-| [`ext`](./ext.md) | 列出已安装扩展或执行扩展工具 |
-| `help` | 查看 CLI 用法，或用 `opsctl help <asset>` 查看该资产类型的命令语法 |
-| `session` | 管理审批会话（start、end、status） |
-| [`list`](./assets.md#安全发现凭据) | 列出资产、分组或安全凭据元数据 |
-| [`get`](./assets.md#安全发现凭据) | 获取资产详情，或通过类型化引用获取安全凭据详情 |
-| [`create`](./assets.md#创建资产) | 通过类型自有配置创建任意已注册的内建资产类型，或创建分组 |
-| `update` | 更新已有资产或分组 |
-| `delete` | 删除资产或分组（始终需要桌面端确认） |
-| `version` | 输出版本信息 |
+| [`exec`](./exec.md) | 按资产真实类型执行命令 |
+| [`batch`](./batch.md) | 跨资产并行执行多条命令 |
+| [`ssh`](./ssh.md) | 打开交互式 SSH 终端 |
+| [`cp`](./cp.md) | 在本地、远程服务器和对象存储之间复制文件 |
+| [`policy`](./policy.md) | 查看生效授权，管理永久规则和权限组 |
+| [`ext`](./ext.md) | 列出扩展或委托桌面端执行扩展工具 |
+| `help` | 查看 CLI 或指定资产类型的权威命令语法 |
+| [`list`](./assets.md#安全发现凭据) | 列出资产、分组、安全凭据元数据或审计记录（`list audit`） |
+| [`get`](./assets.md#安全发现凭据) | 获取资产或安全凭据详情 |
+| [`create`](./assets.md#创建资产) | 创建内建资产或分组 |
+| `update` | 更新资产或分组 |
+| `delete` | 删除资产或分组，始终需要真人确认 |
+| `version` | 输出版本 |
 
-:::info
-`opsctl sql`、`opsctl redis`、`opsctl mongo` 是早期版本的命令，现已移除。所有资产类型统一通过 [`opsctl exec`](./exec.md) 驱动，由资产的真实类型决定派发方式。
-:::
+## 授权与审批
 
-## 审批与会话
+`exec` 按资产自身类型对应的策略检查。处理顺序是永久规则、仍有效的 grant、真人审批：
 
-`exec`、`cp`、`batch`、`create`、`update` 和 `delete` 等操作使用各自文档说明的策略、Grant 和审批路径。`exec` 按资产自身类型的策略检查 —— `database` 资产走 SQL 策略，`redis` 资产走 Redis 策略，以此类推。桌面应用可用时，扩展执行仅把 `approval.sock` 作为委托传输通道；委托的 `ext_tool` 处理器不会显示常规审批对话框。
+1. deny 命中立即拒绝，allow 命中直接执行；
+2. 仍有效的桌面 grant 可以授权匹配操作；
+3. 交互运行时在当前终端提问；非交互运行时可在桌面可达时请求桌面审批。
 
-1. **策略检查** —— 根据资产策略（允许列表/拒绝列表）检查命令。
-2. **授权匹配** —— 如果匹配已预先批准的授权模式，则允许执行。
-3. **桌面应用审批** —— 策略和授权都未匹配时，桌面应用显示对话框。多个并发请求会自动合并到同一对话框，可“全部批准”或“全部拒绝”。
+既无交互终端也无桌面审批服务时，`exec`、`cp`、`batch` 以退出码 3 输出 `NEEDS AUTHORIZATION` 和可复制的 `opsctl policy allow` 命令。真人在自己的终端执行并确认后，再重试原操作。`create`、`update`、`delete` 无法被规则预授权，会输出 `NEEDS TTY`；应由真人交互执行原命令。
 
-会话把多个操作归入同一审批范围。首次写操作时会自动创建，并存储在当前目录的 `.opskat/sessions/` 中；会话在 24 小时后过期。
+审批会话是按数据目录复用、24 小时过期的内部概念。不存在 `session` 子命令、`--session`、`OPSKAT_SESSION_ID` 或项目级 `.opskat/sessions/`。
 
-```bash
-# 显式管理会话
-opsctl session start               # 创建会话并打印 ID
-opsctl exec web-01 -- uptime       # 复用 .opskat/sessions/ 里的会话
-opsctl exec web-02 -- df -h        # 命中「记住」保存的模式即可跳过审批
-opsctl session end                 # 结束会话
+## 输出语言
 
-# 也可以让它自动创建
-opsctl exec web-01 -- uptime       # 首次调用时自动创建会话
-```
-
-会话 ID 解析优先级：
-
-1. 全局参数 `--session <id>`
-2. 环境变量 `OPSKAT_SESSION_ID`
-3. `.opskat/sessions/<scope>` 文件（自动创建，并向上遍历目录树）
-
-`<scope>` 根据终端环境变量（`TERM_SESSION_ID`、`ITERM_SESSION_ID`、`WT_SESSION`、`WINDOWID`）生成，因此同一目录下的不同终端窗口会获得独立会话。
+给人阅读的策略、审批和审计输出依次按 `LC_ALL`、`LC_MESSAGES`、`LANG` 选择语言。`NEEDS AUTHORIZATION`、`NEEDS TTY` 以及可复制的命令保持稳定英文 ASCII。需要确定性英文显示文本时使用 `LC_ALL=C`。

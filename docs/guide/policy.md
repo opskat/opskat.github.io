@@ -136,6 +136,34 @@ Groups in the asset tree can have their own policies. When evaluating an asset's
 
 This allows you to set organization-wide rules at the group level while allowing asset-specific overrides.
 
+## Manage Policies with opsctl
+
+The CLI provides the same permanent policy model without requiring the desktop UI:
+
+```bash
+opsctl policy show web-01
+opsctl policy allow web-01 -- 'systemctl status *'
+opsctl policy deny web-01 -- 'rm -rf *'
+opsctl policy rm web-01 2
+```
+
+`show` is read-only and merges the asset's own rules, inherited asset-group rules, attached policy groups, and still-valid grants. For an asset target, `--type` is only an assertion. For an asset-group target, it is required because the group itself has no asset type:
+
+```bash
+opsctl policy allow --group production --type ssh -- 'uptime'
+```
+
+Policy groups can also be listed, inspected, created, copied, edited, attached, and detached:
+
+```bash
+opsctl policy group list --type command
+opsctl policy group copy builtin:linux-readonly --name production-readonly
+opsctl policy group allow 5 -- 'journalctl *'
+opsctl policy attach web-01 5
+```
+
+Built-in and extension groups are read-only; copy one to a user group before editing it. `policy show`, `policy group list`, and `policy group show` work without a TTY. Every policy write requires a human-operated interactive terminal and explicit confirmation. A non-interactive agent receives `NEEDS TTY` and cannot grant itself access. See the full [`opsctl policy` reference](/docs/cli/policy).
+
 ## Policy Testing
 
 OpsKat includes a real-time policy tester for the registered built-in policy kinds. Enter an operation in the policy editor to see whether it would be allowed, denied, or require confirmation, and which rule matched.

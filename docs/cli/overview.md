@@ -29,14 +29,13 @@ make install-cli      # Install to $GOPATH/bin
 |------|-------------|-------------|
 | `--data-dir <path>` | — | Override the application data directory (default: platform-specific, e.g. `~/Library/Application Support/opskat`) |
 | `--master-key <key>` | `OPSKAT_MASTER_KEY` | Override the master encryption key for credential decryption |
-| `--session <id>` | `OPSKAT_SESSION_ID` | Session ID for batch approval (auto-created if not specified) |
 
 ## Desktop App Integration
 
 When the OpsKat desktop app is running, `opsctl` automatically connects to it via a Unix socket (`sshpool.sock`). This provides:
 
 - **Connection pooling** — reuses the desktop app's SSH connections instead of opening new ones
-- **Approval workflow** — write operations (exec, cp, batch, create, update, delete) prompt an approval dialog in the desktop app
+- **Approval workflow** — non-interactive operations may use the desktop approval service when no permanent rule decides them
 - **Persisted grants** — when an approval is explicitly saved as reusable patterns, matching later operations can be authorized through the grant system
 
 When the desktop app is not running, `opsctl` falls back to direct connections using the shared database and credentials.
@@ -57,45 +56,32 @@ Assets can be referenced in all commands by:
 | [`batch`](./batch.md) | Execute multiple commands in parallel across assets |
 | [`ssh`](./ssh.md) | Open an interactive SSH terminal session |
 | [`cp`](./cp.md) | Copy files between local, remote servers, and object storage (scp-style) |
-| [`grant`](./grant.md) | Submit a batch grant for pre-approval |
+| [`policy`](./policy.md) | Inspect effective authorization and manage permanent rules and policy groups |
 | [`ext`](./ext.md) | List installed extensions or execute an extension tool |
 | `help` | Show CLI usage, or `opsctl help <asset>` for that asset type's command syntax |
-| `session` | Manage approval sessions (start, end, status) |
-| [`list`](./assets.md#discover-credentials-safely) | List assets, groups, or safe credential metadata |
+| [`list`](./assets.md#discover-credentials-safely) | List assets, groups, safe credential metadata, or stored audit rows (`list audit`) |
 | [`get`](./assets.md#discover-credentials-safely) | Get asset detail or safe credential detail by typed reference |
 | [`create`](./assets.md#create-an-asset) | Create any registered built-in asset type through its type-owned configuration, or create a group |
 | `update` | Update an existing asset or group |
-| `delete` | Delete an asset or group (always asks for desktop confirmation) |
+| `delete` | Delete an asset or group (always asks for human confirmation) |
 | `version` | Print version information |
 
 :::info
 `opsctl sql`, `opsctl redis`, and `opsctl mongo` existed in earlier releases and have been removed. Every asset type is now driven through [`opsctl exec`](./exec.md), which dispatches on the asset's real type.
 :::
 
-## Approval and Sessions
+## Authorization and Approval
 
-Operations such as `exec`, `cp`, `batch`, `create`, `update`, and `delete` use their documented policy, grant, and approval paths. `exec` is checked against the policy of the asset's own type — a `database` asset by the SQL policy, a `redis` asset by the Redis policy, and so on. Extension execution uses `approval.sock` only as a delegation transport when the app is available; the delegated `ext_tool` handler does not display the normal approval dialog.
+Operations such as `exec`, `cp`, `batch`, `create`, `update`, and `delete` use their documented policy, grant, and approval paths. `exec` is checked against the policy of the asset's own type — a `database` asset by the SQL policy, a `redis` asset by the Redis policy, and so on. Extension execution is a separate delegated path and requires the desktop extension runtime.
 
 1. **Policy check** — the command is checked against the asset's policy (allow-list / deny-list)
 2. **Grant matching** — if a pre-approved grant pattern matches, the command is allowed
-3. **Desktop app approval** — if neither policy nor grant matches, a dialog is shown in the desktop app. Multiple concurrent requests are automatically queued into a single dialog with "Approve All" / "Deny All" options
+3. **Human approval** — if neither policy nor grant decides the operation, an interactive opsctl prompts in the current terminal. A single-kind operation can be allowed once, permanently allowed, or denied; other kinds can be allowed once or denied. A non-interactive invocation can instead use the desktop approval dialog when the app is reachable.
 
-Sessions group multiple operations under a single approval scope. They are auto-created on the first write operation and stored in `.opskat/sessions/` in the current directory. Sessions expire after 24 hours.
+When neither an interactive terminal nor the desktop app is available, `exec`, `cp`, and `batch` exit with code 3, print `NEEDS AUTHORIZATION`, and provide a paste-ready permanent-rule command for a human to run. `create`, `update`, and `delete` cannot be pre-authorized and print `NEEDS TTY`; run the original operation in a terminal.
 
-```bash
-# Explicit session management
-opsctl session start               # Creates a session, prints its ID
-opsctl exec web-01 -- uptime       # Uses the session from .opskat/sessions/
-opsctl exec web-02 -- df -h        # Skips approval if it matches a pattern saved with "Remember"
-opsctl session end                  # Ends the session
+Approval sessions are internal, scoped to the data directory, and expire after 24 hours. There are no `session` subcommands, `--session` flag, `OPSKAT_SESSION_ID`, or project-local `.opskat/sessions/` files.
 
-# Or just let it auto-create
-opsctl exec web-01 -- uptime       # Auto-creates session on first call
-```
+## Output Language
 
-Session ID resolution priority:
-1. `--session <id>` global flag
-2. `OPSKAT_SESSION_ID` environment variable
-3. `.opskat/sessions/<scope>` file (auto-created, walks up directory tree)
-
-The `<scope>` is derived from terminal environment variables (`TERM_SESSION_ID`, `ITERM_SESSION_ID`, `WT_SESSION`, `WINDOWID`) so that different terminal windows in the same directory get separate sessions.
+Human-readable policy, approval, and audit output follows `LC_ALL`, then `LC_MESSAGES`, then `LANG`. The refusal markers `NEEDS AUTHORIZATION` and `NEEDS TTY`, and the paste-ready command, remain stable English ASCII. Use `LC_ALL=C` when scripts need deterministic English display text.

@@ -39,7 +39,7 @@ opsctl [global-flags] cp [-r] <source>... <destination>
 
 在传输任何一个字节之前，每一端的资产都会按其自身的策略单独授权。递归 / 通配符传输会先对源和目标的目录（或对象前缀）范围完成审批，再去列举其内容。
 
-如果未指定会话，系统会自动创建一个。
+未命中规则时，交互调用会在当前终端提问。既无 TTY 也无桌面审批服务时，以退出码 3 输出 `NEEDS AUTHORIZATION` 和可复制的 `opsctl policy allow`；真人执行授权后再重试。
 
 ## 示例
 
@@ -69,6 +69,6 @@ opsctl cp -r ./dist s3-prod:/releases/v2/
 # 远程通配符（加引号，避免本地 shell 展开）
 opsctl cp 'web-01:/var/log/*.log' s3-prod:/logs/
 
-# 使用显式会话
-opsctl --session $ID cp ./app.tar.gz web-server:/opt/releases/
+# 在交互终端预授权远端写入范围
+opsctl policy allow web-server -- 'cp:write:/opt/releases/*'
 ```

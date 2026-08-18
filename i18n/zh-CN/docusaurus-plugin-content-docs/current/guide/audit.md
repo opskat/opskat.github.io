@@ -5,127 +5,42 @@ sidebar_label: 审计
 
 # 审计与审批
 
-OpsKat 会记录 AI 与 `opsctl` 的工具执行，包括来源、结果以及可用的策略决策上下文。审批工作流为 CLI 操作提供受控访问，授权系统支持命令模式预审批。
+OpsKat 会记录 AI 与 `opsctl` 工具执行的来源、结果和可用的策略决策上下文。永久规则、仍有效的 grant 和真人审批共同控制 CLI 操作。
 
-## 审计日志
+## 审计字段
 
-进入 AI runner 审计中间件或已接入审计的 `opsctl` 处理器的工具调用会自动记录。其他交互式或委托路径并不意味着每个操作都会产生审计行。已记录条目可包含：
+记录可包含来源（`ai`、`opsctl`、`desktop`）、工具名、资产、命令、请求/结果、成功状态、决策、决策来源、命中模式、内部会话 ID、AI 对话 ID、grant 会话 ID 和时间。常见决策来源包括 `policy_allow`、`policy_deny`、`user_allow`、`user_deny`、`grant_allow`、`grant_deny`。
 
-| 字段 | 说明 |
-|---|---|
-| **来源** | 操作发起方：`ai`、`opsctl` 或 `desktop` |
-| **工具名称** | 被调用的工具（例如 `exec`、`cp`、`batch_exec`、`put_asset`） |
-| **资产** | 目标资产（ID 和名称） |
-| **命令** | 执行的命令或查询 |
-| **请求 / 结果** | 请求参数截断至 4KB，执行结果截断至 32KB |
-| **成功** | 执行是否成功 |
-| **决策** | 操作经过策略或审批检查时记录的允许/拒绝决策 |
-| **决策来源** | 决策的产生方式（见下方） |
-| **匹配模式** | 匹配的具体规则或模式 |
-| **会话 ID** | opsctl 或 AI 会话标识符 |
-| **对话 ID** | 该操作所属的 AI 对话（如适用） |
-| **授权会话 ID** | 授权该操作的授权会话（如适用） |
-| **时间戳** | 操作发生的时间 |
-
-## 决策来源
-
-每条审计日志都记录了决策来源，说明允许/拒绝决策是如何产生的：
-
-| 来源 | 说明 |
-|---|---|
-| `policy_allow` | 被策略允许列表规则放行 |
-| `policy_deny` | 被策略拒绝列表规则阻止 |
-| `user_allow` | 用户在提示时手动批准 |
-| `user_deny` | 用户在提示时手动拒绝 |
-| `grant_allow` | 匹配了已批准的授权模式 |
-| `grant_deny` | 授权请求被拒绝 |
-
-## 审计日志查看器
-
-桌面应用中的审计日志查看器提供：
-
-- **可筛选列表** — 按来源、工具、资产、决策和时间范围筛选
-- **会话筛选** — 查看特定会话中的所有操作
-- **详情视图** — 查看已存储的请求和结果，受 4KB / 32KB 审计截断上限约束
-
-## 审计载荷边界
-
-审计载荷默认保留原值：审计 writer 会保存其实际收到的 command、request、result、error 和 matched pattern，不会扫描内容并把疑似秘密替换为 `<redacted>`。既有的命令 canonicalization、有限输出缓冲区以及 4KB / 32KB 截断上限仍然生效，因此这不是逐字节的取证记录。
-
-部分 producer 拥有更窄的 write-only 契约。AI/opsctl `put_asset`、桌面资产变更和 external-edit 元数据会写入显式字段白名单投影。创建或更新资产时，password、Secret Access Key、kubeconfig、私钥和 passphrase 字段会从审计请求中省略，而不是显示为占位值。安全资产/凭据查询同样只返回窄元数据 DTO，绝不会暴露密码、私钥、passphrase、token、kubeconfig 或 SSH Agent endpoint 值。
-
-直接执行与审批表面属于不同边界：工具输入/输出、命令历史、错误和审批主体会保留传入这些表面的内容。不要假设 Audit 或 UI 会替你脱敏，从而把秘密写入命令或参数。应优先使用托管凭据引用，或命令明确提供的标准输入秘密通道，例如 [`opsctl create asset --password-stdin`](/docs/cli/assets#密码与认证引用)。
-
-## 审批工作流
-
-当 `opsctl` CLI 在桌面应用运行期间使用时，需要审批的操作会被路由到应用的 UI 界面。
-
-### 工作原理
-
-1. `opsctl` 通过 Unix 套接字（`<data-dir>/approval.sock`）发送审批请求。
-2. 桌面应用显示审批对话框，展示操作详情。
-3. 用户审核后批准或拒绝。
-4. 响应发送回 `opsctl`，后者继续执行或中止。
-
-根据各命令的审批路径，这适用于 `exec`、`cp`、`batch`、`create`、`update`、`delete` 和 `grant` 等 CLI 命令。扩展工具委托也经过 `approval.sock`，但当前处理器会在桌面扩展运行时中直接执行，而不是显示常规审批对话框。
-
-### 审批类型
-
-审批类型决定弹窗上的类型标签，也是策略和 Grant 模式的匹配依据。`opsctl exec` 和 `opsctl batch` 的审批类型由**资产自身的类型**推导而来，因此对 `database` 资产执行的命令走 SQL 策略，而不是 shell 策略：
-
-| 资产类型 | 审批类型 |
-|---|---|
-| `ssh` | `exec` |
-| `database` | `sql` |
-| `redis` | `redis` |
-| `mongodb` | `mongo` |
-| `etcd` | `etcd` |
-| `kafka` | `kafka` |
-| `k8s` | `k8s` |
-| `oss` | `oss` |
-| `serial` | `serial` |
-
-其余操作使用固定的审批类型：
-
-| 类型 | 说明 |
-|---|---|
-| `cp` | 文件传输（本地、远程服务器、对象存储任意组合） |
-| `create` | 创建资产或分组 |
-| `update` | 更新已有资产或分组 |
-| `delete` | 删除资产或分组 —— 始终需要确认，无法预先授权 |
-| `grant` | 提交命令模式进行预审批 |
-| `batch` | 一起审批多个受支持的操作 |
-
-## 授权系统
-
-授权系统允许你预先批准命令模式，使后续匹配的命令自动通过审批，减少重复确认。
-
-### 提交授权
-
-授权可以从两个地方提交：
-
-1. **AI 智能体** — `request_permission` 工具提交命令模式并附带理由。
-2. **opsctl CLI** — `opsctl grant submit` 从命令行提交模式。
-
-`opsctl` 示例：
+桌面审计查看器可按来源、工具、资产、决策和时间筛选并查看详情。无需桌面或交互终端，也可以使用只读 CLI：
 
 ```bash
-opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
+opsctl list audit
+opsctl list audit --asset web-01 --limit 50
 ```
 
-### 授权生命周期
+输出按时间倒序，原样展示已存储行的时间、来源、资产、工具、命令摘要和决策来源。
 
-1. 创建一个 `GrantSession`，状态为 **pending**（待处理），包含一条或多条 `GrantItem` 记录（每条指定一个资产和命令模式）。
-2. 桌面应用显示审批对话框，用户可以在批准前审核并**编辑**模式。
-3. 批准后，授权会话状态变为 **approved**（已批准）。
-4. 后续匹配已批准模式的 `exec` 调用将自动通过（决策来源：`grant_allow`）。
+## 载荷边界
 
-授权项支持 `*` 通配符匹配（例如 `cat /var/log/*` 匹配 `cat /var/log/syslog`）。已批准的授权项**不会被消耗** — 它们在整个会话期间持续有效，可以匹配多个命令。
+审计写入默认不会扫描命令、请求、结果或错误并猜测其中的秘密；请求最多保留 4KB，结果最多保留 32KB。资产创建/更新以及安全资产/凭据查询使用窄字段投影，不写入密码、Secret Access Key、kubeconfig、私钥或 passphrase。
 
-## opsctl 会话管理
+不要假设审计或 UI 会替命令参数脱敏。优先使用托管凭据引用或命令明确提供的标准输入秘密通道，例如 [`opsctl create asset --password-stdin`](/docs/cli/assets#密码与认证引用)。
 
-`opsctl session` 命令用于管理审批会话：
+## opsctl 审批流程
 
-- 会话将相关操作分组在一起
-- 同一会话中的所有操作在审计日志中共享相同的会话 ID
-- 授权项的作用范围限定在其授权会话内
+1. 先检查永久 deny/allow，再检查仍有效的 grant。
+2. 有 TTY 时，opsctl 在当前终端显示操作并询问允许一次、永久允许（适用时）或拒绝。
+3. 无 TTY 但桌面可达时，可以经 `<data-dir>/approval.sock` 请求桌面审批。
+4. 两条审批路径都不可用时，可被规则授权的操作输出 `NEEDS AUTHORIZATION`；资产变更输出 `NEEDS TTY`，退出码均为 3。
+
+这适用于 `exec`、`cp`、`batch`、`create`、`update`、`delete` 各自的审批路径。扩展工具也经 `approval.sock` 委托，但在桌面扩展运行时中直接执行，不显示常规审批弹窗；桌面不可达时 `ext exec` 安全失败。
+
+`exec` 和 `batch` 的审批类型由资产真实类型推导：SSH 为 `exec`，数据库为 `sql`，另有 `redis`、`mongo`、`etcd`、`kafka`、`k8s`、`oss`、`serial`。`cp`、`create`、`update`、`delete` 使用固定类型；delete 永远不能预授权。
+
+## Grant 与永久规则
+
+桌面审批可以在按数据目录复用的内部会话中保存临时 grant。opsctl 能用 `policy show` 查看、用 `policy rm` 撤销仍有效的 grant，但没有创建临时 grant 的命令。
+
+需要持久预授权时，真人在交互终端运行 `opsctl policy allow`。每次策略写入都会单独审计；AI 和其他非交互调用者执行策略写命令会得到 `NEEDS TTY`。
+
+审批会话是内部实现细节，按数据目录复用并在 24 小时后过期。不存在 `opsctl session` 子命令或公开 session 参数。

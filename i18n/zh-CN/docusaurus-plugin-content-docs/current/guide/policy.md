@@ -139,3 +139,31 @@ OpsKat 内置了以下策略组（不可修改）：
 ## 策略测试
 
 OpsKat 为已注册的内置策略类型提供实时策略测试器。在策略编辑器中输入操作，即可查看它会被允许、拒绝还是需要确认，以及匹配了哪条规则。
+
+## 使用 opsctl 管理策略
+
+无需桌面 UI，也可以通过 CLI 管理同一套永久策略：
+
+```bash
+opsctl policy show web-01
+opsctl policy allow web-01 -- 'systemctl status *'
+opsctl policy deny web-01 -- 'rm -rf *'
+opsctl policy rm web-01 2
+```
+
+`show` 会合并资产自身规则、继承的资产组规则、已挂载权限组和仍有效的 grant。资产目标上的 `--type` 只是断言；资产组自身没有资产类型，所以组目标必须指定：
+
+```bash
+opsctl policy allow --group production --type ssh -- 'uptime'
+```
+
+权限组也可在 CLI 中列出、查看、创建、复制、编辑、挂载和卸载：
+
+```bash
+opsctl policy group list --type command
+opsctl policy group copy builtin:linux-readonly --name production-readonly
+opsctl policy group allow 5 -- 'journalctl *'
+opsctl policy attach web-01 5
+```
+
+内置组和扩展组只读，必须先复制成用户组再修改。`policy show`、`policy group list`、`policy group show` 不要求 TTY；所有策略写操作都要求真人在交互终端中明确确认。非交互 agent 会得到 `NEEDS TTY`，不能自行扩权。完整语法见 [`opsctl policy` 参考](/docs/cli/policy)。

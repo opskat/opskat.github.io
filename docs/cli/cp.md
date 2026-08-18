@@ -39,7 +39,7 @@ Quote remote globs so your local shell does not expand them first. Symlinks enco
 
 Every asset endpoint is authorized separately under that asset's own policy, before any byte is transferred. Recursive and glob transfers approve the source and destination directory / object-prefix scopes before listing their contents.
 
-A session is auto-created if not specified.
+If no rule decides an endpoint, an interactive invocation prompts in the current terminal. With neither a TTY nor the desktop approval service, opsctl exits 3 with `NEEDS AUTHORIZATION` and paste-ready `opsctl policy allow` commands. A human must run those commands before retrying.
 
 ## Examples
 
@@ -69,6 +69,6 @@ opsctl cp -r ./dist s3-prod:/releases/v2/
 # A remote glob (quoted so the local shell leaves it alone)
 opsctl cp 'web-01:/var/log/*.log' s3-prod:/logs/
 
-# Use with an explicit session
-opsctl --session $ID cp ./app.tar.gz web-server:/opt/releases/
+# Pre-authorize a remote write scope from an interactive terminal
+opsctl policy allow web-server -- 'cp:write:/opt/releases/*'
 ```

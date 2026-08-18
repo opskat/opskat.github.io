@@ -93,12 +93,12 @@ The exit code of the remote command is propagated as `opsctl`'s exit code.
 
 ## Approval
 
-This command requires approval from the running desktop app, checked against the policy **of the asset's own type** — a `database` asset is evaluated by the SQL policy, a `redis` asset by the Redis policy, and so on:
+This command is checked against the policy **of the asset's own type** — a `database` asset is evaluated by the SQL policy, a `redis` asset by the Redis policy, and so on:
 
 - Commands matching the asset's **allow list** execute without approval
 - Commands matching the **deny list** are rejected immediately
-- A session is auto-created if not specified. Reusable authorization comes from explicitly saved grant patterns; matching later commands can then skip another prompt
-- When the desktop app is offline, only commands matching the allow-list policy or a pre-approved grant are permitted
+- If no rule decides it, an interactive invocation prompts in the current terminal; a non-interactive invocation can use the desktop approval service when available
+- With neither path available, opsctl exits 3 with `NEEDS AUTHORIZATION` and a paste-ready `opsctl policy allow` command. A human must run that command interactively before retrying
 
 ## Examples
 
@@ -128,6 +128,6 @@ echo "hello" | opsctl exec web-server -- cat
 opsctl exec web-server -- cat /etc/nginx/nginx.conf | grep upstream
 opsctl exec web-server -- test -f /opt/app/config.yml && echo "exists"
 
-# Use with an explicit session
-opsctl --session $ID exec web-01 -- systemctl restart nginx
+# A human can pre-authorize a reusable pattern, then automation can retry
+opsctl policy allow web-01 -- 'systemctl restart *'
 ```

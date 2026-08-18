@@ -20,12 +20,12 @@ React 前端 ── Wails IPC/事件 ── internal/app 绑定层
                                       ▼
                               internal/repository ── GORM/SQLite
 
-opsctl ── approval.sock / sshpool.sock ── 运行中的桌面应用
+opsctl ── 可选 approval.sock / sshpool.sock ── 运行中的桌面应用
 扩展 ── wazero WASM 运行时 ── 经过能力校验的宿主函数
 ```
 
 - 桌面进程负责数据库、凭据服务、连接池、AI 运行器、审批服务和扩展运行时。
-- `opsctl` 与应用共享数据和业务辅助模块。桌面应用运行时，它可以通过本地 Unix 域套接字请求审批并复用 SSH 连接池；应用离线时，支持的命令可以回退为直连。
+- `opsctl` 与应用共享数据和业务服务。交互调用在当前终端审批；非交互调用可在桌面可达时请求桌面审批。桌面离线时，内建协议可以直连；`ext exec` 因 WASM 运行时仍位于桌面进程而安全失败。
 - `cmd/devserver` 是仅用于扩展开发的调试工具，带有本地 HTTP/WebSocket 接口；它不是正式桌面应用的通信方式。
 
 ## 后端分层
@@ -50,7 +50,7 @@ internal/app（IPC 边界）→ internal/service（业务逻辑）
 
 ## AI、策略与审计
 
-`internal/ai/` 下的 AI 子系统为受支持的资产操作注册工具。操作执行前，对应策略类型可以返回 `Allow`、`Deny` 或 `NeedConfirm`；审批授权可以允许后续匹配的操作。工具执行会连同来源和决策详情写入审计日志。
+`internal/ai/` 下的 AI 子系统为受支持的资产操作注册工具。操作执行前，对应策略类型可以返回 `Allow`、`Deny` 或 `NeedConfirm`；永久规则和仍有效的 grant 可以授权匹配操作。`opsctl policy` 提供只读检查和由真人操作的规则/权限组管理。工具执行会连同来源和决策详情写入审计日志。
 
 内置策略类型目前覆盖 shell 命令、SQL、Redis、MongoDB、Kafka、Kubernetes、etcd 和对象存储。交互式 RDP 与 VNC 目前没有自己的策略类型。所有资产类型都没有专用的 `opsctl` 操作命令 —— 统一走 `opsctl exec`，由资产的真实类型决定派发。
 

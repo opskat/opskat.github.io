@@ -21,7 +21,9 @@ opsctl ext list
 opsctl ext exec <extension> <tool> --args '<json>'
 ```
 
-桌面应用运行时，`opsctl` 通过 `approval.sock` 把调用委托给应用中已安装的扩展运行时。这条 `ext_tool` 委托路径会在扩展运行时中直接执行，不会显示常规审批对话框。无法连接应用时，`opsctl` 可以在本地加载并运行已安装的 WASM 扩展；两条路径都会执行清单能力校验。
+`opsctl` 通过 `approval.sock` 把调用委托给桌面应用中已安装的扩展运行时。这条 `ext_tool` 路径会在扩展运行时中直接执行，不显示常规审批对话框。
+
+`ext exec` 必须依赖桌面应用：opsctl 自身不包含离线 WASM 运行时。无法连接桌面时，命令会安全失败，不会在本地加载或执行扩展。
 
 ```bash
 opsctl ext exec example list_items --args '{"asset_id":1}'

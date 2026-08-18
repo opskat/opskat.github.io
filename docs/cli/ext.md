@@ -21,7 +21,9 @@ The command scans the configured extensions directory and prints JSON containing
 opsctl ext exec <extension> <tool> --args '<json>'
 ```
 
-When the desktop app is running, `opsctl` delegates the call through `approval.sock` to the app's installed extension runtime. This delegated `ext_tool` path executes directly in that runtime; it does not display the normal approval dialog. If the app cannot be reached, `opsctl` can load and run the installed WASM extension locally. Manifest capability checks still apply in both paths.
+`opsctl` delegates the call through `approval.sock` to the desktop app's installed extension runtime. This delegated `ext_tool` path executes directly in that runtime; it does not display the normal approval dialog.
+
+The desktop app is required for `ext exec`: opsctl does not contain an offline WASM runtime. If the app cannot be reached, the command fails closed instead of loading or executing the extension locally.
 
 ```bash
 opsctl ext exec example list_items --args '{"asset_id":1}'

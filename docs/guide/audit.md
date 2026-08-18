@@ -5,7 +5,7 @@ sidebar_label: Audit
 
 # Audit & Approval
 
-OpsKat records AI and `opsctl` tool executions with their source, result, and available policy-decision context. The approval workflow provides controlled access for CLI operations, and the grant system enables command-pattern pre-approval.
+OpsKat records AI and `opsctl` tool executions with their source, result, and available policy-decision context. Permanent policy rules, still-valid grants, and human approval provide controlled access for CLI operations.
 
 ## Audit Logging
 
@@ -48,6 +48,15 @@ The audit log viewer in the desktop app provides:
 - **Session filtering** — View all actions within a specific session
 - **Detail view** — Inspect the stored request and result, subject to the 4KB / 32KB audit truncation limits
 
+The read-only CLI view works without the desktop app or an interactive terminal:
+
+```bash
+opsctl list audit
+opsctl list audit --asset web-01 --limit 50
+```
+
+Rows are displayed newest first and exactly as stored, including time, source, asset, tool, command summary, and decision source.
+
 ## Audit Payload Boundaries
 
 Audit payloads are raw by default: the audit writer stores the command, request, result, error, and matched pattern it receives instead of scanning their contents and replacing suspected values with `<redacted>`. Existing command canonicalization, limited output buffers, and the 4KB / 32KB truncation limits still apply, so this is not a byte-for-byte forensic transcript.
@@ -58,16 +67,16 @@ Direct execution and approval surfaces are different boundaries. Tool input/outp
 
 ## Approval Workflow
 
-When the `opsctl` CLI is used while the desktop app is running, operations that require approval are routed through the app's UI.
+An interactive `opsctl` invocation asks for approval in the current terminal. When opsctl is non-interactive and the desktop app is running, operations that need confirmation can be routed through the app's UI.
 
 ### How It Works
 
-1. `opsctl` sends an approval request via a Unix socket (`<data-dir>/approval.sock`).
-2. The desktop app displays an approval dialog showing the operation details.
-3. The user reviews and approves or denies.
-4. The response is sent back to `opsctl`, which proceeds or aborts.
+1. Permanent deny and allow rules are evaluated first, followed by still-valid grants.
+2. With a TTY, opsctl displays the operation and asks the user to allow once, permanently allow when supported, or deny.
+3. Without a TTY, opsctl can send a request through `<data-dir>/approval.sock` when the desktop app is available.
+4. With neither approval path, rule-capable operations emit `NEEDS AUTHORIZATION`; asset mutation operations emit `NEEDS TTY`. Both use exit code 3.
 
-This applies to CLI commands including `exec`, `cp`, `batch`, `create`, `update`, `delete`, and `grant`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its current handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog.
+This applies to CLI commands including `exec`, `cp`, `batch`, `create`, `update`, and `delete`, according to the command's approval path. Extension-tool delegation also travels over `approval.sock`, but its handler executes directly in the desktop extension runtime rather than displaying the normal approval dialog; `ext exec` fails closed when the app is unavailable.
 
 ### Approval Types
 
@@ -93,39 +102,12 @@ The remaining operations carry a fixed type:
 | `create` | Creating a new asset or group |
 | `update` | Updating an existing asset or group |
 | `delete` | Deleting an asset or group — always confirmed, never pre-approvable |
-| `grant` | Submitting command patterns for pre-approval |
 | `batch` | Approving multiple supported operations together |
 
-## Grant System
+## Grants and Permanent Rules
 
-The grant system lets you pre-approve command patterns so that subsequent matching commands are auto-approved, reducing repetitive confirmations.
+The desktop approval flow can save a reusable grant for its internal, data-directory-scoped session. opsctl can inspect and revoke still-valid grants through `policy show` and `policy rm`, but it does not provide a command to create temporary grants.
 
-### Submitting Grants
+For durable pre-authorization, a human runs `opsctl policy allow` in an interactive terminal. Policy writes are individually audited. AI and other non-interactive callers cannot run policy writes: they receive `NEEDS TTY`.
 
-Grants can be submitted from two places:
-
-1. **AI Agent** — The `request_permission` tool submits command patterns with a reason.
-2. **opsctl CLI** — `opsctl grant submit` submits patterns from the command line.
-
-Example from `opsctl`:
-
-```bash
-opsctl grant submit 1 "cat /var/log/*" "systemctl * nginx"
-```
-
-### Grant Lifecycle
-
-1. A `GrantSession` is created with status **pending** and one or more `GrantItem` records (each specifying an asset and command pattern).
-2. The desktop app shows an approval dialog where the user can review and **edit** the patterns before approving.
-3. Once approved, the grant session status changes to **approved**.
-4. Subsequent `exec` calls matching any approved pattern are auto-approved (decision source: `grant_allow`).
-
-Grant items support `*` wildcard matching (e.g., `cat /var/log/*` matches `cat /var/log/syslog`). Approved grant items are **not consumed** — they persist for the entire session and can match multiple commands.
-
-## opsctl Session Management
-
-The `opsctl session` command manages approval sessions:
-
-- Sessions group related operations together
-- All actions within a session share the same session ID in audit logs
-- Grant items are scoped to their grant session
+Sessions remain an internal implementation detail, are reused per data directory, and expire after 24 hours. There are no `opsctl session` subcommands or public session flags.

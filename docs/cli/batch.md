@@ -5,7 +5,7 @@ sidebar_label: batch
 
 # opsctl batch
 
-Execute multiple commands in parallel with a single approval request. A single batch can mix any asset types — SSH, database, Redis, MongoDB, etcd, Kafka, Kubernetes, and more. Each command is written in the syntax for its asset's type; see [`opsctl exec`](./exec.md#command-syntax-per-asset-type) or run `opsctl help <asset>`.
+Execute multiple commands in parallel with a single authorization decision. A single batch can mix any asset types — SSH, database, Redis, MongoDB, etcd, Kafka, Kubernetes, and more. Each command is written in the syntax for its asset's type; see [`opsctl exec`](./exec.md#command-syntax-per-asset-type) or run `opsctl help <asset>`.
 
 ## Syntax
 
@@ -84,16 +84,17 @@ Structured JSON with per-command results. The `type` field echoes back the type 
 **Exit code:**
 - `0` — batch mechanism succeeded (even if individual commands failed; check per-result `exit_code` and `error`)
 - `1` — all commands failed, or batch-level error (parsing, all denied)
+- `3` — authorization or an interactive terminal is required
 
 ## Approval
 
 The batch command uses a dedicated approval flow:
 
 1. **Policy pre-check** — each command is individually checked against the asset's policy (allow-list / deny-list). Auto-allowed commands skip approval; auto-denied commands are reported in output with an error.
-2. **Single batch approval** — all remaining commands that need confirmation are presented in a single approval dialog in the desktop app, listing each command with its type badge.
+2. **Single batch approval** — an interactive invocation presents all remaining commands once in the terminal. A non-interactive invocation can use the desktop approval dialog when available.
 3. **Parallel execution** — after approval, all commands execute concurrently (up to 10 in parallel).
 
-When the desktop app is offline, only commands matching policy or grant patterns are executed; the rest are denied with hints about allowed commands.
+With neither a terminal nor the desktop app, unresolved commands stop the batch with exit code 3 and `NEEDS AUTHORIZATION`, followed by paste-ready `opsctl policy allow` commands. A human must run them interactively before retrying the batch.
 
 ## Examples
 
@@ -108,8 +109,8 @@ opsctl batch \
   'redis:cache:INFO server' \
   'k8s:prod-cluster:get nodes'
 
-# Use with explicit session
-opsctl --session $ID batch '1:uptime' '2:hostname'
+# A human can pre-authorize patterns before automation runs the batch
+opsctl policy allow 1 2 -- uptime hostname
 
 # JSON input for complex queries
 cat <<'EOF' | opsctl batch

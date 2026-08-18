@@ -20,12 +20,12 @@ React frontend ── Wails IPC/events ── internal/app bindings
                                       ▼
                               internal/repository ── GORM/SQLite
 
-opsctl ── approval.sock / sshpool.sock ── running desktop app
+opsctl ── optional approval.sock / sshpool.sock ── running desktop app
 extensions ── wazero WASM runtime ── capability-checked host functions
 ```
 
 - The desktop process owns the database, credential services, connection pools, AI runner, approval server, and extension runtime.
-- `opsctl` shares the application data and business helpers. When the app is running, it can request approval and reuse pooled SSH connections through local Unix-domain sockets; supported commands can fall back to direct connections when it is offline.
+- `opsctl` shares application data and business services. Interactive invocations ask for approval in the current terminal; non-interactive invocations can request desktop approval when available. Built-in protocol commands can connect directly while the app is offline, while `ext exec` fails closed because its WASM runtime remains in the desktop process.
 - `cmd/devserver` is a development-only extension harness with a local HTTP/WebSocket interface. It is not the shipped desktop application's transport.
 
 ## Backend Layers
@@ -50,7 +50,7 @@ State is organized by domain in `frontend/src/stores/`. Asset-type UI is registe
 
 ## AI, Policy, and Audit
 
-The AI subsystem under `internal/ai/` registers tools for supported asset operations. Before an operation runs, its policy kind can produce `Allow`, `Deny`, or `NeedConfirm`; approval grants can authorize later matching operations. Tool execution is audited with its source and decision details.
+The AI subsystem under `internal/ai/` registers tools for supported asset operations. Before an operation runs, its policy kind can produce `Allow`, `Deny`, or `NeedConfirm`; permanent rules and still-valid grants can authorize matching operations. `opsctl policy` provides read-only inspection plus human-operated rule and policy-group management. Tool execution is audited with its source and decision details.
 
 Built-in policy kinds currently cover shell commands, SQL, Redis, MongoDB, Kafka, Kubernetes, etcd, and object storage. Interactive RDP and VNC do not currently add their own policy kinds. No asset type has a dedicated `opsctl` operation command — they all run through `opsctl exec`, which dispatches on the asset's real type.
 
