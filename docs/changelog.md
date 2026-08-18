@@ -5,6 +5,29 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.13.0 (2026-08-19)
+
+This release ships two core capabilities: **automated asset credentials** — assets created by AI now get managed credentials wired up automatically (SSH managed auth), with tightened AI/audit data boundaries so credential secrets never reach AI context, approvals, or audit logs; and **standalone opsctl approvals** — approvals can be completed from the terminal, headless runs without the desktop get structured rejections, plus new policy and audit CLIs. MongoDB assets also gain a legacy compatibility mode (v1 driver), and the asset tree can copy asset references as Markdown to paste into AI chats.
+
+### 🚀 Major New Features
+
+- 💥 Asset credential automation and AI/audit data boundaries: assets created via AI get managed credentials configured automatically (SSH managed-auth automation); secrets only flow through unified projections and never reach AI context, approvals, or audit ([#286](https://github.com/opskat/opskat/pull/286)) (by @CodFrm)
+- 💥 Standalone opsctl approvals: a terminal approver, structured rejection (exit code 3) when there is no TTY and no desktop, the `opsctl policy` rule/group family, and a read-only `opsctl list audit` entry ([#290](https://github.com/opskat/opskat/pull/290)) (by @CodFrm)
+- ✨ MongoDB assets support a legacy compatibility mode (v1 driver) ([#292](https://github.com/opskat/opskat/pull/292)) (by @wzshuang)
+- ✨ Copy asset references as Markdown, resolvable in AI and opsctl; pasting into the chat box turns them into mentions ([#291](https://github.com/opskat/opskat/pull/291)) (by @Pililink)
+- ✨ `exec --type` accepts driver-name aliases (mysql/postgres, validated against the asset's driver) and adds db/kubernetes synonyms ([#281](https://github.com/opskat/opskat/pull/281)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fix every SSH Agent key showing the same usage count [#278](https://github.com/opskat/opskat/issues/278) ([#280](https://github.com/opskat/opskat/pull/280)) (by @CodFrm)
+- 🐛 Fix toasts ignoring the user's light/dark theme choice and following the system instead ([#282](https://github.com/opskat/opskat/pull/282)) (by @CodFrm)
+- 🐛 Fix SSH key backups omitting the passphrase (by @CodFrm)
+- 🐛 Fix long text overflowing key and multi-line input layouts (by @CodFrm)
+- 🐛 Running tasks no longer block app exit (by @CodFrm)
+- 🐛 Respect the user's chosen high-risk denial policy (by @CodFrm)
+
+**Full Changelog**: [v1.12.1...v1.13.0](https://github.com/opskat/opskat/compare/v1.12.1...v1.13.0)
+
 ## v1.12.1 (2026-08-10)
 
 Fixes washed-out UI on older WebView2 runtimes and makes SFTP transfers substantially faster.

@@ -5,6 +5,29 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.13.0 (2026-08-19)
+
+本次版本带来两项核心能力：**资产凭据全面自动化**——AI 创建资产时自动配置托管凭据（SSH 托管认证），并收紧 AI / 审计数据边界，凭据机密不再进入 AI 上下文、审批与审计；**opsctl 独立审批**——审批人可在终端完成审批，无桌面在场时结构化拒绝，并新增 policy / audit CLI。此外 MongoDB 资产新增旧版兼容模式（v1 驱动），资产树支持复制 Markdown 引用粘贴进 AI 对话。
+
+### 🚀 主要新功能
+
+- 💥 资产凭据自动化与 AI / Audit 数据边界：AI 创建资产自动配置托管凭据（SSH 托管认证自动化），秘密经统一投影边界，不再进入 AI 上下文、审批与审计 ([#286](https://github.com/opskat/opskat/pull/286)) (by @CodFrm)
+- 💥 opsctl 独立审批：终端审批人、无 TTY 无桌面时结构化拒绝（退出码 3），新增 policy 规则/权限组家族与 `opsctl list audit` 只读审计入口 ([#290](https://github.com/opskat/opskat/pull/290)) (by @CodFrm)
+- ✨ MongoDB 资产支持旧版兼容模式（v1 驱动） ([#292](https://github.com/opskat/opskat/pull/292)) (by @wzshuang)
+- ✨ 支持复制资产 Markdown 引用并在 AI / opsctl 中解析，粘贴进聊天框转为 mention ([#291](https://github.com/opskat/opskat/pull/291)) (by @Pililink)
+- ✨ `exec --type` 支持驱动名别名（mysql / postgres 等，带驱动约束校验），并补 db / kubernetes 同义词 ([#281](https://github.com/opskat/opskat/pull/281)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 修复 SSH Agent 每把密钥显示相同使用资产数 [#278](https://github.com/opskat/opskat/issues/278) ([#280](https://github.com/opskat/opskat/pull/280)) (by @CodFrm)
+- 🐛 修复 Toaster 不跟随用户选择的明暗主题（深色系统下选浅色时 toast 跟随系统） ([#282](https://github.com/opskat/opskat/pull/282)) (by @CodFrm)
+- 🐛 修复 SSH 密钥备份遗漏 passphrase (by @CodFrm)
+- 🐛 修复长文本撑破密钥 / 多行输入框布局 (by @CodFrm)
+- 🐛 避免运行中的任务阻塞应用退出 (by @CodFrm)
+- 🐛 尊重用户选择的高危拒绝策略 (by @CodFrm)
+
+**完整更新记录**: [v1.12.1...v1.13.0](https://github.com/opskat/opskat/compare/v1.12.1...v1.13.0)
+
 ## v1.12.1 (2026-08-10)
 
 修复旧版 WebView2 下界面失色的问题，并大幅提升 SFTP 传输速度。
