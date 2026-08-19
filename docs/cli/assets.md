@@ -41,21 +41,21 @@ The supported secret/reference inputs are mutually exclusive:
 
 | Input | Behavior |
 |---|---|
-| `--password-stdin` | Reads plaintext from standard input without a prompt or echo. This is the recommended plaintext path. |
-| `--password <value>` | Accepts plaintext in argv and prints a warning because the value may be exposed in shell history, process listings, or CI logs. |
+| `--password` (bare) | Prompts for the plaintext in your terminal and reads it without echo. This is the recommended plaintext path. It needs an interactive terminal: without one the command exits with code 3 and a `NEEDS TTY` marker telling you to run it yourself. |
+| `--password <value>` | Accepts plaintext in argv and prints a warning because the value may be exposed in shell history, process listings, or CI logs. `--password=<value>` is equivalent, and is required when the value starts with `-`. |
 | `--credential-id <id>` | Reuses an existing compatible managed password or SSH-key credential. |
 | `--agent-source-id <id>` with `--agent-key-fingerprint <fingerprint>` | Selects an existing SSH Agent source and identity for SSH Agent authentication. |
 
 For example:
 
 ```bash
-printf '%s\n' "$APP_PASSWORD" | \
-  opsctl create asset --type redis --name cache \
-    --config '{"host":"redis.internal","username":"default"}' \
-    --password-stdin
+opsctl create asset --type redis --name cache \
+  --config '{"host":"redis.internal","username":"default"}' \
+  --password
+# Password: (typed in your terminal, never echoed)
 ```
 
-Plaintext supplied through `--password-stdin`, `--password`, or an accepted JSON secret field is encrypted in the asset. It does **not** create a reusable managed credential. Create managed passwords and SSH keys explicitly in the desktop key manager, then reference them with `--credential-id`.
+Plaintext supplied through `--password`, or an accepted JSON secret field, is encrypted in the asset. It does **not** create a reusable managed credential. Create managed passwords and SSH keys explicitly in the desktop key manager, then reference them with `--credential-id`.
 
 Do not put SSH private keys or passphrases into automation configuration. Import the key in the desktop key manager and reference its credential ID. Kubernetes kubeconfig remains encrypted directly in the asset. Asset types without password authentication reject password inputs.
 

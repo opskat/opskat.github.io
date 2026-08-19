@@ -63,7 +63,7 @@ Audit payloads are raw by default: the audit writer stores the command, request,
 
 Some producers own a narrower write-only contract. AI/opsctl `put_asset`, desktop asset changes, and external-edit metadata write explicit allowlisted projections. For asset creation and updates, password, Secret Access Key, kubeconfig, private-key, and passphrase fields are omitted from the audit request; they do not appear as placeholder values. Safe asset and credential queries likewise return narrow metadata DTOs and never expose password, private-key, passphrase, token, kubeconfig, or SSH Agent endpoint values.
 
-Direct execution and approval surfaces are different boundaries. Tool input/output, command history, errors, and approval subjects preserve the content supplied to those surfaces. Do not pass secrets in commands or arguments on the assumption that Audit or the UI will redact them. Prefer managed credential references or a command's documented standard-input secret path, such as [`opsctl create asset --password-stdin`](/docs/cli/assets#passwords-and-authentication-references).
+Direct execution and approval surfaces are different boundaries. Tool input/output, command history, errors, and approval subjects preserve the content supplied to those surfaces. Do not pass secrets in commands or arguments on the assumption that Audit or the UI will redact them. Prefer managed credential references or a command's documented no-echo secret path, such as [a bare `opsctl create asset --password`](/docs/cli/assets#passwords-and-authentication-references), which prompts in your terminal instead of taking the value from argv.
 
 ## Approval Workflow
 

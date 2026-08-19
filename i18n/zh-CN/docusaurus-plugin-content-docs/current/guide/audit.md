@@ -24,7 +24,7 @@ opsctl list audit --asset web-01 --limit 50
 
 审计写入默认不会扫描命令、请求、结果或错误并猜测其中的秘密；请求最多保留 4KB，结果最多保留 32KB。资产创建/更新以及安全资产/凭据查询使用窄字段投影，不写入密码、Secret Access Key、kubeconfig、私钥或 passphrase。
 
-不要假设审计或 UI 会替命令参数脱敏。优先使用托管凭据引用或命令明确提供的标准输入秘密通道，例如 [`opsctl create asset --password-stdin`](/docs/cli/assets#密码与认证引用)。
+不要假设审计或 UI 会替命令参数脱敏。优先使用托管凭据引用或命令明确提供的无回显输入通道，例如[不带值的 `opsctl create asset --password`](/docs/cli/assets#密码与认证引用)——它在终端里提示输入，不经过 argv。
 
 ## opsctl 审批流程
 

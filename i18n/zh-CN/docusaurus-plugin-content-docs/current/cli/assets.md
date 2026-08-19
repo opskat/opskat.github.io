@@ -41,21 +41,21 @@ opsctl create asset \
 
 | 输入 | 行为 |
 |---|---|
-| `--password-stdin` | 从标准输入读取明文，不显示提示也不回显；这是推荐的明文输入方式。 |
-| `--password <value>` | 从 argv 接收明文，并警告该值可能暴露在 Shell 历史、进程列表或 CI 日志中。 |
+| `--password`（不带值） | 在终端里提示输入明文，输入过程不回显；这是推荐的明文输入方式。它需要交互式终端，没有终端时命令以退出码 3 和 `NEEDS TTY` 标记结束，并提示你自己去终端里执行。 |
+| `--password <value>` | 从 argv 接收明文，并警告该值可能暴露在 Shell 历史、进程列表或 CI 日志中。`--password=<value>` 等价；值以 `-` 开头时必须用这种写法。 |
 | `--credential-id <id>` | 复用已有且类型兼容的托管密码或 SSH 密钥凭据。 |
 | `--agent-source-id <id>` 与 `--agent-key-fingerprint <fingerprint>` | 为 SSH Agent 认证选择已有 Agent 来源和身份。 |
 
 例如：
 
 ```bash
-printf '%s\n' "$APP_PASSWORD" | \
-  opsctl create asset --type redis --name cache \
-    --config '{"host":"redis.internal","username":"default"}' \
-    --password-stdin
+opsctl create asset --type redis --name cache \
+  --config '{"host":"redis.internal","username":"default"}' \
+  --password
+# 密码：（在终端里输入，不回显）
 ```
 
-通过 `--password-stdin`、`--password` 或允许的 JSON 秘密字段传入的明文会加密到资产中，**不会**隐式创建可复用的托管凭据。请先在桌面端密钥管理器中显式创建托管密码或导入 SSH 密钥，再通过 `--credential-id` 引用。
+通过 `--password` 或允许的 JSON 秘密字段传入的明文会加密到资产中，**不会**隐式创建可复用的托管凭据。请先在桌面端密钥管理器中显式创建托管密码或导入 SSH 密钥，再通过 `--credential-id` 引用。
 
 不要把 SSH 私钥或 passphrase 放进自动化配置。应先在桌面端密钥管理器中导入密钥，再引用其凭据 ID。Kubernetes kubeconfig 仍直接加密在资产中。不使用密码认证的资产类型会拒绝密码输入。
 
