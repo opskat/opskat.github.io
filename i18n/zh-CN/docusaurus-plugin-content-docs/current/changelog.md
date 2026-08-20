@@ -5,6 +5,20 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.13.1 (2026-08-20)
+
+本次版本改进了 opsctl 的密码输入体验，并修复 Redis key 搜索的匹配行为。opsctl 现在可通过裸写 `--password` 在终端中安全地无回显输入密码；Redis key 搜索会正确区分精确 key 与通配符 pattern。
+
+### 🚀 主要新功能
+
+- ✨ opsctl 密码入口收敛为单个 `--password`：裸写参数时在 TTY 中无回显交互输入；无 TTY 时返回结构化 `NEEDS TTY` 拒绝；继续支持 `--password <value>` 与 `--password=<value>` 明文形式 (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 修复 Redis key 搜索 pattern 匹配：无通配符时执行精确 key 查询，包含 `*`、`?` 或 `[` 时使用 `SCAN MATCH`，空过滤条件规范化为 `*` ([#293](https://github.com/opskat/opskat/pull/293)) (by @moonmicah)
+
+**完整更新记录**: [v1.13.0...v1.13.1](https://github.com/opskat/opskat/compare/v1.13.0...v1.13.1)
+
 ## v1.13.0 (2026-08-19)
 
 本次版本带来两项核心能力：**资产凭据全面自动化**——AI 创建资产时自动配置托管凭据（SSH 托管认证），并收紧 AI / 审计数据边界，凭据机密不再进入 AI 上下文、审批与审计；**opsctl 独立审批**——审批人可在终端完成审批，无桌面在场时结构化拒绝，并新增 policy / audit CLI。此外 MongoDB 资产新增旧版兼容模式（v1 驱动），资产树支持复制 Markdown 引用粘贴进 AI 对话。

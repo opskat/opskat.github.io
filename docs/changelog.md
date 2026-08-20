@@ -5,6 +5,20 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.13.1 (2026-08-20)
+
+This release improves the opsctl password-entry experience and fixes Redis key-search matching. opsctl can now prompt securely without echo when `--password` is provided without a value, while Redis key search correctly distinguishes exact keys from wildcard patterns.
+
+### 🚀 Major New Features
+
+- ✨ Consolidate opsctl password input into a single `--password` option: providing it without a value prompts without echo in a TTY; non-TTY usage returns a structured `NEEDS TTY` rejection; the plaintext `--password <value>` and `--password=<value>` forms remain supported (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fix Redis key-search pattern matching: filters without wildcards use an exact-key lookup, filters containing `*`, `?`, or `[` use `SCAN MATCH`, and empty filters normalize to `*` ([#293](https://github.com/opskat/opskat/pull/293)) (by @moonmicah)
+
+**Full Changelog**: [v1.13.0...v1.13.1](https://github.com/opskat/opskat/compare/v1.13.0...v1.13.1)
+
 ## v1.13.0 (2026-08-19)
 
 This release ships two core capabilities: **automated asset credentials** — assets created by AI now get managed credentials wired up automatically (SSH managed auth), with tightened AI/audit data boundaries so credential secrets never reach AI context, approvals, or audit logs; and **standalone opsctl approvals** — approvals can be completed from the terminal, headless runs without the desktop get structured rejections, plus new policy and audit CLIs. MongoDB assets also gain a legacy compatibility mode (v1 driver), and the asset tree can copy asset references as Markdown to paste into AI chats.
