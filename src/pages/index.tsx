@@ -21,7 +21,7 @@ export default function Home() {
           "One cross-platform desktop app for SSH, RDP, databases, object storage, Redis, Kafka and Kubernetes — with policy, audit and an optional AI assistant.",
       })}
     >
-      <main className="landing-page relative overflow-hidden">
+      <main className="landing-page relative overflow-x-hidden">
         <div className="relative z-10">
           <Hero />
           <ValueBand />
