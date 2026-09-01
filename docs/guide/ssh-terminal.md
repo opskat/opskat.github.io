@@ -5,13 +5,24 @@ sidebar_label: SSH Terminal
 
 # SSH Terminal
 
-OpsKat provides a full-featured SSH terminal with split pane, SFTP file browsing, jump host chains, port forwarding, and proxy chains.
+OpsKat provides a full-featured SSH terminal with split pane, SFTP file browsing, startup commands, jump host chains, port forwarding, and proxy chains.
 
 ## Connecting to Assets
 
 Select an SSH asset from the sidebar and click **Connect** (or double-click). A terminal session opens in a new tab. Credentials are resolved automatically from the encrypted credential store.
 
 Multiple sessions can be open simultaneously in separate tabs.
+
+## Startup Commands
+
+An SSH asset can run commands automatically once its interactive shell is ready. Set **Run command after connecting** in the asset's advanced SSH configuration; multiple commands are separated by line breaks.
+
+- Commands run on every connect *and* every reconnect, and in every split pane of the session.
+- They are dispatched after the shell has settled, so the shell — not the line discipline — executes them.
+- With **Restore last directory on reconnect** also enabled, the directory is restored first and the commands run afterwards.
+- A command that cannot be written is logged as a warning; it does not tear down an established terminal.
+
+Leaving the field empty stores nothing on the asset.
 
 ## Split Pane
 

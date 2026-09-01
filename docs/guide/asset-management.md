@@ -19,6 +19,7 @@ SSH server assets for terminal access, command execution, and file transfer.
 - **Port** — SSH port (default: 22)
 - **Username** — Login user
 - **Auth Type** — `password`, `key`, or `agent` (SSH Agent; pick the agent source and identity)
+- **Run command after connecting** — Optional commands executed once the interactive shell is ready, one per line (see [Startup Commands](/docs/guide/ssh-terminal#startup-commands))
 - **Connection** — Direct, or an ordered proxy chain whose layers can be SSH jump hosts, SOCKS5 proxies, and HTTP tunnels (mix and order them freely)
 
 ### Local Terminal
@@ -48,6 +49,7 @@ VNC assets open an embedded RFB remote-desktop session through the [VNC client](
 - **Username** — Optional; only when the server requires one
 - **Password** — Stored encrypted, or a managed credential
 - **SSH/SFTP file channel** — Optional SSH asset carrying file transfer, which VNC itself has no channel for
+- **Encryption policy** — Required transport encryption for the session (see [Session Encryption](/docs/guide/vnc#session-encryption)); defaults to letting the server choose
 - **Connection** — Direct, or an ordered proxy chain of SSH-tunnel / SOCKS5 / HTTP-tunnel layers
 
 ### Database (MySQL / PostgreSQL / SQL Server / SQLite)
@@ -194,6 +196,8 @@ OpsKat supports importing assets from external sources and exporting your invent
 | **SSH Config** | Parse your `~/.ssh/config` file. Preview entries and select which ones to import. |
 | **Tabby** | Import from a [Tabby](https://tabby.sh/) configuration file. |
 | **WindTerm** | Import from a WindTerm session file. |
+| **RDP files** | Pick one or more `.rdp` connection files exported by Remote Desktop Connection (mstsc) and import them as RDP assets. |
+| **RDP spreadsheet** | Download the RDP template spreadsheet, fill in host, port, username, password and other fields, then bulk-import RDP assets from it. |
 
 When importing, you can preview entries before confirming, and choose whether to merge with existing assets. Restoring an OpsKat backup is done from the **Backup** tab in Settings, not the Import picker.
 
