@@ -5,6 +5,31 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.13.2 (2026-09-01)
+
+本次更新带来 SSH 连接后自动执行配置命令、RDP 资产批量导入（.rdp 文件与 Excel 模板）以及 VNC RA2 加密与服务器身份信任支持；同时修复了退出时误关闭活动会话、RDP 文件传输进度不准的问题，并让终端与面板中的技术内容支持原生选中复制。
+
+### 🚀 主要新功能
+
+- ✨ SSH 连接后自动执行配置命令 [#298](https://github.com/opskat/opskat/issues/298) ([#299](https://github.com/opskat/opskat/pull/299)) (by @jiongjiongJOJO)
+- ✨ 支持 .rdp 文件与 Excel 模板导入 RDP 资产 ([#295](https://github.com/opskat/opskat/pull/295)) (by @shanaiardor)
+- ✨ 通用安装支持列表加入 DeepSeek Harness ([#294](https://github.com/opskat/opskat/pull/294)) (by @Pililink)
+
+### 🔒 安全性改进
+
+- 🔒 支持 VNC RA2 加密策略与服务器身份信任 ([#300](https://github.com/opskat/opskat/pull/300)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 退出前展示活动任务与远程会话，避免误关闭正在运行的连接
+- 🐛 修复 RDP 原生文件传输进度显示
+
+### 🎨 UI 改进
+
+- 🎨 命令、路径、指纹等技术内容支持原生选中复制
+
+**完整更新记录**: [v1.13.1...v1.13.2](https://github.com/opskat/opskat/compare/v1.13.1...v1.13.2)
+
 ## v1.13.1 (2026-08-20)
 
 本次版本改进了 opsctl 的密码输入体验，并修复 Redis key 搜索的匹配行为。opsctl 现在可通过裸写 `--password` 在终端中安全地无回显输入密码；Redis key 搜索会正确区分精确 key 与通配符 pattern。

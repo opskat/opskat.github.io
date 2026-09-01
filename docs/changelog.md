@@ -5,6 +5,31 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.13.2 (2026-09-01)
+
+This release adds automatic startup commands for SSH sessions, bulk RDP asset import from `.rdp` files and an Excel template, and VNC RA2 encryption policies with durable server-identity trust. It also stops the app from closing active sessions unnoticed on quit, fixes RDP file-transfer progress, and makes technical content selectable and copyable natively.
+
+### 🚀 Major New Features
+
+- ✨ Run configured commands automatically after an SSH connection is established [#298](https://github.com/opskat/opskat/issues/298) ([#299](https://github.com/opskat/opskat/pull/299)) (by @jiongjiongJOJO)
+- ✨ Import RDP assets from `.rdp` files and an Excel template ([#295](https://github.com/opskat/opskat/pull/295)) (by @shanaiardor)
+- ✨ Add DeepSeek Harness to the general installation support list ([#294](https://github.com/opskat/opskat/pull/294)) (by @Pililink)
+
+### 🔒 Security
+
+- 🔒 Support VNC RA2 encryption policies and server-identity trust ([#300](https://github.com/opskat/opskat/pull/300)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Show active tasks and remote sessions before quitting, so running connections are not closed by accident
+- 🐛 Fix RDP native file-transfer progress reporting
+
+### 🎨 UI Improvements
+
+- 🎨 Make technical content such as commands, paths, and fingerprints natively selectable and copyable
+
+**Full Changelog**: [v1.13.1...v1.13.2](https://github.com/opskat/opskat/compare/v1.13.1...v1.13.2)
+
 ## v1.13.1 (2026-08-20)
 
 This release improves the opsctl password-entry experience and fixes Redis key-search matching. opsctl can now prompt securely without echo when `--password` is provided without a value, while Redis key search correctly distinguishes exact keys from wildcard patterns.
