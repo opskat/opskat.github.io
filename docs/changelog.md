@@ -5,6 +5,16 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.13.4 (2026-09-07)
+
+This release fixes how quitting is gated: only running work that would lose progress holds the app back, and idle remote sessions stay out of your way.
+
+### 🐛 Bug Fixes
+
+- 🐛 Quitting now prompts only for work still in progress (AI generation, opsctl tasks) — idle SSH / RDP / VNC sessions no longer block the app from closing. Confirming the prompt no longer skips persisting AI conversations, and an unresponsive frontend can no longer leave the window impossible to close (by @CodFrm)
+
+**Full Changelog**: [v1.13.3...v1.13.4](https://github.com/opskat/opskat/compare/v1.13.3...v1.13.4)
+
 ## v1.13.3 (2026-09-07)
 
 This release focuses on the database panel: query results gain row multi-selection and bulk delete, a table / read-only JSON view toggle with a row detail panel, and bulk table operations across databases from the sidebar tree. Measurement-driven optimizations to large-value rendering and selection re-renders take scrolling over 200 KB text columns from 2 fps to 22 fps. SSH-Agent forwarding also lands in this release.
