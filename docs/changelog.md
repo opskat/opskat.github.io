@@ -5,6 +5,29 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.13.3 (2026-09-07)
+
+This release focuses on the database panel: query results gain row multi-selection and bulk delete, a table / read-only JSON view toggle with a row detail panel, and bulk table operations across databases from the sidebar tree. Measurement-driven optimizations to large-value rendering and selection re-renders take scrolling over 200 KB text columns from 2 fps to 22 fps. SSH-Agent forwarding also lands in this release.
+
+### 🚀 Major New Features
+
+- 💥 The database result grid gains row multi-selection and bulk delete; both table data and SQL results can switch between the grid and a read-only JSON view with a row detail panel; the sidebar tree supports selecting tables across databases and opening / truncating / dropping them in bulk ([#305](https://github.com/opskat/opskat/pull/305)) (by @CodFrm)
+- ✨ Add SSH-Agent forwarding, letting remote sessions reuse keys held by the local ssh-agent [#302](https://github.com/opskat/opskat/issues/302) ([#303](https://github.com/opskat/opskat/pull/303)) (by @sgpublic)
+
+### ⚡️ Performance
+
+- ⚡️ Speed up the database grid and file list: cap the text rendered for large cell values, memoize cells so selecting one no longer re-renders the whole table, and drop redundant recomputation in list rendering ([#304](https://github.com/opskat/opskat/pull/304)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 A server configured with `AllowAgentForwarding no` no longer breaks the whole terminal connection — forwarding now warns and continues. Agent forwarding dials the local agent per channel, so it recovers after a local ssh-agent restart, and a single stalled signing request no longer blocks the rest of the session (by @CodFrm)
+
+### 🔧 Other
+
+- 🔧 Add GPT-6 Astra and Claude 5.1 defaults for AI model context / output limits (by @CodFrm)
+
+**Full Changelog**: [v1.13.2...v1.13.3](https://github.com/opskat/opskat/compare/v1.13.2...v1.13.3)
+
 ## v1.13.2 (2026-09-01)
 
 This release adds automatic startup commands for SSH sessions, bulk RDP asset import from `.rdp` files and an Excel template, and VNC RA2 encryption policies with durable server-identity trust. It also stops the app from closing active sessions unnoticed on quit, fixes RDP file-transfer progress, and makes technical content selectable and copyable natively.

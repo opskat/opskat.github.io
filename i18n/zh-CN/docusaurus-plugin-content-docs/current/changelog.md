@@ -5,6 +5,29 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.13.3 (2026-09-07)
+
+本版本围绕数据库面板做了一轮体验与性能升级：查询结果支持行多选与批量删除、表格 / JSON 双视图与行详情面板，左树可跨库批量操作表；同时对大字段渲染、选中重渲等热点做了实测驱动的优化，200KB 级文本字段的表格滚动从 2 fps 提升到 22 fps。另外新增 SSH-Agent 转发能力。
+
+### 🚀 主要新功能
+
+- 💥 数据库结果网格支持行多选与批量删除，表数据与 SQL 结果可在表格 / 只读 JSON 之间切换并开出行详情面板，左树支持跨库多选表并批量打开 / 清空 / 删除 ([#305](https://github.com/opskat/opskat/pull/305)) (by @CodFrm)
+- ✨ 新增 SSH-Agent 转发功能，远端会话可直接复用本地 ssh-agent 中的密钥 [#302](https://github.com/opskat/opskat/issues/302) ([#303](https://github.com/opskat/opskat/pull/303)) (by @sgpublic)
+
+### ⚡️ 性能优化
+
+- ⚡️ 数据库表格与文件列表性能优化：单元格大字段限长渲染、单元格 memo 化避免选中时整表重渲、去掉列表的无谓重算 ([#304](https://github.com/opskat/opskat/pull/304)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 服务端配置 `AllowAgentForwarding no` 时不再导致终端整体连不上，改为告警后继续；Agent 转发改为每通道独立拨号，本地 ssh-agent 重启后转发可自动恢复，单个卡住的签名请求不再阻塞整个会话 (by @CodFrm)
+
+### 🔧 其它
+
+- 🔧 AI 模型默认上下文 / 输出参数补充 GPT-6 Astra 与 Claude 5.1 系列 (by @CodFrm)
+
+**完整更新记录**: [v1.13.2...v1.13.3](https://github.com/opskat/opskat/compare/v1.13.2...v1.13.3)
+
 ## v1.13.2 (2026-09-01)
 
 本次更新带来 SSH 连接后自动执行配置命令、RDP 资产批量导入（.rdp 文件与 Excel 模板）以及 VNC RA2 加密与服务器身份信任支持；同时修复了退出时误关闭活动会话、RDP 文件传输进度不准的问题，并让终端与面板中的技术内容支持原生选中复制。
