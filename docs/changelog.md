@@ -5,6 +5,23 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.13.5 (2026-09-11)
+
+This release brings a directory tree and a built-in file editor to the SFTP file panel: expand directories in place, edit remote text files right inside the app, and saving checks for changes made on the remote side. It also fixes three problems: Shell snippets couldn't run in local terminals, the asset-reference Ctrl/Cmd+C shortcut took over copying in content areas, and a standalone `allow *` had no effect on shell commands that can't be split into subcommands.
+
+### 🚀 Major New Features
+
+- 💥 The SFTP file panel becomes a tree that loads each directory when you open it: expand directories in place, a chain of directories that each hold only one subdirectory is merged into a single row, and files can be dropped onto deeper directories. A new built-in file editor opens remote text files in a tab in the main area when you double-click them, and ⌘S / Ctrl+S saves. If the file changed on the remote side, a conflict banner leads into compare / merge, and closing a tab with unsaved changes asks first [#308](https://github.com/opskat/opskat/issues/308) ([#310](https://github.com/opskat/opskat/pull/310)) (by @CodFrm)
+- ✨ The query result grid supports Ctrl/Cmd+C to copy the selected cells, rows, or columns, and supports pasting rows ([#311](https://github.com/opskat/opskat/pull/311)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Running a Shell snippet in a local terminal (e.g. PowerShell) no longer fails with `unsupported asset type local` [#301](https://github.com/opskat/opskat/issues/301) ([#309](https://github.com/opskat/opskat/pull/309)) (by @CodFrm)
+- 🐛 The Ctrl/Cmd+C shortcut for copying asset references now works only in the asset sidebar. It no longer takes over copying in content areas such as the query result grid and the SFTP file list, and copy / cut / paste works again in the SFTP file manager ([#311](https://github.com/opskat/opskat/pull/311)) (by @CodFrm)
+- 🐛 A standalone `allow *` in a command policy now also allows shell commands that can't be split into subcommands (they still need confirmation when specific deny rules exist). Approvals for these commands no longer offer an "Always allow" rule that could never match, and when opsctl refuses in a non-interactive environment it now tells you to fix the command ([#312](https://github.com/opskat/opskat/pull/312)) (by @CodFrm)
+
+**Full Changelog**: [v1.13.4...v1.13.5](https://github.com/opskat/opskat/compare/v1.13.4...v1.13.5)
+
 ## v1.13.4 (2026-09-07)
 
 This release fixes how quitting is gated: only running work that would lose progress holds the app back, and idle remote sessions stay out of your way.

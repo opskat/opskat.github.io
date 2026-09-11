@@ -5,6 +5,23 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.13.5 (2026-09-11)
+
+本版本为 SFTP 文件面板带来目录树与内置文件编辑器：目录可以就地展开，远程文本文件可以直接在应用内编辑，保存时会检测远端冲突。另外修复了本地终端无法运行 Shell 代码片段、内容区的 Ctrl/Cmd+C 被资产引用快捷键抢走，以及独立 `allow *` 对拆不出子命令的 shell 命令不起作用这三个问题。
+
+### 🚀 主要新功能
+
+- 💥 SFTP 文件面板改为按目录懒加载的树形视图：可以就地展开目录，只有一个子目录的目录链会合并成一行，也可以把文件拖到深层目录。新增内置文件编辑器：双击远程文本文件就会在主区的 tab 中打开，⌘S / Ctrl+S 保存；远端有变更时给出冲突提示，可以进入对比 / 合并；关闭有未保存改动的 tab 前会先确认 [#308](https://github.com/opskat/opskat/issues/308) ([#310](https://github.com/opskat/opskat/pull/310)) (by @CodFrm)
+- ✨ 查询结果表格支持用 Ctrl/Cmd+C 复制选中的单元格、行或列，也支持粘贴行 ([#311](https://github.com/opskat/opskat/pull/311)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 在本地终端（如 PowerShell）中运行 Shell 代码片段不再报 `unsupported asset type local` [#301](https://github.com/opskat/opskat/issues/301) ([#309](https://github.com/opskat/opskat/pull/309)) (by @CodFrm)
+- 🐛 复制资产引用的 Ctrl/Cmd+C 快捷键只在资产侧栏生效，不再抢走查询结果表格、SFTP 文件列表等内容区的复制，SFTP 文件管理器的复制 / 剪切 / 粘贴也恢复正常 ([#311](https://github.com/opskat/opskat/pull/311)) (by @CodFrm)
+- 🐛 命令策略里单独配置的 `allow *`，现在也会放行拆不出子命令的 shell 命令（有具体 deny 规则时仍需确认）。这类命令的审批不再提供永远匹配不上的“始终允许”，opsctl 在无交互环境下拒绝时会提示修正命令 ([#312](https://github.com/opskat/opskat/pull/312)) (by @CodFrm)
+
+**完整更新记录**: [v1.13.4...v1.13.5](https://github.com/opskat/opskat/compare/v1.13.4...v1.13.5)
+
 ## v1.13.4 (2026-09-07)
 
 本版本修正退出应用时的拦截逻辑：只有会丢进度的运行中任务才拦下退出，空闲的远程会话不再挡路。
