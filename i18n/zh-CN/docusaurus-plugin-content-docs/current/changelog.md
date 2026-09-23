@@ -5,6 +5,32 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.14.0 (2026-09-23)
+
+本版本让 opsctl 完整支持 SSH 二次验证（MFA）：遇到验证码挑战时可以用参数、终端或桌面弹窗作答，不再直接断开；桌面终端连接「密码 + 验证码」的服务器时也只需输入验证码。SFTP 传输改为并发流水线，高延迟链路上 `opsctl cp` 快了约 6 倍；opsctl 的远程操作不再依赖桌面端，关闭桌面端不会再截断正在执行的命令。另外 AI Provider 支持自定义请求头，解决了 OpenCode 等网关能识别模型却无法对话的问题。
+
+### 🚀 主要新功能
+
+- 💥 opsctl 支持 SSH MFA：新建 SSH 连接遇到二次验证时，依次用 `--mfa-code` / `OPSKAT_MFA_CODE`、交互终端提示、运行中桌面端的弹窗作答；都不可用时以退出码 3 输出 `NEEDS MFA`，便于脚本和 AI 向人索要验证码 [#322](https://github.com/opskat/opskat/issues/322) ([#323](https://github.com/opskat/opskat/pull/323)) (by @CodFrm)
+- ✨ AI Provider 支持自定义请求头，值中可写 `{{session}}` 展开为对话级的稳定标识；修复 OpenCode 等网关要求会话头导致「能识别模型但无法对话」的问题 [#314](https://github.com/opskat/opskat/issues/314) ([#316](https://github.com/opskat/opskat/pull/316)) (by @CodFrm)
+- ✨ 命令授权为 `*`（完全信任）后，同一资产上的 `cp` 文件传输也不再逐条弹出审批 ([#319](https://github.com/opskat/opskat/pull/319)) (by @CodFrm)
+
+### ⚡️ 性能优化
+
+- ⚡️ SFTP 传输改走并发流水线：高延迟链路上 `opsctl cp` 上传 / 下载 32MB 从约 7 秒降到约 1 秒，文件管理器远端粘贴和资产间 cp 也提速 3 倍以上；传输中途失败会清理不完整的文件 ([#317](https://github.com/opskat/opskat/pull/317)) (by @CodFrm)
+
+### ♻️ 重构与兼容性
+
+- ♻️ opsctl 的 exec / ssh / cp / batch 改为自行建立 SSH 连接，不再借道桌面端连接池：关闭桌面端不会再中断正在执行的命令，被截断的命令也不会再以退出码 0 结束。审批仍由桌面端完成 ([#318](https://github.com/opskat/opskat/pull/318)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 修复 Windows 下桌面审批连接失败（10022）：本地 IPC 改用仅当前用户可访问的命名管道。Windows 桌面端与 opsctl 需一起升级，并重启桌面端 ([#313](https://github.com/opskat/opskat/pull/313)) (by @yearliny)
+- 🐛 桌面终端连接「密码 + 验证码」的服务器时自动使用已保存的密码，只需输入验证码；跳板机、隧道等无法交互的连接遇到二次验证时明确报错，不再把密码误填进验证码提示 (by @CodFrm)
+- 🐛 opsctl 的全局参数（`--mfa-code`、`--data-dir`、`--master-key`）写在子命令之后也会生效，之前会被静默忽略（例如 `delete asset web --data-dir X` 实际作用于默认数据目录）；各子命令遇到无法识别的参数时报错，不再静默丢弃 (by @CodFrm)
+
+**完整更新记录**: [v1.13.5...v1.14.0](https://github.com/opskat/opskat/compare/v1.13.5...v1.14.0)
+
 ## v1.13.5 (2026-09-11)
 
 本版本为 SFTP 文件面板带来目录树与内置文件编辑器：目录可以就地展开，远程文本文件可以直接在应用内编辑，保存时会检测远端冲突。另外修复了本地终端无法运行 Shell 代码片段、内容区的 Ctrl/Cmd+C 被资产引用快捷键抢走，以及独立 `allow *` 对拆不出子命令的 shell 命令不起作用这三个问题。

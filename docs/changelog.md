@@ -5,6 +5,32 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.14.0 (2026-09-23)
+
+This release gives opsctl full support for SSH multi-factor authentication (MFA): when a server asks for a verification code, you can answer with a flag, in the terminal, or in a desktop dialog, instead of the connection being dropped. The desktop terminal also asks only for the verification code on servers that require a password plus a code. SFTP transfers now run as a concurrent pipeline, making `opsctl cp` about 6x faster on high-latency links, and opsctl remote operations no longer depend on the desktop app, so closing it no longer cuts off running commands. AI providers also gain custom request headers, fixing gateways such as OpenCode that could list models but not chat.
+
+### 🚀 Major New Features
+
+- 💥 opsctl supports SSH MFA: when a new SSH connection hits a second-factor challenge, opsctl answers it with `--mfa-code` / `OPSKAT_MFA_CODE`, then an interactive terminal prompt, then a dialog in the running desktop app. When none of these is available it exits with code 3 and prints `NEEDS MFA`, so scripts and AI agents know to ask a person for the code [#322](https://github.com/opskat/opskat/issues/322) ([#323](https://github.com/opskat/opskat/pull/323)) (by @CodFrm)
+- ✨ AI providers support custom request headers, and a value can contain `{{session}}`, which expands to an identifier that stays the same for the whole conversation. This fixes gateways such as OpenCode that require a session header and could list models but not chat [#314](https://github.com/opskat/opskat/issues/314) ([#316](https://github.com/opskat/opskat/pull/316)) (by @CodFrm)
+- ✨ Once a command grant is `*` (full trust), `cp` file transfers on the same asset no longer ask for approval one by one ([#319](https://github.com/opskat/opskat/pull/319)) (by @CodFrm)
+
+### ⚡️ Performance
+
+- ⚡️ SFTP transfers run as a concurrent pipeline: on a high-latency link, uploading or downloading 32MB with `opsctl cp` drops from about 7 seconds to about 1 second, and remote paste in the file manager and asset-to-asset cp are more than 3x faster. A transfer that fails partway cleans up the incomplete file ([#317](https://github.com/opskat/opskat/pull/317)) (by @CodFrm)
+
+### ♻️ Refactoring
+
+- ♻️ opsctl `exec` / `ssh` / `cp` / `batch` now open their own SSH connections instead of going through the desktop app's connection pool. Closing the desktop app no longer interrupts a running command, and a command that gets cut off no longer ends with exit code 0. Approval still happens in the desktop app ([#318](https://github.com/opskat/opskat/pull/318)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Fixed desktop approval failing to connect on Windows (error 10022): local IPC now uses named pipes that only the current user can access. On Windows, upgrade the desktop app and opsctl together and restart the desktop app ([#313](https://github.com/opskat/opskat/pull/313)) (by @yearliny)
+- 🐛 The desktop terminal now uses the saved password automatically on servers that require a password plus a verification code, so you only enter the code. Connections that can't prompt you, such as jump hosts and tunnels, now report a clear error when a server asks for a second factor, instead of sending the password to the verification-code prompt (by @CodFrm)
+- 🐛 opsctl global flags (`--mfa-code`, `--data-dir`, `--master-key`) now also work after the subcommand. Before, they were silently ignored there (for example, `delete asset web --data-dir X` acted on the default data directory). Subcommands now report an error for arguments they don't recognize instead of silently dropping them (by @CodFrm)
+
+**Full Changelog**: [v1.13.5...v1.14.0](https://github.com/opskat/opskat/compare/v1.13.5...v1.14.0)
+
 ## v1.13.5 (2026-09-11)
 
 This release brings a directory tree and a built-in file editor to the SFTP file panel: expand directories in place, edit remote text files right inside the app, and saving checks for changes made on the remote side. It also fixes three problems: Shell snippets couldn't run in local terminals, the asset-reference Ctrl/Cmd+C shortcut took over copying in content areas, and a standalone `allow *` had no effect on shell commands that can't be split into subcommands.
