@@ -5,6 +5,46 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.15.0 (2026-11-04)
+
+本版本上线扩展商店：官方签名索引、在线安装 / 更新，`opsctl ext search / install / update` 也能用；扩展可以给 SQL 数据库资产提供驱动，Oracle 与 Elasticsearch 都以扩展形式支持。新增「辅助审批」与「Autopilot」权限模式：命令先交给模型审核，只拦破坏数据、中断服务这类明确的危险操作，其余自动执行。Redis 资产支持集群与哨兵。另外还有表设计器、应用内网络代理、数据表 ⌘F 查找，以及 SQL 数据库读写全面改由驱动生成（修复 SQL Server 中文与 MySQL 反斜杠写入损坏）。
+
+> 扩展 ABI 在本版本重置为 1.0，1.14.0 时安装的扩展需要在扩展商店重新安装新版本。
+
+### 🚀 主要新功能
+
+- 💥 扩展商店：官方索引带签名校验，扩展包经 OCI 分发，支持在线安装与更新，安装前统一确认扩展申请的权限；opsctl 新增 `ext search` / `ext install` / `ext update`；下载镜像支持带路径前缀的地址，内置 katch.ggnb.top 镜像 ([#335](https://github.com/opskat/opskat/pull/335)) (by @CodFrm)
+- 💥 扩展可以为 SQL 数据库资产提供驱动：驱动专属字段、Kerberos 认证、跟随数据库重定向、证书 TLS 与语句切分分类；**Oracle（11.2 ~ 23ai）以扩展形式支持**，在扩展商店安装即可使用。扩展资产的 exec / batch 可在 opsctl 里独立运行，连接路径上要 MFA 的 SSH 跳板也能应答 [#329](https://github.com/opskat/opskat/issues/329) ([#346](https://github.com/opskat/opskat/pull/346), [#347](https://github.com/opskat/opskat/pull/347), [#348](https://github.com/opskat/opskat/pull/348), [#349](https://github.com/opskat/opskat/pull/349)) (by @CodFrm)
+- 💥 辅助审批与 Autopilot：服务器或分组可选权限模式。命令没被规则放行时先交给命令审核扩展审核，只拦明确的危险操作；辅助审批下未通过的转人工确认，Autopilot 下直接拒绝并把原因返回给 AI。默认模式与之前一样逐条问人 [#327](https://github.com/opskat/opskat/issues/327) ([#330](https://github.com/opskat/opskat/pull/330)) (by @Pililink)
+- ✨ Redis 资产支持集群与哨兵：部署模式可自动识别，跨节点浏览 key 并按节点路由命令，opsctl 新增 `--scope` 指定库或节点 ([#324](https://github.com/opskat/opskat/pull/324)) (by @CodFrm)
+- ✨ 表设计器：设计表、新建表、查看结构合为一处，支持索引管理 ([#356](https://github.com/opskat/opskat/pull/356)) (by @CodFrm)
+- ✨ 应用内网络代理（HTTP / SOCKS5）：AI、检查更新、扩展商店与云备份经代理出站，不影响资产连接 ([#355](https://github.com/opskat/opskat/pull/355)) (by @CodFrm)
+- ✨ 数据表 ⌘F / Ctrl+F 在当前页查找并定位到单元格，数据库面板交互整体优化；SQL 编辑器 ⌘↵ 执行光标所在语句（有选区时执行选区），⇧⌘↵ 执行全部 [#328](https://github.com/opskat/opskat/issues/328) ([#343](https://github.com/opskat/opskat/pull/343)) (by @CodFrm)
+- ✨ 资产连接配置：扩展资产表单分 Tab，证书可直接填内容；opsctl 与 AI 的 `put_asset` 支持配置隧道、代理链与 TLS ([#337](https://github.com/opskat/opskat/pull/337)) (by @CodFrm)
+- ✨ Elasticsearch 扩展所需的宿主能力：页面调用直通、多资源策略、表单字段级校验等；扩展可使用资产的网络路径、连接配置与凭据 ([#326](https://github.com/opskat/opskat/pull/326), [#331](https://github.com/opskat/opskat/pull/331)) (by @CodFrm)
+- ✨ 对象存储资产支持默认桶，浏览器支持下载整个文件夹 (by @CodFrm)
+
+### ♻️ 重构与兼容性
+
+- ♻️ 扩展 ABI 重置为 1.0：运行时与业务解耦，改为贡献点 / 调用作用域 / hostUI 契约，Action 并入工具；扩展系统改为 WASM 实例池。**旧版本扩展会显示加载失败，请在扩展商店安装新版本** ([#306](https://github.com/opskat/opskat/pull/306), [#357](https://github.com/opskat/opskat/pull/357)) (by @CodFrm)
+- ♻️ SQL 数据库改由驱动注册表提供，读写语句都由各驱动按方言生成；修复 SQL Server 写入中文乱码、MySQL 反斜杠写入损坏等问题。SQL Server 导入时勾选「忽略外键」改为只停用外键，导入后以 `WITH NOCHECK` 恢复 ([#342](https://github.com/opskat/opskat/pull/342), [#345](https://github.com/opskat/opskat/pull/345)) (by @CodFrm)
+- ♻️ 代理链第一跳改为沿用该跳板机自身的连接路径（它自己的跳板 / 代理），每一跳的握手受 SSH 连接超时限制，卡住的一跳不再无限等待 (by @CodFrm)
+- ♻️ `.local` 主机名先走单播 DNS，解析失败再交给系统解析（mDNS），解决部分网络下 `.local` 地址连不上的问题 ([#325](https://github.com/opskat/opskat/pull/325)) (by @CodFrm)
+- ⬆️ 升级 Wails 到 v2.16.0 及 Go / 前端依赖 ([#339](https://github.com/opskat/opskat/pull/339)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 AI 对话在重试等待期间点停止可以结束生成 ([#353](https://github.com/opskat/opskat/pull/353)) (by @CodFrm)
+- 🐛 Windows 上 `opsctl cp` 不再把盘符（如 `C:`）当成资产名 ([#341](https://github.com/opskat/opskat/pull/341)) (by @Pililink)
+- 🐛 SSH 隧道被服务器按策略拒绝转发后换新连接重试，不再一直复用拒绝转发的池化连接 (by @CodFrm)
+- 🐛 修复 R2 等对象存储的文件夹打不开 (by @CodFrm)
+- 🐛 修复 MongoDB 面板刷新按钮不刷新集合列表 ([#340](https://github.com/opskat/opskat/pull/340)) (by @CodFrm)
+- 🐛 修复扩展页面切换标签页后被重新加载、页面内状态丢失 (by @CodFrm)
+- 🐛 修复弹窗关闭动画期间再次打开时按钮点不到 (by @CodFrm)
+- 🐛 所有 Monaco 编辑器内的 ⌘F 使用编辑器自带查找 ([#344](https://github.com/opskat/opskat/pull/344)) (by @CodFrm)
+
+**完整更新记录**: [v1.14.0...v1.15.0](https://github.com/opskat/opskat/compare/v1.14.0...v1.15.0)
+
 ## v1.14.0 (2026-09-23)
 
 本版本让 opsctl 完整支持 SSH 二次验证（MFA）：遇到验证码挑战时可以用参数、终端或桌面弹窗作答，不再直接断开；桌面终端连接「密码 + 验证码」的服务器时也只需输入验证码。SFTP 传输改为并发流水线，高延迟链路上 `opsctl cp` 快了约 6 倍；opsctl 的远程操作不再依赖桌面端，关闭桌面端不会再截断正在执行的命令。另外 AI Provider 支持自定义请求头，解决了 OpenCode 等网关能识别模型却无法对话的问题。
