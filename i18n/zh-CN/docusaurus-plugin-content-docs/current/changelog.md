@@ -5,6 +5,53 @@ sidebar_position: 100
 
 # 更新日志
 
+## v1.16.0 (2026-11-24)
+
+本版本新增「自定义类型与通用资产」：只存凭据，通过 opsctl 与内置 AI 以 HTTP 请求或本地命令访问任意服务，支持签名模板与取值审批。K8s 集群页覆盖全部资源类型与 CRD，可直接进 Pod 终端并执行常用写操作。数据库支持转储为可还原的 SQL 文件与运行 SQL 文件；自动备份支持 WebDAV / GitHub Gist / 本地文件夹；审计日志支持多维筛选，SFTP 文件面板新增目录树。另外 SSH 策略支持 Windows PowerShell，并带来一轮全仓性能优化与多项 Windows、AI 对话、终端渲染相关修复。
+
+### 🚀 主要新功能
+
+- 💥 自定义类型与通用资产：仅存凭据，通过 opsctl 与内置 AI 以 HTTP 请求或本地命令访问，支持签名模板、取值审批、导入导出与备份 ([#333](https://github.com/opskat/opskat/pull/333)) (by @CodFrm)
+- 💥 K8s 集群页：全资源类型与 CRD、Pod 终端、统一详情、集群概览与事件、常用写操作 [#370](https://github.com/opskat/opskat/issues/370) ([#383](https://github.com/opskat/opskat/pull/383)) (by @CodFrm)
+- 💥 数据库转储 SQL 文件与运行 SQL 文件：MySQL / PostgreSQL / SQL Server / SQLite 生成可还原的转储（导出选项、分区与继承、依赖排序），大文件流式导入；扩展驱动经宿主 ABI 1.1 同样可用 [#368](https://github.com/opskat/opskat/issues/368) ([#382](https://github.com/opskat/opskat/pull/382)) (by @CodFrm)
+- ✨ 自动备份：独立于备份位置，支持 WebDAV / GitHub Gist / 本地文件夹，定时检查去重、多版本保留与失败重试 ([#192](https://github.com/opskat/opskat/pull/192)) (by @wfion)
+- ✨ 审计日志筛选与审计页重构：表头筛选、决策方、资产多选与按分组筛选、详情抽屉、分页；`opsctl list audit` 同步支持同一套筛选 ([#389](https://github.com/opskat/opskat/pull/389)) (by @CodFrm)
+- ✨ SFTP 文件面板目录树：根为 `/` 的目录树与文件列表并排，自动定位到当前目录 [#381](https://github.com/opskat/opskat/issues/381) ([#391](https://github.com/opskat/opskat/pull/391)) (by @CodFrm)
+- ✨ SSH 策略支持 Windows PowerShell：命令拆分与模型审核，Windows 默认策略组；`opsctl exec` 新增 `-n` / `--no-stdin` [#384](https://github.com/opskat/opskat/issues/384) ([#385](https://github.com/opskat/opskat/pull/385)) (by @Pililink)
+- ✨ AI 对话排队中的消息支持立即插话，AI 侧栏去掉宽度上限 ([#373](https://github.com/opskat/opskat/pull/373)) (by @CodFrm)
+- ✨ 支持为 Google Antigravity 安装 opsctl Skill ([#377](https://github.com/opskat/opskat/pull/377)) (by @Pililink)
+
+### ⚡️ 性能优化
+
+- ⚡️ 全仓性能优化：审计索引、opsctl 启动、前端渲染、连接复用、SFTP / OSS / cp 并发、输出攒批、AI 事件与保存、主包瘦身、RDP 脏区刷新 ([#363](https://github.com/opskat/opskat/pull/363)) (by @CodFrm)
+
+### 🎨 UI 改进
+
+- 🎨 UI/UX 整改 17 项：设置导航、审批安全、同名冲突、三态反馈、表单校验、侧栏与字号统一 ([#369](https://github.com/opskat/opskat/pull/369)) (by @CodFrm)
+
+### 🔒 安全性改进
+
+- 🔒 SQL 策略按语句实际效果归类：UNION 等集合查询算 SELECT，`INTO OUTFILE` 与 `EXPLAIN ANALYZE` 不再按只读放行 ([#388](https://github.com/opskat/opskat/pull/388)) (by @CodFrm)
+
+### 🐛 Bug 修复
+
+- 🐛 AI 对话停止一定生效：工具卡住时也能恢复，停止收尾期间发出的消息不丢 ([#376](https://github.com/opskat/opskat/pull/376)) (by @CodFrm)
+- 🐛 双击正在连接中的资产会切到它的标签，不再被忽略 [#380](https://github.com/opskat/opskat/issues/380) ([#390](https://github.com/opskat/opskat/pull/390)) (by @CodFrm)
+- 🐛 RDP 密码错误时只尝试一次登录，不再触发服务器的暴力破解防护 [#374](https://github.com/opskat/opskat/issues/374) ([#375](https://github.com/opskat/opskat/pull/375)) (by @CodFrm)
+- 🐛 终端大量输出后 WebGL 渲染出其它字形碎片：移植 xterm.js 上游 atlas 页合并修复 [#287](https://github.com/opskat/opskat/issues/287) ([#378](https://github.com/opskat/opskat/pull/378)) (by @CodFrm)
+- 🐛 Windows 混合缩放双屏下，最大化窗口最小化再还原后界面被放大 [#196](https://github.com/opskat/opskat/issues/196) ([#379](https://github.com/opskat/opskat/pull/379)) (by @CodFrm)
+- 🐛 Windows 剪贴板没有文本时粘贴不再报「The operation completed successfully」 [#367](https://github.com/opskat/opskat/issues/367) ([#372](https://github.com/opskat/opskat/pull/372)) (by @CodFrm)
+- 🐛 `opsctl cp` 单个源且目的端以 `/` 结尾时落到该目录下并保留源文件名；目的端是已存在的目录时说明原因并提示末尾加 `/` [#364](https://github.com/opskat/opskat/issues/364) ([#371](https://github.com/opskat/opskat/pull/371)) (by @CodFrm)
+- 🐛 docker 循环巡检命令不再被误判为 undecodable，未送审的命令写明原因 [#384](https://github.com/opskat/opskat/issues/384) ([#386](https://github.com/opskat/opskat/pull/386)) (by @CodFrm)
+- 🐛 备份导入时重映射全部资产类型的 SSH 隧道与代理链引用 [#360](https://github.com/opskat/opskat/issues/360) ([#361](https://github.com/opskat/opskat/pull/361)) (by @Pililink)
+- 🐛 Ctrl+P 选择代码片段后焦点回到原终端 [#354](https://github.com/opskat/opskat/issues/354) ([#362](https://github.com/opskat/opskat/pull/362)) (by @CodFrm)
+
+### 其它
+
+- ⬆️ 升级 Wails 到 v2.17.1 (by @CodFrm)
+
+**完整更新记录**: [v1.15.0...v1.16.0](https://github.com/opskat/opskat/compare/v1.15.0...v1.16.0)
+
 ## v1.15.0 (2026-11-04)
 
 本版本上线扩展商店：官方签名索引、在线安装 / 更新，`opsctl ext search / install / update` 也能用；扩展可以给 SQL 数据库资产提供驱动，Oracle 与 Elasticsearch 都以扩展形式支持。新增「辅助审批」与「Autopilot」权限模式：命令先交给模型审核，只拦破坏数据、中断服务这类明确的危险操作，其余自动执行。Redis 资产支持集群与哨兵。另外还有表设计器、应用内网络代理、数据表 ⌘F 查找，以及 SQL 数据库读写全面改由驱动生成（修复 SQL Server 中文与 MySQL 反斜杠写入损坏）。

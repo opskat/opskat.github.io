@@ -5,6 +5,53 @@ sidebar_position: 100
 
 # Changelog
 
+## v1.16.0 (2026-11-24)
+
+This release adds custom types and generic assets: store only the credentials, and let opsctl and the built-in AI reach any service through HTTP requests or local commands, with signing templates and approval for reading secret values. The K8s cluster page now covers every resource type and CRD, opens Pod terminals, and runs common write operations. Databases can be dumped to restorable SQL files and SQL files can be run against them; automatic backups support WebDAV / GitHub Gist / a local folder; the audit log gains multi-dimensional filters, and the SFTP file panel gets a folder tree. SSH policies now support Windows PowerShell, and the release also brings a repo-wide performance pass plus a batch of fixes for Windows, AI chat, and terminal rendering.
+
+### 🚀 Major New Features
+
+- 💥 Custom types and generic assets: store only the credentials and access the service from opsctl and the built-in AI through HTTP requests or local commands, with signing templates, approval for reading values, import / export, and backup ([#333](https://github.com/opskat/opskat/pull/333)) (by @CodFrm)
+- 💥 K8s cluster page: every resource type and CRD, Pod terminals, a unified detail view, cluster overview and events, and common write operations [#370](https://github.com/opskat/opskat/issues/370) ([#383](https://github.com/opskat/opskat/pull/383)) (by @CodFrm)
+- 💥 Dump to SQL file and run SQL file: restorable dumps for MySQL / PostgreSQL / SQL Server / SQLite (export options, partitions and inheritance, dependency ordering) and streaming import of large files; extension drivers get the same through host ABI 1.1 [#368](https://github.com/opskat/opskat/issues/368) ([#382](https://github.com/opskat/opskat/pull/382)) (by @CodFrm)
+- ✨ Automatic backup, independent of the backup location: WebDAV / GitHub Gist / local folder, scheduled checks with deduplication, multiple retained versions, and retry on failure ([#192](https://github.com/opskat/opskat/pull/192)) (by @wfion)
+- ✨ Audit log filters and a reworked audit page: column-header filters, decided-by, multi-select assets and filtering by group, a detail drawer, and pagination; `opsctl list audit` supports the same filters ([#389](https://github.com/opskat/opskat/pull/389)) (by @CodFrm)
+- ✨ SFTP file panel folder tree: a directory tree rooted at `/` beside the file list, automatically revealing the current directory [#381](https://github.com/opskat/opskat/issues/381) ([#391](https://github.com/opskat/opskat/pull/391)) (by @CodFrm)
+- ✨ SSH policies support Windows PowerShell: command splitting and model review, plus Windows default policy groups; `opsctl exec` adds `-n` / `--no-stdin` [#384](https://github.com/opskat/opskat/issues/384) ([#385](https://github.com/opskat/opskat/pull/385)) (by @Pililink)
+- ✨ Queued AI chat messages can interject right away, and the AI sidebar no longer has a maximum width ([#373](https://github.com/opskat/opskat/pull/373)) (by @CodFrm)
+- ✨ Install the opsctl Skill for Google Antigravity ([#377](https://github.com/opskat/opskat/pull/377)) (by @Pililink)
+
+### ⚡️ Performance
+
+- ⚡️ Repo-wide performance pass: audit indexes, opsctl startup, frontend rendering, connection reuse, SFTP / OSS / cp concurrency, output batching, AI events and saving, a slimmer main bundle, and RDP dirty-region updates ([#363](https://github.com/opskat/opskat/pull/363)) (by @CodFrm)
+
+### 🎨 UI Improvements
+
+- 🎨 17 UI/UX fixes: settings navigation, approval safety, name conflicts, three-state feedback, form validation, and consistent sidebar and font sizes ([#369](https://github.com/opskat/opskat/pull/369)) (by @CodFrm)
+
+### 🔒 Security
+
+- 🔒 SQL policy classifies statements by what they actually do: set queries such as UNION count as SELECT, and `INTO OUTFILE` and `EXPLAIN ANALYZE` are no longer allowed as read-only ([#388](https://github.com/opskat/opskat/pull/388)) (by @CodFrm)
+
+### 🐛 Bug Fixes
+
+- 🐛 Stopping an AI chat always takes effect: it recovers even when a tool is stuck, and messages sent while stopping are not lost ([#376](https://github.com/opskat/opskat/pull/376)) (by @CodFrm)
+- 🐛 Double-clicking an asset that is still connecting switches to its tab instead of being ignored [#380](https://github.com/opskat/opskat/issues/380) ([#390](https://github.com/opskat/opskat/pull/390)) (by @CodFrm)
+- 🐛 RDP tries to log in only once on a wrong password, so it no longer trips the server's brute-force protection [#374](https://github.com/opskat/opskat/issues/374) ([#375](https://github.com/opskat/opskat/pull/375)) (by @CodFrm)
+- 🐛 Fragments of other glyphs no longer appear in WebGL rendering after heavy terminal output: backported the upstream xterm.js atlas page merge fix [#287](https://github.com/opskat/opskat/issues/287) ([#378](https://github.com/opskat/opskat/pull/378)) (by @CodFrm)
+- 🐛 On Windows dual monitors with mixed scaling, a maximized window is no longer enlarged after being minimized and restored [#196](https://github.com/opskat/opskat/issues/196) ([#379](https://github.com/opskat/opskat/pull/379)) (by @CodFrm)
+- 🐛 Pasting on Windows with no text on the clipboard no longer reports "The operation completed successfully" [#367](https://github.com/opskat/opskat/issues/367) ([#372](https://github.com/opskat/opskat/pull/372)) (by @CodFrm)
+- 🐛 `opsctl cp` with a single source and a destination ending in `/` places the file inside that directory and keeps the source file name; when the destination is an existing directory, it explains why and suggests adding a trailing `/` [#364](https://github.com/opskat/opskat/issues/364) ([#371](https://github.com/opskat/opskat/pull/371)) (by @CodFrm)
+- 🐛 Docker polling loops are no longer misclassified as undecodable, and commands not sent for review state the reason [#384](https://github.com/opskat/opskat/issues/384) ([#386](https://github.com/opskat/opskat/pull/386)) (by @CodFrm)
+- 🐛 Backup import remaps SSH tunnel and proxy chain references for every asset type [#360](https://github.com/opskat/opskat/issues/360) ([#361](https://github.com/opskat/opskat/pull/361)) (by @Pililink)
+- 🐛 Focus returns to the original terminal after picking a snippet with Ctrl+P [#354](https://github.com/opskat/opskat/issues/354) ([#362](https://github.com/opskat/opskat/pull/362)) (by @CodFrm)
+
+### Other
+
+- ⬆️ Upgrade Wails to v2.17.1 (by @CodFrm)
+
+**Full Changelog**: [v1.15.0...v1.16.0](https://github.com/opskat/opskat/compare/v1.15.0...v1.16.0)
+
 ## v1.15.0 (2026-11-04)
 
 This release launches the extension store: a signed official index, online install / update, and `opsctl ext search / install / update`. Extensions can now provide drivers for SQL database assets — Oracle and Elasticsearch are both supported as extensions. New "Assisted" and "Autopilot" permission modes have commands reviewed by a model first, blocking only clearly dangerous operations such as destroying data or interrupting services, and running the rest automatically. Redis assets now support Cluster and Sentinel. Also new: a table designer, an in-app network proxy, ⌘F search in table data, and SQL reads and writes are now generated by each driver (fixing corrupted writes of Chinese text on SQL Server and backslashes on MySQL).
